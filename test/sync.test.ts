@@ -10,7 +10,7 @@ import { seal, unseal } from '../lib/auth/seal';
 import { EpicClient } from '../lib/epic/client';
 import { playedSessions } from '../lib/epic/player';
 import { clearScheduleCache } from '../lib/epic/schedule';
-import type { SyncPoll, SyncRows, SyncStart } from '../lib/types';
+import type { SyncPoll, SyncProbe, SyncRows, SyncStart } from '../lib/types';
 
 const fixture = (f: string) => readFileSync(join(__dirname, 'fixtures/epic/first', f), 'utf8');
 const SECRET = 'test-cookie-secret-0123456789';
@@ -36,7 +36,15 @@ const SLENDER = { eventId: 'epicgames_S42_SlenderManCup_ZB_BR', windowId: 'S42_S
 const NOW = Date.parse('2026-10-21T03:00:00Z');
 
 /** A fake Epic for the whole sync: device code sign-in, exchange, your schedule and your filtered rows. */
-function fakeEpic(o: { pendingPolls?: number; teams?: Record<string, string[]> } = {}) {
+function fakeEpic(
+  o: {
+    pendingPolls?: number;
+    teams?: Record<string, string[]>;
+    history?: { status: number; body: unknown };
+    /** Answer boards you're not on as Epic does for your own ID (200, no rows), instead of refusing. */
+    emptyOnMiss?: boolean;
+  } = {},
+) {
   const calls: string[] = [];
   const killed: string[] = [];
   let polls = 0;
@@ -86,6 +94,11 @@ function fakeEpic(o: { pendingPolls?: number; teams?: Record<string, string[]> }
       }
       return new Response(fixture(`events-download-${region}.json`));
     }
+    if (/^\/api\/v1\/events\/Fortnite\/[^/]+\/[^/]+\/history\//.test(path)) {
+      calls.push('history');
+      expect(auth).toBe('bearer your-token');
+      return Response.json(o.history?.body ?? {}, { status: o.history?.status ?? 200 });
+    }
     if (path.startsWith('/api/v1/leaderboards/Fortnite/')) {
       const [, instance, caller] = path.split('/').slice(5, 8) as [string, string, string];
       const team = u.searchParams.get('teamAccountIds') ?? '';
@@ -97,6 +110,7 @@ function fakeEpic(o: { pendingPolls?: number; teams?: Record<string, string[]> }
       );
       if (instance === SLENDER.windowId && mine)
         return Response.json({ ...JSON.parse(fixture('leaderboard-final-p0.json')), entries: [mine] });
+      if (o.emptyOnMiss) return Response.json({ ...JSON.parse(fixture('leaderboard-final-p0.json')), entries: [] });
       return Response.json({ errorCode: 'com.epicgames.api.malformed_data' }, { status: 400 });
     }
     return new Response('{}', { status: 404 });
@@ -174,6 +188,7 @@ describe('POST /api/sync', () => {
       accountId: ME,
       displayName: 'You',
       played: [{ ...SLENDER, team: [ME, MATE] }],
+      epic: { playerKeys: ['accountId', 'tokens', 'teams'], teams: 2, tokens: 0 },
     });
     expect(epic.killed).toEqual(['switch-token']);
     expect(ready.headers.get('set-cookie')).not.toContain('your-token');
@@ -192,24 +207,45 @@ describe('POST /api/sync', () => {
     expect(rows.results[0]!.entry).toMatchObject({ rank: 5, points: 584, sessions: [] });
     expect(rows.results[0]!.entry!.gamePoints!.reduce((a, b) => a + b, 0)).toBe(584);
     expect(rows.results[0]!.entry!.members.every((m) => m.name === undefined)).toBe(true);
+    expect(rows.results[0]!.trace).toEqual([expect.stringMatching(/: 200, 1 row \(rank 5\)$/)]);
 
     const done = await epic.handlers.DELETE(new Request('https://app.test/api/sync', { headers: { cookie } }));
     expect(done.headers.get('set-cookie')).toContain('Max-Age=0');
     expect(epic.killed).toContain('your-token');
   });
 
-  it("checks Ranked Cup tiers top first, and hands back what didn't fit in one request", async () => {
+  const ranked = [8, 7, 6].map((n) => ({
+    eventId: 'epicgames_S42_RankedCupSolo_NAC',
+    windowId: `S42_RankedCupSolo_Event${n}_NAC`,
+  }));
+
+  it("settles a Ranked Cup you didn't play with one call on its main board", async () => {
+    const epic = fakeEpic({ emptyOnMiss: true });
+    const { cookie } = await signIn(epic);
+    const rows = (await (await epic.handlers.POST(post('rows', cookie, { sessions: ranked }))).json()) as SyncRows;
+    expect(rows.results.map((r) => r.status)).toEqual(['not_found', 'not_found', 'not_found']);
+    expect(rows.remaining).toEqual([]);
+    expect(epic.calls.filter((c) => c.startsWith('row'))).toEqual(ranked.map((s) => `row ${s.windowId}`));
+    expect(rows.results[0]!.trace).toEqual(['Overall: 200, 0 rows']);
+  });
+
+  it("tries the tiers top first when the main board refuses, and hands back what didn't fit", async () => {
     const epic = fakeEpic();
     const { cookie } = await signIn(epic);
-    const sessions = [8, 7, 6].map((n) => ({
-      eventId: 'epicgames_S42_RankedCupSolo_NAC',
-      windowId: `S42_RankedCupSolo_Event${n}_NAC`,
-    }));
-    const rows = (await (await epic.handlers.POST(post('rows', cookie, { sessions }))).json()) as SyncRows;
-    // Eight tiers each: two sessions use up the request's sixteen calls.
-    expect(rows.results.map((r) => r.status)).toEqual(['not_found', 'not_found']);
-    expect(rows.remaining.map((s) => s.windowId)).toEqual(['S42_RankedCupSolo_Event6_NAC']);
-    expect(epic.calls.filter((c) => c.startsWith('row'))[0]).toMatch(/_unreal$/);
+    const rows = (await (await epic.handlers.POST(post('rows', cookie, { sessions: ranked }))).json()) as SyncRows;
+    // The main board and eight tiers: the second session runs out of the request's sixteen calls.
+    expect(rows.results.map((r) => r.status)).toEqual(['not_found']);
+    expect(rows.remaining.map((s) => s.windowId)).toEqual([
+      'S42_RankedCupSolo_Event7_NAC',
+      'S42_RankedCupSolo_Event6_NAC',
+    ]);
+    expect(epic.calls.filter((c) => c.startsWith('row')).slice(0, 2)).toEqual([
+      'row S42_RankedCupSolo_Event8_NAC',
+      expect.stringMatching(/^row S42_RankedCupSolo_Event8_NAC_\d_unreal$/),
+    ]);
+    // Each board's answer is kept for the sync's details.
+    expect(rows.results[0]!.trace).toHaveLength(9);
+    expect(rows.results[0]!.trace![1]).toMatch(/^Unreal: 400 com\.epicgames\.api\.malformed_data/);
   });
 
   it('refuses rows without a signed-in cookie, or a tampered one', async () => {
@@ -221,6 +257,28 @@ describe('POST /api/sync', () => {
     expect(forged.status).toBe(409);
     const bad = await epic.handlers.POST(post('rows', cookie, { sessions: [] }));
     expect(bad.status).toBe(400);
+  });
+
+  it("probes Epic's history for one session, reporting only its outline and shortened IDs", async () => {
+    const forbidden = fakeEpic({
+      history: {
+        status: 403,
+        body: { errorCode: 'errors.com.epicgames.common.forbidden', errorMessage: `No access for ${ME}` },
+      },
+    });
+    const { cookie } = await signIn(forbidden);
+    const res = await forbidden.handlers.POST(post('probe', cookie, SLENDER));
+    const { history } = (await res.json()) as SyncProbe;
+    expect(history).toBe(`403 errors.com.epicgames.common.forbidden: No access for ${ME.slice(0, 6)}…`);
+
+    const ok = fakeEpic({
+      history: { status: 200, body: [{ sessionId: 'secret-ish', rank: 7, sessions: [{ x: 1 }] }] },
+    });
+    const signed = await signIn(ok);
+    const outline = ((await (await ok.handlers.POST(post('probe', signed.cookie, SLENDER))).json()) as SyncProbe)
+      .history;
+    expect(outline).toBe('200 [1 × {sessionId: string, rank: 7, sessions: [1 × {x: 1}]}]');
+    expect(outline).not.toContain('secret-ish');
   });
 
   it('ends an unfinished sync when a new one starts', async () => {

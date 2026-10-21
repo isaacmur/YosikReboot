@@ -239,10 +239,34 @@ export interface SyncStart {
   intervalMs: number;
 }
 
-/** POST /api/sync?step=poll. `played` is null when Epic lists no sessions for you. */
+/** What your own schedule download held, for the sync's details. */
+export interface SyncEpicInfo {
+  /** Keys of its `player` part. */
+  playerKeys: string[];
+  /** Entries in `player.teams`, and tokens you hold. */
+  teams: number;
+  tokens: number;
+}
+
+/**
+ * POST /api/sync?step=poll. `played` is what `player.teams` lists, null when it's
+ * empty; it turned out not to be a history of what you played (D30), so it's only
+ * one source of sessions to read.
+ */
 export type SyncPoll =
   | { status: 'pending'; intervalMs: number }
-  | { status: 'ready'; accountId: string; displayName: string | null; played: SyncSession[] | null };
+  | {
+      status: 'ready';
+      accountId: string;
+      displayName: string | null;
+      played: SyncSession[] | null;
+      epic: SyncEpicInfo;
+    };
+
+/** POST /api/sync?step=probe: Epic's per-player history for one session, as an outline. */
+export interface SyncProbe {
+  history: string;
+}
 
 export interface SyncRowResult {
   eventId: string;
@@ -251,6 +275,8 @@ export interface SyncRowResult {
   board?: Pick<BoardInfo, 'id' | 'label' | 'payouts'>;
   /** Your row, without names or games (`lite`). */
   entry?: Entry;
+  /** What Epic answered for each board tried. */
+  trace?: string[];
 }
 
 /** POST /api/sync?step=rows: what was read, and what's left for the next request. */

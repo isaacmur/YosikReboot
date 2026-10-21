@@ -110,7 +110,8 @@ In a cloud session, prefix commands with `NODE_USE_ENV_PROXY=1`, so Node's fetch
 
 ### Still open
 - [ ] Rate limit: not tested yet. Run step 5 once.
-- [ ] Sync with Epic (D30), on the first real sync: that `player.teams` in your own schedule download is keyed `"<eventId>:<windowId>"` with your team's account IDs and lists the sessions you played this season, and that a board filtered with `teamAccountIds=` your whole team returns your row with its rank on the full board. The service account's `teams` is empty, so neither could be checked in Phase 0.
+- [x] Sync with Epic (D30), first real sync: `player.teams` in your own schedule download listed **one** session, not the ones you'd played. It isn't a history (it may be the events you have a team set up for), so a sync now reads sessions one by one instead of trusting it.
+- [ ] Sync with Epic: that a board filtered with `teamAccountIds=` set to just you returns your row with its rank on the full board, and whether `/history/{yourId}` answers for your own account. The sync's "What Epic returned" shows both on the next run.
 - [ ] Player tokens (`/api/v1/players/Fortnite/tokens`) work but are empty for a new account, so the eligibility feature (F9, Later) needs your own account's tokens.
 
 ## Gate 0

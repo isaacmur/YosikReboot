@@ -2,6 +2,7 @@
 //   POST /api/sync?step=start              -> SyncStart; open the link on epicgames.com and approve
 //   POST /api/sync?step=poll&region=       -> SyncPoll; once approved, the sessions Epic lists for you
 //   POST /api/sync?step=rows  { sessions } -> SyncRows; your row in each, a few per request
+//   POST /api/sync?step=probe { session }  -> SyncProbe; Epic's history for one session, as an outline
 //   DELETE /api/sync                       -> ends your Epic session
 // The sign-in lives only in a sealed HttpOnly cookie (Path=/api/sync, 15 min):
 // nothing is stored on the server, the browser can't read it, and DELETE (sent
@@ -15,13 +16,15 @@ import { seal, unseal } from '../lib/auth/seal.js';
 import { CallLog, EpicClient, epicClient, fixedToken } from '../lib/epic/client.js';
 import { endpoints } from '../lib/epic/endpoints.js';
 import { EpicHttpError } from '../lib/epic/errors.js';
-import { ownRow, playedSessions, type PlayedSession } from '../lib/epic/player.js';
+import { ownRow, playedSessions, probeHistory, type PlayedSession } from '../lib/epic/player.js';
+import { asArr, asObj } from '../lib/epic/json.js';
 import { rawSchedule, regionForEvent } from '../lib/epic/schedule.js';
 import { authConfig, deviceCodeClient, epicConfig } from '../lib/config.js';
 import { apiError, json, toErrorResponse } from '../lib/http.js';
 import {
   isRegion,
   type SyncPoll,
+  type SyncProbe,
   type SyncRowResult,
   type SyncRows,
   type SyncSession,
@@ -153,11 +156,17 @@ export function makeSyncHandlers(deps: Deps) {
         'your schedule',
       );
       const played = playedSessions(schedule, ready.accountId);
+      const player = asObj(asObj(schedule)?.player);
       const body: SyncPoll = {
         status: 'ready',
         accountId: ready.accountId,
         displayName: ready.displayName,
         played: played.length ? played : null,
+        epic: {
+          playerKeys: Object.keys(player ?? {}).slice(0, 20),
+          teams: Object.keys(asObj(player?.teams) ?? {}).length,
+          tokens: asArr(player?.tokens).length,
+        },
       };
       const expiresAt = Math.min(token.expiresAt, deps.now() + MAX_AGE_MS);
       return json(body, { headers: { 'Set-Cookie': await setState(ready, deps, expiresAt) } });
@@ -216,6 +225,29 @@ export function makeSyncHandlers(deps: Deps) {
     return json(body);
   }
 
+  async function probe(request: Request): Promise<Response> {
+    const state = await readState(request, deps);
+    if (!state || state.phase !== 'ready') return signedOut();
+    let parsed: { eventId?: unknown; windowId?: unknown } | undefined;
+    try {
+      parsed = (await request.json()) as typeof parsed;
+    } catch {
+      parsed = undefined;
+    }
+    const eventId = typeof parsed?.eventId === 'string' ? parsed.eventId : null;
+    const windowId = typeof parsed?.windowId === 'string' ? parsed.windowId : null;
+    if (!isEpicId(eventId) || !isEpicId(windowId)) return apiError(400, 'bad_session', 'Send { eventId, windowId }.');
+    try {
+      const body: SyncProbe = {
+        history: await probeHistory(userClient(state, deps), { eventId, windowId }, state.accountId),
+      };
+      return json(body);
+    } catch (err) {
+      if (err instanceof EpicHttpError && err.status === 401) return signedOut();
+      throw err;
+    }
+  }
+
   async function POST(request: Request): Promise<Response> {
     const q = new URL(request.url).searchParams;
     try {
@@ -226,8 +258,10 @@ export function makeSyncHandlers(deps: Deps) {
           return await poll(request, q.get('region') ?? '');
         case 'rows':
           return await rows(request);
+        case 'probe':
+          return await probe(request);
         default:
-          return apiError(400, 'bad_step', 'step must be start, poll or rows.');
+          return apiError(400, 'bad_step', 'step must be start, poll, rows or probe.');
       }
     } catch (err) {
       return toErrorResponse(err);
