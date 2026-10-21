@@ -6,6 +6,7 @@ export const HOSTS = {
   account: 'https://account-public-service-prod.ol.epicgames.com',
   events: 'https://events-public-service-live.ol.epicgames.com',
   cms: 'https://fortnitecontent-website-prod07.ol.epicgames.com',
+  datastorage: 'https://datastorage-public-service-live.ol.epicgames.com',
   web: 'https://www.epicgames.com',
 } as const;
 
@@ -84,6 +85,11 @@ export const endpoints = {
     }),
 
   tournamentInfo: () => `${HOSTS.cms}/content/api/pages/fortnite-game/tournamentinformation`,
+
+  /** A tournament game's server replay (D31): its parts and events, by match ID (a game's `sessionId`). */
+  replayMetadata: (matchId: string) => `${HOSTS.datastorage}/api/v1/data/fnreplaysmetadata/public/${seg(matchId)}.json`,
+  /** POST { files: ["<part id>.bin", …] } for signed download links, good for 15 minutes. */
+  replayFiles: (matchId: string) => `${HOSTS.datastorage}/api/v1/access/fnreplays/public/${seg(matchId)}/`,
 };
 
 function withQueryRepeated(url: string, key: string, values: string[]): string {

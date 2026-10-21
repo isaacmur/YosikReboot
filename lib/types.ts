@@ -207,6 +207,8 @@ export interface Entry {
   sessions: MatchResult[];
   /** `lite` responses only: each game's points, oldest first; missing when a game's points are unknown (D29). */
   gamePoints?: number[];
+  /** Epic's split of `points`: placement, eliminations and anything else (from its point breakdown). */
+  pointSplit?: { placement: number; elims: number; other: number };
 }
 
 /** GET /api/leaderboard */
@@ -263,7 +265,7 @@ export interface SyncRowResult {
   entry?: Entry;
   /** What Epic answered for each board tried. */
   trace?: string[];
-  /** For an event Epic's schedule no longer lists (D31): the session's name from its ID, and your last game's end. */
+  /** For an event Epic's schedule no longer lists (D32): the session's name from its ID, and your last game's end. */
   label?: string;
   endedAt?: string;
 }
@@ -296,6 +298,46 @@ export interface SyncHistory {
 export interface SyncRows {
   results: SyncRowResult[];
   remaining: SyncSession[];
+}
+
+// --- Replay stats (D31): a tournament game's server replay, by match ID ---
+
+/** One elimination or knock: account IDs, 'bot', or null when unreadable. */
+export interface ReplayElim {
+  /** Milliseconds into the game. */
+  at: number;
+  eliminated: string | null;
+  eliminator: string | null;
+  knocked: boolean;
+}
+
+/** Epic's per-player match stats (`AthenaMatchStats`). */
+export interface ReplayPlayerStats {
+  /** Whose they are, when the event names an account. */
+  player: string | null;
+  accuracy: number;
+  assists: number;
+  eliminations: number;
+  damageToPlayers: number;
+  damageTaken: number;
+  damageToStructures: number;
+  materialsGathered: number;
+  materialsUsed: number;
+  revives: number;
+  distance: number;
+}
+
+/** GET /api/replay?match= */
+export interface ReplaySummary {
+  matchId: string;
+  lengthMs: number;
+  live: boolean;
+  /** Each kind of event the replay held, with counts, for when stats are missing. */
+  events: Record<string, number>;
+  elims: ReplayElim[];
+  stats: ReplayPlayerStats[];
+  /** What couldn't be read. */
+  notes: string[];
 }
 
 /** GET /api/ics, signed in: the calendar feed's secret for the subscribe link; null while the feed is off. */

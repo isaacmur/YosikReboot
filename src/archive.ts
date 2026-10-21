@@ -1,4 +1,4 @@
-// Every event this browser has seen, kept for the season (D31). Epic's schedule
+// Every event this browser has seen, kept for the season (D32). Epic's schedule
 // lists an event only until about a week after it ends, and no Epic API lists
 // older ones (`showPastEvents` stops at the same week), so without this a sync
 // could never ask Epic's history about them. Trackers like Osirion keep their

@@ -9,7 +9,7 @@ const SCHEDULE_MAX_AGE_MS = 5 * 60_000;
 
 /**
  * The schedule for a region (default: the one in settings). The server caches it 15 min; we reuse ours for 5.
- * Every schedule read is also kept, for after Epic stops listing its events (D31).
+ * Every schedule read is also kept, for after Epic stops listing its events (D32).
  */
 export function useEvents(region?: Region) {
   const [settings] = useSettings();

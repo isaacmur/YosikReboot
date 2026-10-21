@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { boardInfos, boardRules, defaultBoard, parseScoreLocation, windowLocations } from '../lib/epic/boards';
-import { liteEntry, mergeCumulative, normalizeEntries, teamKeyOf } from '../lib/epic/leaderboard';
+import { liteEntry, mergeCumulative, normalizeEntries, pointSplit, teamKeyOf } from '../lib/epic/leaderboard';
 import { findWindow, regionForEvent } from '../lib/epic/schedule';
 import {
   parseCutoffs,
@@ -127,6 +127,26 @@ describe('normalizeEntries', () => {
     expect(rows.every((r) => r.points === 0)).toBe(true);
     expect(rows.some((r) => r.sessions.some((s) => s.place !== null))).toBe(true);
     expect(rows[0]!.sessions[0]!.points).toBeNull();
+  });
+
+  it("splits each team's points into placement and eliminations, as Epic does", () => {
+    for (const e of entries) {
+      const { placement, elims, other } = e.pointSplit!;
+      expect(placement + elims + other).toBe(e.points);
+    }
+    expect(entries[0]!.pointSplit).toMatchObject({
+      placement: expect.any(Number),
+      elims: expect.any(Number),
+      other: 0,
+    });
+    expect(entries[0]!.pointSplit!.elims).toBeGreaterThan(0);
+    // Ranked Cup tier boards prefix their stats with the tier.
+    const tier = normalizeEntries(load('second', 'leaderboard-live-board-2_unreal.json'), []);
+    expect(tier.every((e) => e.pointSplit!.placement + e.pointSplit!.elims + e.pointSplit!.other === e.points)).toBe(
+      true,
+    );
+    expect(tier.some((e) => e.pointSplit!.placement > 0 && e.pointSplit!.elims > 0)).toBe(true);
+    expect(pointSplit(undefined)).toBeUndefined();
   });
 
   it("keeps each game's points on lite rows, which add up to the team's total (D29)", () => {
@@ -336,5 +356,12 @@ describe('mergeCumulative', () => {
     ]);
     expect(merged[0]!.matches).toBe(2);
     expect(merged[0]!.avgPlace).toBe(1.5);
+  });
+
+  it('adds up the point splits, when every session has one', () => {
+    const a1 = { ...row('a', 50, 1, '2026-10-20T20:00:00Z'), pointSplit: { placement: 30, elims: 20, other: 0 } };
+    const a2 = { ...row('a', 20, 5, '2026-10-21T20:00:00Z'), pointSplit: { placement: 5, elims: 15, other: 0 } };
+    expect(mergeCumulative([[a1], [a2]])[0]!.pointSplit).toEqual({ placement: 35, elims: 35, other: 0 });
+    expect(mergeCumulative([[a1], [row('a', 20, 5, '2026-10-21T20:00:00Z')]])[0]!.pointSplit).toBeUndefined();
   });
 });

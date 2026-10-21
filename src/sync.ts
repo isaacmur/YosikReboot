@@ -1,6 +1,6 @@
 // Sync with Epic (D30): sign in with your own account once, read Epic's history
 // of your results in every event this season, in every region (including events
-// Epic no longer lists, from this browser's archive, D31), keep each result like
+// Epic no longer lists, from this browser's archive, D32), keep each result like
 // a board search, and end the Epic session however the sync ends. The sign-in
 // itself never reaches this code: it rides in an HttpOnly cookie only /api/sync
 // can read.
@@ -121,7 +121,7 @@ export async function syncWithEpic(o: {
     ];
 
     // Every event this season, in every region (you can play outside yours), the one copy of each: those Epic
-    // lists, then those it has stopped listing that this browser kept (D31).
+    // lists, then those it has stopped listing that this browser kept (D32).
     const current = new Map<string, EventInfo>();
     for (const list of await Promise.all(
       REGIONS.map((r) => apiGetCached<EventsResponse>(`/api/events?region=${r}`, 15 * 60_000)),

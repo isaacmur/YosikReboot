@@ -230,7 +230,7 @@ const TIER_BOARD = new RegExp(`^(.+_(?:${REGIONS.join('|')}))_\\d+_[A-Za-z]+$`);
 
 /**
  * Like `historyResults`, for an event Epic's schedule no longer lists (it drops
- * events about a week after they end, D31): every session is long final, and
+ * events about a week after they end, D32): every session is long final, and
  * boards are told apart by their IDs alone. Without the schedule there are no
  * scoring rules or payouts, so rows carry Epic's points but not each game's.
  */
@@ -291,7 +291,7 @@ export async function eventHistory(
     toRead: [],
     unmatched: 0,
   });
-  // Not in the schedule: Epic has stopped listing it, but still keeps your scores (D31).
+  // Not in the schedule: Epic has stopped listing it, but still keeps your scores (D32).
   const inSchedule = asArr(asObj(raw)?.events).some((e) => str(asObj(e)?.eventId) === eventId);
 
   const ask = async (team?: string[]): Promise<unknown> => {
