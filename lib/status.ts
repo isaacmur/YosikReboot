@@ -69,3 +69,14 @@ export function nextWindow<W extends WindowTimes>(windows: W[], now: Date = new 
     .filter((w) => windowState(w, now) === 'upcoming')
     .sort((a, b) => new Date(a.begin).getTime() - new Date(b.begin).getTime())[0];
 }
+
+/** The session whose results to open first: a live one (the latest to start), else the one that ended last. */
+export function latestWindow<W extends WindowTimes>(windows: W[], now: Date = new Date()): W | undefined {
+  const started = windows.filter((w) => new Date(w.begin).getTime() <= now.getTime());
+  const live = started.filter((w) => windowState(w, now) === 'live');
+  const at = (w: W) => new Date(live.length ? w.begin : w.end).getTime();
+  return (live.length ? live : started).reduce<W | undefined>(
+    (best, w) => (best && at(best) >= at(w) ? best : w),
+    undefined,
+  );
+}

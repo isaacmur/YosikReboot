@@ -5,6 +5,8 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { Entry, LeaderboardPage, WindowDetail } from '../lib/types';
 import { dedupeTeams } from '../src/entries';
+import { dayIndex, plural } from '../src/format';
+import { eventPath, inRegion, regionOf } from '../src/links';
 import { addFollow, getFollows, importFollows, parseFollows, removeFollow, setMe } from '../src/follows';
 import { allScans, cachedScan, isWindowChecked, scanBoard, scanWindow } from '../src/scan';
 
@@ -190,5 +192,25 @@ describe('dedupeTeams', () => {
       ['a', 100],
       ['b', 101],
     ]);
+  });
+});
+
+describe('formatting and links', () => {
+  it('counts calendar days in the chosen time zone', () => {
+    // 11 PM in New York on Oct 21 is already Oct 22 in UTC.
+    const late = '2026-10-22T03:00:00Z';
+    expect(dayIndex(late, 'America/New_York')).toBe(dayIndex('2026-10-21T12:00:00Z', 'UTC'));
+    expect(dayIndex(late, 'UTC') - dayIndex(late, 'America/New_York')).toBe(1);
+    expect(plural(1, 'win')).toBe('1 win');
+    expect(plural(1200, 'game')).toBe('1,200 games');
+  });
+
+  it('swaps the region suffix to find the same event elsewhere', () => {
+    expect(regionOf('epicgames_S42_PurgeCup_ZB_EU')).toBe('EU');
+    expect(regionOf('epicgames_Bog_Official')).toBeUndefined();
+    expect(inRegion('epicgames_S42_PurgeCup_ZB_EU', 'NAC')).toBe('epicgames_S42_PurgeCup_ZB_NAC');
+    expect(inRegion('S42_ArenaTestCup_Event2_EU', 'ASIA')).toBe('S42_ArenaTestCup_Event2_ASIA');
+    expect(inRegion('epicgames_Bog_Official', 'EU')).toBeUndefined();
+    expect(eventPath('a_EU', 'b_EU', 'tab=rules')).toBe('/events/a_EU/b_EU?tab=rules');
   });
 });

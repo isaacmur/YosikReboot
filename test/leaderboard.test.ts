@@ -67,6 +67,18 @@ describe('scoring rules reproduce Epic totals', () => {
     expect(summary.elims).toHaveLength(10);
     expect(summarizeScoring([])).toBeNull();
   });
+
+  it('counts multiplicative elimination points past their key (Ranked Cup tiers have no cap)', () => {
+    const elite = windowLocations(NAC2, RANKED.event, RANKED.window).find((l) =>
+      l.instance.toLowerCase().endsWith('_elite'),
+    )!.instance;
+    const rules = rulesFor(NAC2, RANKED.event, RANKED.window, elite);
+    const { elims } = statNames(rules);
+    expect(rules.find((r) => r.stat === elims)!.tiers).toEqual([{ key: 1, points: 1, multiplicative: true }]);
+    const summary = summarizeScoring(rules)!;
+    expect(summary.elims).toHaveLength(100);
+    expect(summary.elims[11]).toEqual({ elims: 12, points: 12 });
+  });
 });
 
 describe('normalizeEntries', () => {

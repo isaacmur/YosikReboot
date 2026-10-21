@@ -61,8 +61,10 @@ export function summarizeScoring(rules: ScoringRule[]): ScoringSummary | null {
     const points = sessionPoints({ [place]: p }, rules);
     if (points > 0) placement.push({ place: p, points });
   }
+  // A multiplicative tier ("2 points per elimination") has no top, so count up to 100.
+  const uncapped = rules.some((r) => r.stat === elims && r.tiers.some((t) => t.multiplicative));
   const elimRows = [];
-  for (let e = 1; e <= Math.min(maxKey(elims), 100); e++) {
+  for (let e = 1; e <= (uncapped ? 100 : Math.min(maxKey(elims), 100)); e++) {
     const points = sessionPoints({ [elims]: e }, rules);
     if (points > 0) elimRows.push({ elims: e, points });
   }

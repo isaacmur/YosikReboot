@@ -1,10 +1,132 @@
 @import 'tailwindcss';
+@import '@fontsource/barlow-condensed/600.css';
+@import '@fontsource/barlow-condensed/700.css';
+@import '@fontsource-variable/manrope';
 
-/* Dark mode follows the system setting (Tailwind's default `dark:` variant). */
+/*
+ * Design tokens. Dark is the primary theme; light mode redefines the same
+ * tokens. Neutrals carry a faint violet tint so the accent belongs to them.
+ */
 :root {
-  color-scheme: light dark;
+  color-scheme: dark;
+  --bg: #09090e;
+  --surface: #111118;
+  --raised: #191922;
+  --line: #24242f;
+  --line-strong: #33333f;
+  --ink: #f3f3f7;
+  --muted: #a3a3b6;
+  --faint: #6e6e83;
+  --accent: #8b5cf6;
+  --accent-bright: #a98bff;
+  --accent-soft: rgb(139 92 246 / 0.16);
+  --accent-ink: #ffffff;
+  --live: #ff4d6d;
+  --wrap: #f7b733;
+  --soon: #5aa9ff;
+  --soon-ink: #04121f;
+  --final: #8b8ba1;
+  --ok: #3ddc97;
+  --gold: #f2c14e;
+  --silver: #c3c9d6;
+  --bronze: #cf8a5b;
+  --shade: 9 9 14; /* --bg as RGB, for art overlays */
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+    --bg: #f5f5f8;
+    --surface: #ffffff;
+    --raised: #efeff4;
+    --line: #e2e2ea;
+    --line-strong: #cfcfdb;
+    --ink: #121218;
+    --muted: #55556a;
+    --faint: #8a8a9e;
+    --accent: #7c3aed;
+    --accent-bright: #6d28d9;
+    --accent-soft: rgb(124 58 237 / 0.1);
+    --live: #e11d48;
+    --wrap: #b7791f;
+    --soon: #2563eb;
+    --soon-ink: #ffffff;
+    --final: #71717f;
+    --ok: #059669;
+    --gold: #b8860b;
+    --silver: #7b8394;
+    --bronze: #a0522d;
+    --shade: 245 245 248;
+  }
+}
+
+@theme inline {
+  --font-sans: 'Manrope Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Barlow Condensed', 'Manrope Variable', ui-sans-serif, sans-serif;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-accent: var(--accent);
+  --color-accent-bright: var(--accent-bright);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-ink: var(--accent-ink);
+  --color-live: var(--live);
+  --color-wrap: var(--wrap);
+  --color-soon: var(--soon);
+  --color-soon-ink: var(--soon-ink);
+  --color-final: var(--final);
+  --color-ok: var(--ok);
+  --color-gold: var(--gold);
+  --color-silver: var(--silver);
+  --color-bronze: var(--bronze);
 }
 
 body {
-  @apply bg-zinc-50 text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100;
+  @apply bg-bg font-sans text-ink antialiased;
+}
+
+/* Numbers that line up in columns. */
+.nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* The slanted shape used for status tags and the active-tab marker. */
+.skew {
+  transform: skewX(-12deg);
+}
+.skew > * {
+  display: inline-block;
+  transform: skewX(12deg);
+}
+
+/* Hide scrollbars on horizontal strips while keeping them scrollable. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes live-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+.live-dot {
+  animation: live-pulse 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-dot {
+    animation: none;
+  }
 }

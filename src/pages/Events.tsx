@@ -1,25 +1,21 @@
 import { useSearchParams } from 'react-router';
 import { eventState, nextWindow, type EventState } from '../../lib/status';
 import { EVENT_TYPES, type EventInfo } from '../../lib/types';
-import { EventCard } from '../components/EventCard';
-import { Card, LoadState, SELECT } from '../components/ui';
-import { formatAgo, MODE_LABEL, REGION_LABEL, TEAM_LABEL, TYPE_LABEL, useNow } from '../format';
+import { EventTile } from '../components/EventCard';
+import { Button, Empty, LoadState, PageTitle, PillSelect, SectionHeader, Skeleton, Tabs } from '../components/ui';
+import { dayIndex, formatAgo, MODE_LABEL, REGION_LABEL, TEAM_LABEL, TYPE_LABEL, useNow } from '../format';
 import { useSettings } from '../settings';
 import { useEvents } from '../useEvents';
 
-const TABS: [EventState, string][] = [
-  ['upcoming', 'Upcoming'],
-  ['live', 'Live'],
-  ['ended', 'Ended'],
+const TABS: { id: EventState; label: string }[] = [
+  { id: 'upcoming', label: 'Upcoming' },
+  { id: 'live', label: 'Live' },
+  { id: 'ended', label: 'Ended' },
 ];
 
 /** Filter definitions: URL param, label, options, and the test each option applies (F3). */
 const FILTERS: { key: string; label: string; options: [string, string, (e: EventInfo) => boolean][] }[] = [
-  {
-    key: 'type',
-    label: 'Type',
-    options: EVENT_TYPES.map((t) => [t, TYPE_LABEL[t], (e) => e.type === t]),
-  },
+  { key: 'type', label: 'Type', options: EVENT_TYPES.map((t) => [t, TYPE_LABEL[t], (e) => e.type === t]) },
   {
     key: 'mode',
     label: 'Mode',
@@ -51,18 +47,29 @@ const FILTERS: { key: string; label: string; options: [string, string, (e: Event
   },
 ];
 
-function sortKey(e: EventInfo, state: EventState, now: Date): number {
-  if (state === 'ended') return -Date.parse(e.windows[e.windows.length - 1]!.end);
+/** When an event sorts and groups in a tab: its next start (upcoming), its live end (live), its last end (ended). */
+function when(e: EventInfo, state: EventState, now: Date): string {
+  if (state === 'ended') return e.windows[e.windows.length - 1]!.end;
   const next = nextWindow(e.windows, now);
-  return next ? Date.parse(state === 'live' ? next.end : next.begin) : Date.parse(e.windows[0]!.begin);
+  return next ? (state === 'live' ? next.end : next.begin) : e.windows[0]!.begin;
+}
+
+/** Broad buckets, so a quiet week doesn't turn into a column of one-card days. */
+function bucket(iso: string, now: Date, tz: string): string {
+  const days = dayIndex(iso, tz) - dayIndex(now, tz);
+  if (days === 0) return 'Today';
+  if (days === 1) return 'Tomorrow';
+  if (days === -1) return 'Yesterday';
+  if (days > 1) return days < 7 ? 'This week' : 'Later';
+  return days > -7 ? 'Earlier this week' : 'Older';
 }
 
 export default function Events() {
-  const [{ region }] = useSettings();
+  const [{ region, timeZone }] = useSettings();
   const { data, error, loading, reload } = useEvents();
   const [params, setParams] = useSearchParams();
   const now = useNow();
-  const tab = (TABS.find(([t]) => t === params.get('tab'))?.[0] ?? 'upcoming') as EventState;
+  const tab = TABS.find((t) => t.id === params.get('tab'))?.id ?? 'upcoming';
 
   const set = (key: string, value: string) => {
     const next = new URLSearchParams(params);
@@ -70,51 +77,62 @@ export default function Events() {
     else next.delete(key);
     setParams(next, { replace: true });
   };
+  const active = FILTERS.filter((f) => params.get(f.key));
 
-  if (!data) return <LoadState loading={loading} error={error} onRetry={reload} />;
-
-  const filtered = data.events.filter((e) =>
+  const filtered = (data?.events ?? []).filter((e) =>
     FILTERS.every(({ key, options }) => {
       const chosen = options.find(([v]) => v === params.get(key));
       return !chosen || chosen[2](e);
     }),
   );
   const byState = (s: EventState) => filtered.filter((e) => eventState(e.windows, now) === s);
-  const shown = byState(tab).sort((a, b) => sortKey(a, tab, now) - sortKey(b, tab, now));
+  const shown = byState(tab).sort((a, b) => {
+    const d = when(a, tab, now).localeCompare(when(b, tab, now));
+    return tab === 'ended' ? -d : d;
+  });
+  const groups: [string, EventInfo[]][] = [];
+  for (const e of shown) {
+    const label = tab === 'live' ? '' : bucket(when(e, tab, now), now, timeZone);
+    const g = groups[groups.length - 1];
+    if (g && g[0] === label) g[1].push(e);
+    else groups.push([label, [e]]);
+  }
 
   return (
     <div>
-      <div className="flex items-baseline justify-between">
-        <h1 className="text-xl font-semibold">Events</h1>
-        <p className="text-xs text-zinc-500">
-          {REGION_LABEL[region]} · updated {formatAgo(data.fetchedAt, now)}
-        </p>
-      </div>
+      <PageTitle
+        sub={
+          data
+            ? `${REGION_LABEL[region]} · ${data.events.length} events · updated ${formatAgo(data.fetchedAt, now)}`
+            : REGION_LABEL[region]
+        }
+      >
+        Events
+      </PageTitle>
 
-      <div role="tablist" className="mt-3 grid grid-cols-3 gap-1 rounded-lg bg-zinc-200 p-1 dark:bg-zinc-800">
-        {TABS.map(([t, label]) => (
-          <button
-            key={t}
-            role="tab"
-            aria-selected={tab === t}
-            onClick={() => set('tab', t === 'upcoming' ? '' : t)}
-            className={`rounded-md px-2 py-1.5 text-sm font-medium ${
-              tab === t ? 'bg-white shadow-sm dark:bg-zinc-950' : 'text-zinc-600 dark:text-zinc-400'
-            }`}
-          >
-            {label} <span className="text-zinc-500">{byState(t).length}</span>
-          </button>
-        ))}
-      </div>
+      <Tabs
+        label="Event state"
+        value={tab}
+        onChange={(t) => set('tab', t === 'upcoming' ? '' : t)}
+        tabs={TABS.map((t) => ({
+          id: t.id,
+          label: (
+            <>
+              {t.label} <span className="nums text-faint">{data ? byState(t.id).length : ''}</span>
+            </>
+          ),
+        }))}
+      />
 
-      <div className="mt-3 flex flex-wrap gap-2">
+      <div className="no-scrollbar -mx-4 mt-3 flex gap-2 overflow-x-auto px-4 pb-1">
         {FILTERS.map(({ key, label, options }) => (
-          <select
+          <PillSelect
             key={key}
             aria-label={label}
             value={params.get(key) ?? ''}
             onChange={(e) => set(key, e.target.value)}
-            className={SELECT}
+            tone={params.get(key) ? 'active' : 'plain'}
+            className="shrink-0"
           >
             <option value="">{label}: all</option>
             {options.map(([v, l]) => (
@@ -122,17 +140,53 @@ export default function Events() {
                 {l}
               </option>
             ))}
-          </select>
+          </PillSelect>
         ))}
-      </div>
-
-      <div className="mt-4 space-y-2">
-        {shown.length ? (
-          shown.map((e) => <EventCard key={e.id} event={e} now={now} />)
-        ) : (
-          <Card className="p-4 text-sm text-zinc-600 dark:text-zinc-400">No {tab} events match these filters.</Card>
+        {active.length > 0 && (
+          <Button
+            variant="ghost"
+            className="shrink-0"
+            onClick={() => {
+              const next = new URLSearchParams(params);
+              for (const f of FILTERS) next.delete(f.key);
+              setParams(next, { replace: true });
+            }}
+          >
+            Clear
+          </Button>
         )}
       </div>
+
+      {!data ? (
+        loading && !error ? (
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }, (_, i) => (
+              <Skeleton key={i} className="aspect-[4/3.4]" />
+            ))}
+          </div>
+        ) : (
+          <div className="mt-4">
+            <LoadState loading={loading} error={error} onRetry={reload} />
+          </div>
+        )
+      ) : shown.length ? (
+        groups.map(([label, list]) => (
+          <section key={label || 'all'} className="mt-5">
+            {label && <SectionHeader title={label} />}
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {list.map((e) => (
+                <EventTile key={e.id} event={e} now={now} />
+              ))}
+            </div>
+          </section>
+        ))
+      ) : (
+        <div className="mt-5">
+          <Empty>
+            No {tab} events{active.length ? ' match these filters' : ` in ${REGION_LABEL[region]}`}.
+          </Empty>
+        </div>
+      )}
     </div>
   );
 }

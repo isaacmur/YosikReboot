@@ -1,8 +1,9 @@
-import { useMemo } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { REGIONS, type Region } from '../../lib/types';
 import { logout } from '../api';
-import { Card, SELECT } from '../components/ui';
+import { ActivityIcon, ChevronRight, LogOutIcon, UsersIcon } from '../components/icons';
+import { Button, PageTitle, Panel, PillSelect, SectionHeader } from '../components/ui';
 import { REGION_LABEL, zoneAbbrev } from '../format';
 import { DEFAULT_SETTINGS, useSettings } from '../settings';
 
@@ -14,81 +15,94 @@ function timeZones(): string[] {
   }
 }
 
+function Row({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
+  return (
+    <div className="flex items-center justify-between gap-4 px-4 py-3">
+      <span className="min-w-0">
+        <span className="block text-sm font-semibold">{label}</span>
+        {hint && <span className="block text-xs text-muted">{hint}</span>}
+      </span>
+      {children}
+    </div>
+  );
+}
+
+function LinkRow({ to, icon, label }: { to: string; icon: ReactNode; label: string }) {
+  return (
+    <Link to={to} className="flex items-center gap-3 px-4 py-3 text-sm font-semibold transition hover:bg-raised/60">
+      <span className="text-accent-bright">{icon}</span>
+      <span className="flex-1">{label}</span>
+      <ChevronRight size={16} className="text-faint" />
+    </Link>
+  );
+}
+
 export default function Settings() {
   const [settings, update] = useSettings();
   const navigate = useNavigate();
   const zones = useMemo(timeZones, []);
 
   return (
-    <div>
-      <h1 className="text-xl font-semibold">Settings</h1>
-      <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">Saved in this browser only.</p>
-      <Card className="mt-4 divide-y divide-zinc-200 dark:divide-zinc-800">
-        <label className="flex items-center justify-between gap-4 p-3">
-          <span className="text-sm font-medium">Default region</span>
-          <select
+    <div className="max-w-2xl">
+      <PageTitle sub="Saved in this browser only.">Settings</PageTitle>
+      <Panel className="divide-y divide-line">
+        <Row label="Region" hint="Whose schedule you see">
+          <PillSelect
             value={settings.region}
             onChange={(e) => update({ region: e.target.value as Region })}
-            className={SELECT}
+            aria-label="Region"
           >
             {REGIONS.map((r) => (
               <option key={r} value={r}>
                 {REGION_LABEL[r]}
               </option>
             ))}
-          </select>
-        </label>
-        <label className="flex items-center justify-between gap-4 p-3">
-          <span className="text-sm font-medium">Time zone</span>
-          <select
+          </PillSelect>
+        </Row>
+        <Row label="Time zone" hint="For every date and time">
+          <PillSelect
             value={settings.timeZone}
             onChange={(e) => update({ timeZone: e.target.value })}
-            className={`${SELECT} max-w-[55%]`}
+            aria-label="Time zone"
+            className="max-w-[55%]"
           >
             {(zones.includes(settings.timeZone) ? zones : [settings.timeZone, ...zones]).map((z) => (
               <option key={z} value={z}>
                 {z.replace(/_/g, ' ')} ({zoneAbbrev(z)})
               </option>
             ))}
-          </select>
-        </label>
-        <label className="flex items-center justify-between gap-4 p-3">
-          <span className="text-sm font-medium">
-            Live board refresh
-            <span className="block text-xs font-normal text-zinc-500">Used by live leaderboards (Phase 2)</span>
-          </span>
-          <select
+          </PillSelect>
+        </Row>
+        <Row label="Live refresh" hint="How often a live leaderboard updates">
+          <PillSelect
             value={settings.refreshSec}
             onChange={(e) => update({ refreshSec: Number(e.target.value) })}
-            className={SELECT}
+            aria-label="Live refresh"
           >
             {[30, 60, 120, 300].map((s) => (
               <option key={s} value={s}>
                 {s < 60 ? `${s} s` : `${s / 60} min`}
               </option>
             ))}
-          </select>
-        </label>
-      </Card>
-      <div className="mt-6 flex items-center justify-between">
-        <span className="flex gap-4">
-          <Link to="/follows" className="text-sm font-medium text-blue-600 underline dark:text-blue-400">
-            Follows
-          </Link>
-          <Link to="/health" className="text-sm font-medium text-blue-600 underline dark:text-blue-400">
-            API health
-          </Link>
-        </span>
-        <button
-          onClick={async () => {
-            await logout();
-            navigate('/login', { replace: true });
-          }}
-          className="rounded-lg border border-zinc-300 px-3 py-1.5 text-sm font-medium dark:border-zinc-700"
-        >
-          Sign out
-        </button>
-      </div>
+          </PillSelect>
+        </Row>
+      </Panel>
+
+      <SectionHeader title="More" />
+      <Panel className="divide-y divide-line">
+        <LinkRow to="/follows" icon={<UsersIcon size={17} />} label="Follows" />
+        <LinkRow to="/health" icon={<ActivityIcon size={17} />} label="API health" />
+      </Panel>
+
+      <Button
+        className="mt-6"
+        onClick={async () => {
+          await logout();
+          navigate('/login', { replace: true });
+        }}
+      >
+        <LogOutIcon size={15} /> Sign out
+      </Button>
     </div>
   );
 }

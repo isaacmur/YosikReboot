@@ -27,6 +27,7 @@ These are gaps or traps in the spec that change code structure. Each has a recom
 | D13 | Vercel compiles each function file without bundling, so Node's ESM rules apply. | Relative imports in `api/`, `lib/` and `middleware.ts` use explicit `.js` extensions. `npm run smoke:api` compiles them and loads them with bare Node in CI, and fails with `ERR_MODULE_NOT_FOUND` if one is missing. |
 | D14 | A session can have several boards: the main board, one per Ranked Cup tier, and an FNCS cumulative board. Ranked Cup main boards carry no points (Phase 2 finding). | `/api/window` lists a session's boards, with scoring and payouts in plain terms. `/api/leaderboard` takes `board=`, and defaults to the main board if it scores, else the top tier. The UI hides unscored boards and remembers your tier. `board=cumulative` sums the top 300 of each session (D7) and says when lower ranks are approximate. |
 | D15 | The leaderboard and window routes need window times and scoring rules from the schedule. | The raw schedule document is kept per warm function instance for 15 minutes (`lib/epic/schedule.ts`), shared with `/api/events`, so a board request costs one Epic call. Display names are kept for 24 hours (`lib/epic/accounts.ts`). |
+| D16 | Opening an event should land on results, not a schedule (design overhaul). Epic's event and session IDs end in the region (`…_EU`). | The event page opens the latest session's board: a live one (latest start) first, else the one that ended last (`latestWindow()` in `lib/status.ts`); before any session starts it opens the session list. Session and region pickers switch in place. Another region's copy is the same ID with the suffix swapped (`src/links.ts`); NAE is offered only when a NAE copy exists (D11). |
 
 ---
 
@@ -66,15 +67,17 @@ YosikReboot/
 │   ├── http.ts                   # json(), cacheHeaders(), error envelope
 │   └── health.ts                 # in-memory ring buffer of recent upstream calls
 ├── src/                          # Vite + React + Tailwind
-│   ├── main.tsx, App.tsx, router.tsx
-│   ├── api/                      # typed fetchers for /api/*
-│   ├── hooks/
-│   │   ├── useLiveQuery.ts       # interval by window state, pauses when hidden, backoff
-│   │   ├── useNow.ts             # 1 s ticker for countdowns
-│   │   └── useLocalStorage.ts
-│   ├── store/                    # follows, settings, lastBoard (localStorage)
-│   ├── components/               # RegionSwitcher, Countdown, StatusBadge, LeaderboardRow …
-│   └── pages/                    # Home, Events, EventDetail, Leaderboard, Player, Me, Follows, Settings, Health, Login
+│   ├── main.tsx, App.tsx         # router and the top bar
+│   ├── index.css                 # design tokens (dark default, light override), fonts
+│   ├── api.ts, live.ts           # typed fetchers; live polling by window state
+│   ├── scan.ts, follows.ts, settings.ts, store.ts   # browser-side state (localStorage)
+│   ├── links.ts, format.ts       # event URLs and region suffixes; dates in your time zone
+│   ├── components/
+│   │   ├── ui.tsx                # primitives: tags, tabs, pills, buttons, panels, Art
+│   │   ├── icons.tsx             # stroke icon set
+│   │   ├── EventCard.tsx         # poster card, grid tile, compact row
+│   │   └── Board.tsx             # leaderboard rows, follows strip, scoring and prizes
+│   └── pages/                    # Home, Events, EventPage, Me, Follows, Settings, Health, Login
 └── test/
     ├── fixtures/epic/            # Saved, scrubbed real responses from Phase 0
     └── *.test.ts                 # Vitest
@@ -190,6 +193,21 @@ Tasks
 - After the window ends, the badge moves to "wrapping up", refresh slows to 5 min, then "final" stops refreshing.
 - Your own results for this season appear on `/me`.
 
+### Design overhaul (between Phases 2 and 3)
+
+> **Status: done** (code), pending your look on a phone.
+> - **Look:** dark, poster-led, electric violet accent, top bar navigation, compact leaderboards. Barlow Condensed for headings, Manrope for text, both self-hosted. Light mode follows the system.
+> - **Art:** the CMS backgrounds, 16:9 tiles, square posters and event colors now reach the browser (`EventInfo.art`). Epic's image CDN resizes them on request (`?resize=1&w=`), so a thumbnail is a few KB.
+> - **Event page (D16):** one page per event with an art hero, then Leaderboard, Sessions, and Rules & prizes tabs. It opens on the most recent session's board. Session and region pickers switch in place.
+> - **Pages:** Home (live posters, starting soon, just finished, follows), Events (tabs, filters, art tiles in Today / Tomorrow / This week / Later), Me (stats, trend, art thumbnails), Follows, Settings, Health, and a branded sign-in page.
+> - **Fixed on the way:** the scoring summary stopped counting eliminations at a multiplicative tier's key, so every Ranked Cup tier read "up to 1 elimination". It now counts to 100 (fixture test added).
+> - **Verified locally** against live Epic data in scripted Chromium at 390 px and 1366 px, dark and light, with no horizontal scroll and no console errors:
+>   - an ended event opened on its last session's board (100 rows)
+>   - a Ranked Cup opened on the remembered tier
+>   - a region switch landed on the same session in EU
+>   - an event with no started sessions opened on its session list
+>   - a followed player was highlighted on the board and found by Check on Me
+
 ### Phase 3 — v1 leaderboard depth (~4 sessions)
 
 Features: F14, F15, F16, F17, F18, F21, F24, F31, F34.
@@ -202,7 +220,8 @@ Features: F14, F15, F16, F17, F18, F21, F24, F31, F34.
 - **F21 Scoring panel:** side panel on desktop, bottom sheet on phone.
 - **F24 Team grouping:** `teamKey` = sorted member IDs; follows can be grouped into named teams.
 - **F31 CSV export:** client-side from loaded pages (and "export all" that walks pages for final windows only).
-- **F34 PWA + dark mode:** `vite-plugin-pwa` manifest + app-shell cache (never cache `/api/*` in the service worker — Epic data must stay fresh); Tailwind `dark:` via `prefers-color-scheme`.
+- **F34 PWA:** `vite-plugin-pwa` manifest + app-shell cache (never cache `/api/*` in the service worker — Epic data must stay fresh). Dark mode shipped with the design overhaul.
+- F17 (match breakdown) shipped in Phase 2: tap a row.
 
 ### Phase 4 — v1 schedule & history (~3–4 sessions)
 
@@ -217,7 +236,8 @@ Features: F4, F5, F8, F23, F28, F29.
 
 ### Later (not scheduled)
 
-F9 eligibility (needs the player-tokens endpoint working for *your* account, not the service account), F19 projected cutoff and F20 points calculator (build on F28 data), F26 head-to-head, F27 replay stats via api-fortnite.com, F30 Power Rankings scraper.
+- **Sign in as yourself, on demand (requested, kept for later).** To fill Me the way Osirion does, without board scanning: a "Sign in with Epic" button starts the same device-code link sign-in the setup tool uses, but for your main account. The server uses that session once to read your own season events and results, ends the session, and stores nothing; the browser keeps the results like scans today. No main-account credentials ever sit on the server. Staying signed in permanently with stored main-account credentials was considered and isn't recommended: a leak would expose your real account.
+- F9 eligibility (needs the player-tokens endpoint working for *your* account, not the service account), F19 projected cutoff and F20 points calculator (build on F28 data), F26 head-to-head, F27 replay stats via api-fortnite.com, F30 Power Rankings scraper.
 
 ---
 
