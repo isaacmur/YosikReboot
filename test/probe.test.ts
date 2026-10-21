@@ -82,7 +82,13 @@ describe('runProbe (against a synthetic fake)', () => {
   it('never writes tokens or device credentials to disk', async () => {
     await probe();
     const text = await allFileText();
-    for (const secret of [ACCESS_TOKEN, REFRESH_TOKEN, config.device.secret, config.device.deviceId, config.client.secret]) {
+    for (const secret of [
+      ACCESS_TOKEN,
+      REFRESH_TOKEN,
+      config.device.secret,
+      config.device.deviceId,
+      config.client.secret,
+    ]) {
       expect(text).not.toContain(secret);
     }
     const token = JSON.parse(await readFile(join(dir, 'oauth-token.json'), 'utf8'));
@@ -95,7 +101,12 @@ describe('runProbe (against a synthetic fake)', () => {
     const text = await allFileText();
     for (const personal of ['owner@example.com', '"Owner"', 'psn-name', '"US"']) expect(text).not.toContain(personal);
     const self = JSON.parse(await readFile(join(dir, 'account-by-name.json'), 'utf8'));
-    expect(self).toEqual({ id: SERVICE_ACCOUNT, displayName: 'YosikService', email: '[redacted]', lastName: '[redacted]' });
+    expect(self).toEqual({
+      id: SERVICE_ACCOUNT,
+      displayName: 'YosikService',
+      email: '[redacted]',
+      lastName: '[redacted]',
+    });
     const bulk = JSON.parse(await readFile(join(dir, 'accounts-bulk.json'), 'utf8'));
     expect(bulk[0]).toMatchObject({ externalAuths: '[redacted]' });
     expect(bulk[0].displayName).toMatch(/^name-/);
@@ -107,7 +118,9 @@ describe('runProbe (against a synthetic fake)', () => {
     const { epic } = await probe();
     const cms = epic.calls.find((c) => c.url.includes('tournamentinformation'))!;
     expect(cms.auth).toBeUndefined();
-    expect(epic.calls.filter((c) => c.url.includes('/leaderboards/')).every((c) => c.auth === `bearer ${ACCESS_TOKEN}`)).toBe(true);
+    expect(
+      epic.calls.filter((c) => c.url.includes('/leaderboards/')).every((c) => c.auth === `bearer ${ACCESS_TOKEN}`),
+    ).toBe(true);
     expect(epic.calls[1]!.auth).toBeUndefined();
   });
 
@@ -122,7 +135,11 @@ describe('runProbe (against a synthetic fake)', () => {
     const { report, byId } = await probe({ tokenStatus: 400 });
     expect(report.authenticated).toBe(false);
     expect(report.notes[0]).toMatch(/Token mint failed/);
-    expect((await readdir(dir)).sort()).toEqual(['cms-tournamentinformation.json', 'error-noauth-events.json', 'probe-report.json']);
+    expect((await readdir(dir)).sort()).toEqual([
+      'cms-tournamentinformation.json',
+      'error-noauth-events.json',
+      'probe-report.json',
+    ]);
     expect(byId('token').answer).toBe('Not minted in this run.');
     expect(byId('token').evidence[0]).toMatch(/HTTP 400 errors\.com\.epicgames\.account\.invalid_account_credentials/);
   });
@@ -169,7 +186,9 @@ describe('analyze (against a synthetic fake)', () => {
       'sessionHistory[].trackedStats keys: PLACEMENT_STAT_INDEX, TEAM_ELIMS_STAT_INDEX',
     );
     expect(byId('filtered').answer).toMatch(/^Yes: HTTP 200/);
-    expect(byId('bulk-accounts').answer).toBe('100 IDs -> HTTP 200; 101 IDs -> HTTP 400 errors.com.epicgames.account.too_many_accounts');
+    expect(byId('bulk-accounts').answer).toBe(
+      '100 IDs -> HTTP 200; 101 IDs -> HTTP 400 errors.com.epicgames.account.too_many_accounts',
+    );
     expect(byId('cms').answer).toBe('1 of 1 event displayDataId values appear in the CMS document.');
     expect(byId('cumulative').answer).toMatch(/^Nothing in this capture mentions "cumulative"/);
     expect(byId('rate').answer).toBe('Not tested (run the probe with --rate-test N).');
@@ -181,14 +200,19 @@ describe('analyze (against a synthetic fake)', () => {
         {
           eventId: 'epicgames_S99_FNCS_NAE',
           eventWindows: [
-            { eventWindowId: 'S99_FNCS_Day1_NAE', scoreLocations: [{ leaderboardDefId: 'Official_CumulativeLeaderboardDef' }] },
+            {
+              eventWindowId: 'S99_FNCS_Day1_NAE',
+              scoreLocations: [{ leaderboardDefId: 'Official_CumulativeLeaderboardDef' }],
+            },
           ],
         },
       ],
       resolvedWindowLocations: { x: ['cumulative:epicgames_S99_FNCS_NAE_cumulative'] },
     };
     const f = analyze(undefined, new Map([['events-download-NAE.json', events]])).find((x) => x.id === 'cumulative')!;
-    expect(f.answer).toBe('Not as windows, but the events payload references 2 cumulative score locations or leaderboard defs.');
+    expect(f.answer).toBe(
+      'Not as windows, but the events payload references 2 cumulative score locations or leaderboard defs.',
+    );
     expect(f.evidence).toEqual(['Official_CumulativeLeaderboardDef', 'cumulative:epicgames_S99_FNCS_NAE_cumulative']);
   });
 

@@ -39,16 +39,13 @@ export const endpoints = {
   oauthExchange: () => `${HOSTS.account}/account/api/oauth/exchange`,
   /** Device code flow: returns a link the account owner opens and approves. */
   oauthDeviceAuthorization: () => `${HOSTS.account}/account/api/oauth/deviceAuthorization`,
-  oauthKillSession: (accessToken: string) =>
-    `${HOSTS.account}/account/api/oauth/sessions/kill/${seg(accessToken)}`,
+  oauthKillSession: (accessToken: string) => `${HOSTS.account}/account/api/oauth/sessions/kill/${seg(accessToken)}`,
   /** Opened in a signed-in browser to get a one-time authorization code. */
   authorizationCodeRedirect: (clientId: string) =>
     withQuery(`${HOSTS.web}/id/api/redirect`, { clientId, responseType: 'code' }),
-  deviceAuth: (accountId: string) =>
-    `${HOSTS.account}/account/api/public/account/${seg(accountId)}/deviceAuth`,
+  deviceAuth: (accountId: string) => `${HOSTS.account}/account/api/public/account/${seg(accountId)}/deviceAuth`,
 
-  accountByName: (displayName: string) =>
-    `${HOSTS.account}/account/api/public/account/displayName/${seg(displayName)}`,
+  accountByName: (displayName: string) => `${HOSTS.account}/account/api/public/account/displayName/${seg(displayName)}`,
   accountsById: (ids: string[]) => {
     if (ids.length === 0 || ids.length > BULK_ACCOUNT_LIMIT) {
       throw new RangeError(`accountsById takes 1-${BULK_ACCOUNT_LIMIT} ids, got ${ids.length}`);
@@ -65,16 +62,13 @@ export const endpoints = {
     withQuery(`${HOSTS.events}/api/v1/events/${GAME_ID}/download/${seg(accountId)}`, params),
 
   leaderboard: (eventId: string, windowId: string, accountId: string, p: LeaderboardParams = {}) =>
-    withQuery(
-      `${HOSTS.events}/api/v1/leaderboards/${GAME_ID}/${seg(eventId)}/${seg(windowId)}/${seg(accountId)}`,
-      {
-        page: p.page ?? 0,
-        rank: p.rank ?? 0,
-        teamAccountIds: (p.teamAccountIds ?? []).join(','),
-        appId: GAME_ID,
-        showLiveSessions: p.showLiveSessions ?? false,
-      },
-    ),
+    withQuery(`${HOSTS.events}/api/v1/leaderboards/${GAME_ID}/${seg(eventId)}/${seg(windowId)}/${seg(accountId)}`, {
+      page: p.page ?? 0,
+      rank: p.rank ?? 0,
+      teamAccountIds: (p.teamAccountIds ?? []).join(','),
+      appId: GAME_ID,
+      showLiveSessions: p.showLiveSessions ?? false,
+    }),
   windowHistory: (eventId: string, windowId: string) =>
     `${HOSTS.events}/api/v1/events/${GAME_ID}/${seg(eventId)}/${seg(windowId)}/history`,
   playerWindowHistory: (eventId: string, windowId: string, accountId: string) =>

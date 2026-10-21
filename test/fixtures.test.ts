@@ -50,7 +50,9 @@ describe('fixture: first live capture (anonymized)', () => {
 
   it('keeps cross-file references intact after anonymization', () => {
     const board = new Set(
-      asArr(asObj(load('leaderboard-final-p0.json'))!.entries).flatMap((e) => asArr(asObj(e)!.teamAccountIds) as string[]),
+      asArr(asObj(load('leaderboard-final-p0.json'))!.entries).flatMap(
+        (e) => asArr(asObj(e)!.teamAccountIds) as string[],
+      ),
     );
     const bulk = asArr(load('accounts-bulk.json')).map((a) => asObj(a)!);
     expect(bulk).toHaveLength(100);

@@ -180,9 +180,7 @@ export function analyze(report: ProbeReport | undefined, files: Map<string, unkn
     const counts = keyCounts(allWindows);
     const expected = EXPECTED_WINDOW_FIELDS.map((k) => `${k}: ${counts.get(k) ?? 0}/${allWindows.length}`);
     const extra = [...counts.keys()].filter((k) => !(EXPECTED_WINDOW_FIELDS as readonly string[]).includes(k));
-    const delays = allWindows
-      .map((w) => asObj(w)?.payoutDelay)
-      .filter((d): d is number => typeof d === 'number');
+    const delays = allWindows.map((w) => asObj(w)?.payoutDelay).filter((d): d is number => typeof d === 'number');
     add(
       'window-fields',
       'Which window fields are actually present?',
@@ -196,7 +194,11 @@ export function analyze(report: ProbeReport | undefined, files: Map<string, unkn
   }
 
   // Scoring and payouts
-  const scoringSources = ['events-download-noregion.json', ...regionFiles.slice(0, 1), ...[...files.keys()].filter((f) => f.startsWith('events-data-'))];
+  const scoringSources = [
+    'events-download-noregion.json',
+    ...regionFiles.slice(0, 1),
+    ...[...files.keys()].filter((f) => f.startsWith('events-data-')),
+  ];
   const scoringEvidence = scoringSources
     .filter((f) => files.has(f))
     .flatMap((f) => {
@@ -238,7 +240,9 @@ export function analyze(report: ProbeReport | undefined, files: Map<string, unkn
   add(
     'leaderboard',
     'Leaderboard page size and entry shape',
-    p0 ? `Final page 0 holds ${asArr(p0.entries).length} entries of ${String(p0.totalPages)} pages.` : 'No final leaderboard captured.',
+    p0
+      ? `Final page 0 holds ${asArr(p0.entries).length} entries of ${String(p0.totalPages)} pages.`
+      : 'No final leaderboard captured.',
     lbEvidence,
   );
 
@@ -287,7 +291,14 @@ export function analyze(report: ProbeReport | undefined, files: Map<string, unkn
   add(
     'bulk-accounts',
     'Bulk account lookup limit',
-    bulk.length ? bulk.map((c) => `${c.step.replace('accounts.bulk.', '')} IDs -> HTTP ${c.status}${c.errorCode ? ` ${c.errorCode}` : ''}`).join('; ') : 'Not captured.',
+    bulk.length
+      ? bulk
+          .map(
+            (c) =>
+              `${c.step.replace('accounts.bulk.', '')} IDs -> HTTP ${c.status}${c.errorCode ? ` ${c.errorCode}` : ''}`,
+          )
+          .join('; ')
+      : 'Not captured.',
     bulkBody !== undefined ? [`response shape: ${shapeOf(bulkBody, 2)}`] : [],
   );
 
@@ -305,7 +316,9 @@ export function analyze(report: ProbeReport | undefined, files: Map<string, unkn
 
   // CMS join
   const cms = files.get('cms-tournamentinformation.json');
-  const displayIds = [...new Set(allEvents.map((e) => asObj(e)?.displayDataId).filter((d): d is string => typeof d === 'string'))];
+  const displayIds = [
+    ...new Set(allEvents.map((e) => asObj(e)?.displayDataId).filter((d): d is string => typeof d === 'string')),
+  ];
   if (cms !== undefined) {
     const vocab = allStringsAndKeys(cms);
     const found = displayIds.filter((d) => vocab.has(d));
@@ -315,7 +328,10 @@ export function analyze(report: ProbeReport | undefined, files: Map<string, unkn
       displayIds.length
         ? `${found.length} of ${displayIds.length} event displayDataId values appear in the CMS document.`
         : 'CMS captured, but no displayDataId values were found on events to join with.',
-      [`CMS top-level keys: ${Object.keys(asObj(cms) ?? {}).join(', ')}`, `example tournament-like paths: ${findKeys(cms, /tournament/i, 5).join(', ') || 'none'}`],
+      [
+        `CMS top-level keys: ${Object.keys(asObj(cms) ?? {}).join(', ')}`,
+        `example tournament-like paths: ${findKeys(cms, /tournament/i, 5).join(', ') || 'none'}`,
+      ],
     );
   } else {
     add('cms', 'How does the CMS join to events?', 'CMS not captured.');

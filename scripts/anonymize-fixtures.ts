@@ -40,13 +40,17 @@ async function main() {
 
   const leaks = findLeaks(rawDocs, written.join('\n'), keepIds);
   if (Object.values(leaks).some((n) => n > 0)) {
-    console.error(`Leak check FAILED (${JSON.stringify(leaks)}). Do not commit ${out}; delete it and fix the anonymizer.`);
+    console.error(
+      `Leak check FAILED (${JSON.stringify(leaks)}). Do not commit ${out}; delete it and fix the anonymizer.`,
+    );
     process.exit(2);
   }
 
   const run = await loadRun(out);
   await writeFile(join(out, 'analysis.md'), renderAnalysis(out, run.report, analyze(run.report, run.files)));
-  console.log(`Wrote ${files.length} files to ${out}; replaced ${anon.counts.ids} IDs and ${anon.counts.names} names. Leak check passed.`);
+  console.log(
+    `Wrote ${files.length} files to ${out}; replaced ${anon.counts.ids} IDs and ${anon.counts.names} names. Leak check passed.`,
+  );
 }
 
 main().catch((err) => {

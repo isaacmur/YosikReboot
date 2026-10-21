@@ -54,9 +54,30 @@ export function fakeEpic(opts: FakeEpicOptions): { fetch: FetchLike; calls: Fake
         regions: [region],
         displayDataId: 'test_cup',
         eventWindows: [
-          { eventWindowId: `S99_TestCup_Final_${region}`, eventTemplateId: 'tpl_duos', beginTime: iso(now, -300), endTime: iso(now, -120), payoutDelay: 30, round: 0 },
-          { eventWindowId: `S99_TestCup_Live_${region}`, eventTemplateId: 'tpl_solo', beginTime: iso(now, -30), endTime: iso(now, 60), payoutDelay: 30, round: 0 },
-          { eventWindowId: `S99_TestCup_Soon_${region}`, eventTemplateId: 'tpl_solo', beginTime: iso(now, 600), endTime: iso(now, 780), payoutDelay: 30, round: 1 },
+          {
+            eventWindowId: `S99_TestCup_Final_${region}`,
+            eventTemplateId: 'tpl_duos',
+            beginTime: iso(now, -300),
+            endTime: iso(now, -120),
+            payoutDelay: 30,
+            round: 0,
+          },
+          {
+            eventWindowId: `S99_TestCup_Live_${region}`,
+            eventTemplateId: 'tpl_solo',
+            beginTime: iso(now, -30),
+            endTime: iso(now, 60),
+            payoutDelay: 30,
+            round: 0,
+          },
+          {
+            eventWindowId: `S99_TestCup_Soon_${region}`,
+            eventTemplateId: 'tpl_solo',
+            beginTime: iso(now, 600),
+            endTime: iso(now, 780),
+            payoutDelay: 30,
+            round: 1,
+          },
         ],
       },
     ],
@@ -70,13 +91,21 @@ export function fakeEpic(opts: FakeEpicOptions): { fetch: FetchLike; calls: Fake
     const url = new URL(input);
     const method = init?.method ?? 'GET';
     const headers = new Headers(init?.headers);
-    calls.push({ method, url: input, auth: headers.get('authorization') ?? undefined, body: init?.body as string | undefined });
+    calls.push({
+      method,
+      url: input,
+      auth: headers.get('authorization') ?? undefined,
+      body: init?.body as string | undefined,
+    });
     const path = url.pathname;
     const authed = headers.get('authorization') === `bearer ${ACCESS_TOKEN}`;
 
     if (path === '/account/api/oauth/token') {
       if (opts.tokenStatus && opts.tokenStatus !== 200) {
-        return json({ errorCode: 'errors.com.epicgames.account.invalid_account_credentials', errorMessage: 'nope' }, opts.tokenStatus);
+        return json(
+          { errorCode: 'errors.com.epicgames.account.invalid_account_credentials', errorMessage: 'nope' },
+          opts.tokenStatus,
+        );
       }
       return json({
         access_token: ACCESS_TOKEN,
@@ -91,10 +120,15 @@ export function fakeEpic(opts: FakeEpicOptions): { fetch: FetchLike; calls: Fake
       });
     }
     if (path.startsWith('/content/api/pages/fortnite-game/tournamentinformation')) {
-      return json({ tournament_info: { tournaments: [{ tournament_display_id: 'test_cup', title_line_1: 'TEST CUP' }] } });
+      return json({
+        tournament_info: { tournaments: [{ tournament_display_id: 'test_cup', title_line_1: 'TEST CUP' }] },
+      });
     }
     if (!authed) {
-      return json({ errorCode: 'errors.com.epicgames.common.authentication.authentication_failed', errorMessage: 'no auth' }, 401);
+      return json(
+        { errorCode: 'errors.com.epicgames.common.authentication.authentication_failed', errorMessage: 'no auth' },
+        401,
+      );
     }
     if (path.includes('/api/v1/events/Fortnite/download/') || path.includes('/api/v1/events/Fortnite/data/')) {
       eventsCalls += 1;
@@ -119,7 +153,13 @@ export function fakeEpic(opts: FakeEpicOptions): { fetch: FetchLike; calls: Fake
         teamAccountIds: team(page, i),
         rank: page * pageSize + i + 1,
         pointsEarned: 100 - i,
-        sessionHistory: [{ sessionId: 's1', endTime: iso(now, -150), trackedStats: { PLACEMENT_STAT_INDEX: 3, TEAM_ELIMS_STAT_INDEX: 4 } }],
+        sessionHistory: [
+          {
+            sessionId: 's1',
+            endTime: iso(now, -150),
+            trackedStats: { PLACEMENT_STAT_INDEX: 3, TEAM_ELIMS_STAT_INDEX: 4 },
+          },
+        ],
       }));
       if (wanted.length && opts.filterWorks !== false) {
         entries = [{ teamAccountIds: wanted, rank: 30, pointsEarned: 70, sessionHistory: [] }];
@@ -130,10 +170,21 @@ export function fakeEpic(opts: FakeEpicOptions): { fetch: FetchLike; calls: Fake
     if (path === '/account/api/public/account') {
       const ids = url.searchParams.getAll('accountId');
       if (ids.length > 100) return json({ errorCode: 'errors.com.epicgames.account.too_many_accounts' }, 400);
-      return json(ids.map((id) => ({ id, displayName: `name-${id.slice(0, 6)}`, externalAuths: { psn: { externalDisplayName: 'psn-name' } } })));
+      return json(
+        ids.map((id) => ({
+          id,
+          displayName: `name-${id.slice(0, 6)}`,
+          externalAuths: { psn: { externalDisplayName: 'psn-name' } },
+        })),
+      );
     }
     if (path.startsWith('/account/api/public/account/displayName/')) {
-      return json({ id: SERVICE_ACCOUNT, displayName: decodeURIComponent(path.split('/').pop()!), email: 'owner@example.com', lastName: 'Owner' });
+      return json({
+        id: SERVICE_ACCOUNT,
+        displayName: decodeURIComponent(path.split('/').pop()!),
+        email: 'owner@example.com',
+        lastName: 'Owner',
+      });
     }
     if (path.startsWith('/api/v1/players/Fortnite/tokens')) {
       return json({ accounts: [{ accountId: SERVICE_ACCOUNT, tokens: ['ARENA_S99_Division1'] }] });

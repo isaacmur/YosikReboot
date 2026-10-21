@@ -71,7 +71,11 @@ async function main() {
     EPIC_DEVICE_SECRET: created.device.secret,
   };
   console.log(`Device auth created for ${created.displayName ?? created.device.accountId}.`);
-  console.log(created.verified ? 'Verified: a token was minted from it.' : 'WARNING: minting from it failed; check the client ID.');
+  console.log(
+    created.verified
+      ? 'Verified: a token was minted from it.'
+      : 'WARNING: minting from it failed; check the client ID.',
+  );
 
   if (write) {
     let existing = '';

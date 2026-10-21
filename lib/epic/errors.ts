@@ -22,4 +22,3 @@ export function parseEpicError(body: unknown): { errorCode?: string; errorMessag
   }
   return {};
 }
-

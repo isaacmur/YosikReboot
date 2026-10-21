@@ -11,9 +11,8 @@ export interface WindowTimes {
 }
 
 export function payoutDelayMs(minutes: number | null | undefined): number {
-  const m = typeof minutes === 'number' && Number.isFinite(minutes) && minutes >= 0
-    ? minutes
-    : DEFAULT_PAYOUT_DELAY_MIN;
+  const m =
+    typeof minutes === 'number' && Number.isFinite(minutes) && minutes >= 0 ? minutes : DEFAULT_PAYOUT_DELAY_MIN;
   return m * 60_000;
 }
 

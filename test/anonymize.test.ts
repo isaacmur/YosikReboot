@@ -29,8 +29,12 @@ describe('Anonymizer', () => {
   });
 
   it('catches IDs after an encoded comma in a URL', () => {
-    const out = new Anonymizer().value({ url: `https://x/lb?teamAccountIds=${A}%2C${B}&appId=Fortnite` }) as { url: string };
-    expect(out.url).toBe('https://x/lb?teamAccountIds=f0000000000000000000000000000001%2Cf0000000000000000000000000000002&appId=Fortnite');
+    const out = new Anonymizer().value({ url: `https://x/lb?teamAccountIds=${A}%2C${B}&appId=Fortnite` }) as {
+      url: string;
+    };
+    expect(out.url).toBe(
+      'https://x/lb?teamAccountIds=f0000000000000000000000000000001%2Cf0000000000000000000000000000002&appId=Fortnite',
+    );
   });
 
   it('keeps public IDs and leaves non-ID text alone', () => {
@@ -81,7 +85,12 @@ describe('findLeaks', () => {
   });
 
   it('counts each kind of leak independently of the anonymizer', () => {
-    const text = JSON.stringify({ x: `${B}`, n: 'RealName', f: 'GroupIdentity_GeoIdentity_france', t: 'SpectateCode1' });
+    const text = JSON.stringify({
+      x: `${B}`,
+      n: 'RealName',
+      f: 'GroupIdentity_GeoIdentity_france',
+      t: 'SpectateCode1',
+    });
     expect(findLeaks(raw, text, [CLIENT])).toEqual({ ids: 1, names: 1, countries: 1, tokens: 1 });
   });
 

@@ -20,10 +20,18 @@ function tokenServer(opts: { expiresIn?: number; fail?: number } = {}) {
     if (url.endsWith('/oauth/exchange')) return Response.json({ code: 'xchg' });
     if (opts.fail && n < opts.fail) {
       n += 1;
-      return Response.json({ errorCode: 'errors.com.epicgames.account.invalid_account_credentials', errorMessage: 'bad' }, { status: 400 });
+      return Response.json(
+        { errorCode: 'errors.com.epicgames.account.invalid_account_credentials', errorMessage: 'bad' },
+        { status: 400 },
+      );
     }
     n += 1;
-    return Response.json({ access_token: `tok${n}`, expires_in: opts.expiresIn ?? 7200, account_id: 'acc', client_id: 'cid' });
+    return Response.json({
+      access_token: `tok${n}`,
+      expires_in: opts.expiresIn ?? 7200,
+      account_id: 'acc',
+      client_id: 'cid',
+    });
   };
   return { f, requests };
 }
@@ -39,7 +47,7 @@ describe('requestToken', () => {
     expect(init.body).toBe('grant_type=device_auth&account_id=acc');
   });
 
-  it('throws EpicHttpError with Epic\'s error code', async () => {
+  it("throws EpicHttpError with Epic's error code", async () => {
     const { f } = tokenServer({ fail: 1 });
     const err = await requestToken(f, client, {}).catch((e) => e);
     expect(err).toBeInstanceOf(EpicHttpError);

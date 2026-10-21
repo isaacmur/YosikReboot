@@ -1,0 +1,6 @@
+dist/
+captures/
+test/fixtures/
+.vercel/
+package-lock.json
+*.md

@@ -1,4 +1,6 @@
 {
+  // Node-side code: Vercel functions, shared lib, scripts, tests, tool configs.
+  // The browser app has its own config (tsconfig.app.json).
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["ES2023"],
@@ -13,5 +15,5 @@
     "isolatedModules": true,
     "verbatimModuleSyntax": true
   },
-  "include": ["lib", "scripts", "test"]
+  "include": ["api", "lib", "scripts", "test", "vite.config.ts"]
 }

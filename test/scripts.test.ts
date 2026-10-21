@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import type { FetchLike } from '../lib/auth/epicToken';
-import { createDeviceAuth, createDeviceAuthByLink, WrongAccountError, type DeviceCodeLogin } from '../scripts/deviceAuth';
+import {
+  createDeviceAuth,
+  createDeviceAuthByLink,
+  WrongAccountError,
+  type DeviceCodeLogin,
+} from '../scripts/deviceAuth';
 import { readClient, readDevice, readDeviceCodeClient, readExchangeClient, upsertEnv } from '../scripts/env';
 import { parseLabel, parseRateTest, parseRegions } from '../scripts/probe/args';
 import { REDACTED, sanitizeAccount, sanitizeToken, scrub } from '../scripts/probe/scrub';
@@ -9,11 +14,17 @@ import { listWindows, pickSampleWindows, teamSizeHint } from '../scripts/probe/s
 describe('scrub', () => {
   it('redacts credential keys at any depth, case-insensitively', () => {
     const out = scrub({ access_token: 'a', nested: [{ Secret: 's', deviceId: 'd', keep: 1 }], refresh_token: 'r' });
-    expect(out).toEqual({ access_token: REDACTED, nested: [{ Secret: REDACTED, deviceId: REDACTED, keep: 1 }], refresh_token: REDACTED });
+    expect(out).toEqual({
+      access_token: REDACTED,
+      nested: [{ Secret: REDACTED, deviceId: REDACTED, keep: 1 }],
+      refresh_token: REDACTED,
+    });
   });
 
   it('replaces known secret values inside any string', () => {
-    expect(scrub({ url: 'https://x/kill/abcdefgh12345?y' }, ['abcdefgh12345'])).toEqual({ url: `https://x/kill/${REDACTED}?y` });
+    expect(scrub({ url: 'https://x/kill/abcdefgh12345?y' }, ['abcdefgh12345'])).toEqual({
+      url: `https://x/kill/${REDACTED}?y`,
+    });
   });
 
   it('ignores short or empty secrets so it cannot shred ordinary text', () => {
@@ -55,9 +66,15 @@ describe('env', () => {
 
   it('only uses the exchange client when both halves are set', () => {
     expect(readExchangeClient({ EPIC_EVENTS_CLIENT_ID: 'x', EPIC_EVENTS_CLIENT_SECRET: '' })).toBeUndefined();
-    expect(readExchangeClient({ EPIC_EVENTS_CLIENT_ID: 'x', EPIC_EVENTS_CLIENT_SECRET: 'y' })).toEqual({ id: 'x', secret: 'y' });
+    expect(readExchangeClient({ EPIC_EVENTS_CLIENT_ID: 'x', EPIC_EVENTS_CLIENT_SECRET: 'y' })).toEqual({
+      id: 'x',
+      secret: 'y',
+    });
     expect(readDeviceCodeClient({ EPIC_DEVICE_CODE_CLIENT_ID: 'x' })).toBeUndefined();
-    expect(readDeviceCodeClient({ EPIC_DEVICE_CODE_CLIENT_ID: 'x', EPIC_DEVICE_CODE_CLIENT_SECRET: 'y' })).toEqual({ id: 'x', secret: 'y' });
+    expect(readDeviceCodeClient({ EPIC_DEVICE_CODE_CLIENT_ID: 'x', EPIC_DEVICE_CODE_CLIENT_SECRET: 'y' })).toEqual({
+      id: 'x',
+      secret: 'y',
+    });
   });
 
   it('upserts keys without touching other lines', () => {
@@ -153,7 +170,8 @@ describe('createDeviceAuth', () => {
         if (opts.verifyFails) return Response.json({ errorCode: 'x' }, { status: 400 });
         return Response.json({ access_token: 'verify-tok', account_id: 'acc1' });
       }
-      if (url.endsWith('/acc1/deviceAuth')) return Response.json({ accountId: 'acc1', deviceId: 'dev1', secret: 'sec1' });
+      if (url.endsWith('/acc1/deviceAuth'))
+        return Response.json({ accountId: 'acc1', deviceId: 'dev1', secret: 'sec1' });
       return new Response(null, { status: 204 });
     };
     return { f, seen };
@@ -162,7 +180,11 @@ describe('createDeviceAuth', () => {
   it('logs in with the code, creates the device auth, verifies it, and kills both sessions', async () => {
     const { f, seen } = server();
     const out = await createDeviceAuth(f, { id: 'c', secret: 's' }, '  code123 ');
-    expect(out).toEqual({ device: { accountId: 'acc1', deviceId: 'dev1', secret: 'sec1' }, displayName: 'Alt', verified: true });
+    expect(out).toEqual({
+      device: { accountId: 'acc1', deviceId: 'dev1', secret: 'sec1' },
+      displayName: 'Alt',
+      verified: true,
+    });
     expect(seen).toEqual([
       'POST /account/api/oauth/token grant_type=authorization_code&code=code123',
       'POST /account/api/public/account/acc1/deviceAuth {}',
@@ -185,12 +207,15 @@ describe('createDeviceAuth: expected account guard', () => {
     const seen: string[] = [];
     const f: FetchLike = async (url, init) => {
       seen.push(`${init?.method ?? 'GET'} ${new URL(url).pathname}`);
-      if (url.endsWith('/oauth/token')) return Response.json({ access_token: 'main-tok', account_id: 'main', displayName: 'MyMainAccount' });
+      if (url.endsWith('/oauth/token'))
+        return Response.json({ access_token: 'main-tok', account_id: 'main', displayName: 'MyMainAccount' });
       return new Response(null, { status: 204 });
     };
-    const err = await createDeviceAuth(f, { id: 'c', secret: 's' }, 'code', { expectDisplayName: 'YosikReload' }).catch((e) => e);
+    const err = await createDeviceAuth(f, { id: 'c', secret: 's' }, 'code', {
+      expectDisplayName: 'MyAltAccount',
+    }).catch((e) => e);
     expect(err).toBeInstanceOf(WrongAccountError);
-    expect(err.message).toMatch(/Signed in as MyMainAccount, not YosikReload/);
+    expect(err.message).toMatch(/Signed in as MyMainAccount, not MyAltAccount/);
     expect(seen).toEqual(['POST /account/api/oauth/token', 'DELETE /account/api/oauth/sessions/kill/main-tok']);
   });
 });
@@ -213,14 +238,27 @@ describe('createDeviceAuthByLink', () => {
         if (grant === 'client_credentials') return Response.json({ access_token: 'client-tok' });
         if (grant === 'device_code') {
           polls += 1;
-          if (opts.deny) return Response.json({ errorCode: 'errors.com.epicgames.account.oauth.authorization_denied' }, { status: 400 });
-          if (opts.slowDown && polls === 1) return Response.json({ errorCode: 'errors.com.epicgames.account.oauth.slow_down' }, { status: 400 });
-          if (polls <= (opts.pending ?? 2)) return Response.json({ errorCode: 'errors.com.epicgames.account.oauth.authorization_pending' }, { status: 400 });
+          if (opts.deny)
+            return Response.json(
+              { errorCode: 'errors.com.epicgames.account.oauth.authorization_denied' },
+              { status: 400 },
+            );
+          if (opts.slowDown && polls === 1)
+            return Response.json({ errorCode: 'errors.com.epicgames.account.oauth.slow_down' }, { status: 400 });
+          if (polls <= (opts.pending ?? 2))
+            return Response.json(
+              { errorCode: 'errors.com.epicgames.account.oauth.authorization_pending' },
+              { status: 400 },
+            );
           return Response.json({ access_token: 'switch-tok', account_id: 'alt' });
         }
         if (grant === 'exchange_code') {
           expect(auth).toBe(`basic ${Buffer.from('android:a').toString('base64')}`);
-          return Response.json({ access_token: 'android-tok', account_id: 'alt', displayName: opts.displayName ?? 'YosikReload' });
+          return Response.json({
+            access_token: 'android-tok',
+            account_id: 'alt',
+            displayName: opts.displayName ?? 'MyAltAccount',
+          });
         }
         if (grant === 'device_auth') return Response.json({ access_token: 'verify-tok', account_id: 'alt' });
       }
@@ -258,11 +296,22 @@ describe('createDeviceAuthByLink', () => {
     const { f, seen, polls } = server();
     const c = clock();
     let shown: DeviceCodeLogin | undefined;
-    const out = await createDeviceAuthByLink(f, app, switchClient, (l) => (shown = l), { ...c, expectDisplayName: 'yosikreload' });
-    expect(shown).toMatchObject({ verificationUrl: 'https://www.epicgames.com/activate?userCode=ABCD1234', userCode: 'ABCD1234', expiresAt: 600_000 });
+    const out = await createDeviceAuthByLink(f, app, switchClient, (l) => (shown = l), {
+      ...c,
+      expectDisplayName: 'myaltaccount',
+    });
+    expect(shown).toMatchObject({
+      verificationUrl: 'https://www.epicgames.com/activate?userCode=ABCD1234',
+      userCode: 'ABCD1234',
+      expiresAt: 600_000,
+    });
     expect(polls()).toBe(3);
     expect(c.waits).toEqual([10_000, 10_000, 10_000]);
-    expect(out).toEqual({ device: { accountId: 'alt', deviceId: 'dev', secret: 'sec' }, displayName: 'YosikReload', verified: true });
+    expect(out).toEqual({
+      device: { accountId: 'alt', deviceId: 'dev', secret: 'sec' },
+      displayName: 'MyAltAccount',
+      verified: true,
+    });
     expect(seen.filter((l) => l.startsWith('DELETE'))).toEqual([
       'DELETE /account/api/oauth/sessions/kill/switch-tok',
       'DELETE /account/api/oauth/sessions/kill/verify-tok',
@@ -280,7 +329,9 @@ describe('createDeviceAuthByLink', () => {
   it('gives up when the link expires', async () => {
     const { f } = server({ pending: 1000 });
     const c = clock();
-    await expect(createDeviceAuthByLink(f, app, switchClient, () => {}, c)).rejects.toThrow(/expired before it was approved/);
+    await expect(createDeviceAuthByLink(f, app, switchClient, () => {}, c)).rejects.toThrow(
+      /expired before it was approved/,
+    );
     expect(c.waits).toHaveLength(60);
   });
 
@@ -294,7 +345,7 @@ describe('createDeviceAuthByLink', () => {
   it('refuses when someone other than the expected account approves', async () => {
     const { f, seen } = server({ displayName: 'MyMainAccount' });
     await expect(
-      createDeviceAuthByLink(f, app, switchClient, () => {}, { ...clock(), expectDisplayName: 'YosikReload' }),
+      createDeviceAuthByLink(f, app, switchClient, () => {}, { ...clock(), expectDisplayName: 'MyAltAccount' }),
     ).rejects.toBeInstanceOf(WrongAccountError);
     expect(seen.some((l) => l.includes('/alt/deviceAuth'))).toBe(false);
   });

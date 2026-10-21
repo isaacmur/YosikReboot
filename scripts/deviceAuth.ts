@@ -36,7 +36,10 @@ export async function createDeviceAuth(
 }
 
 export class WrongAccountError extends Error {
-  constructor(readonly expected: string, readonly actual: string | undefined) {
+  constructor(
+    readonly expected: string,
+    readonly actual: string | undefined,
+  ) {
     super(
       `Signed in as ${actual ?? 'an account with no display name'}, not ${expected}. ` +
         'Nothing was created; sign in as the right account and try again.',

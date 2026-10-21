@@ -3,7 +3,12 @@ import { BULK_ACCOUNT_LIMIT, chunk, endpoints, HOSTS } from '../lib/epic/endpoin
 
 describe('endpoints', () => {
   it('builds the leaderboard URL with default paging and joined team IDs', () => {
-    const url = new URL(endpoints.leaderboard('epicgames_S23_Cup_EU', 'S23_Cup_Event9_EU', 'acc', { page: 2, teamAccountIds: ['a', 'b'] }));
+    const url = new URL(
+      endpoints.leaderboard('epicgames_S23_Cup_EU', 'S23_Cup_Event9_EU', 'acc', {
+        page: 2,
+        teamAccountIds: ['a', 'b'],
+      }),
+    );
     expect(url.origin).toBe(HOSTS.events);
     expect(url.pathname).toBe('/api/v1/leaderboards/Fortnite/epicgames_S23_Cup_EU/S23_Cup_Event9_EU/acc');
     expect(Object.fromEntries(url.searchParams)).toEqual({
@@ -33,12 +38,16 @@ describe('endpoints', () => {
     expect(url.searchParams.getAll('accountId')).toEqual(['a', 'b']);
     expect(() => endpoints.accountsById([])).toThrow(RangeError);
     expect(() => endpoints.accountsById(Array(BULK_ACCOUNT_LIMIT + 1).fill('x'))).toThrow(RangeError);
-    expect(new URL(endpoints.accountsByIdUnchecked(Array(101).fill('x'))).searchParams.getAll('accountId')).toHaveLength(101);
+    expect(
+      new URL(endpoints.accountsByIdUnchecked(Array(101).fill('x'))).searchParams.getAll('accountId'),
+    ).toHaveLength(101);
   });
 
   it('builds history and tokens URLs', () => {
     expect(endpoints.playerWindowHistory('e', 'w', 'a')).toBe(`${HOSTS.events}/api/v1/events/Fortnite/e/w/history/a`);
-    expect(endpoints.playerTokens(['a', 'b'])).toBe(`${HOSTS.events}/api/v1/players/Fortnite/tokens?teamAccountIds=a%2Cb`);
+    expect(endpoints.playerTokens(['a', 'b'])).toBe(
+      `${HOSTS.events}/api/v1/players/Fortnite/tokens?teamAccountIds=a%2Cb`,
+    );
   });
 });
 

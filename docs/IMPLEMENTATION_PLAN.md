@@ -173,8 +173,15 @@ Goal: a deployed, passphrase-protected app that lists every region's events in E
 
 Features: F1, F2, F3, F6 (basic), F7, F32, F33 (baseline), F35, F36, F37 (server side).
 
+> **Status:** task 1 is done except the Vercel deploy. The scaffold builds, renders at phone width in light and dark, and CI (`.github/workflows/ci.yml`) runs lint, format, typecheck, tests and build on every push.
+>
+> **Your steps before task 2** (they need your accounts):
+> 1. Merge `docs/implementation-plan` into `main`. Vercel deploys `main` to production.
+> 2. Import the repo in Vercel (Hobby). `vercel.json` sets the framework, build and SPA rewrites.
+> 3. In Vercel → Settings → Environment Variables, add `APP_PASSPHRASE`, `COOKIE_SECRET`, `EPIC_CLIENT_ID`, `EPIC_CLIENT_SECRET` and the three `EPIC_*` device-auth values. Get those three from a fresh link sign-in (runbook step 3 in `EPIC_API_NOTES.md`).
+
 Tasks
-1. **Scaffold:** Vite + React + TS + Tailwind + React Router; ESLint, Prettier, Vitest; `vercel.json` with SPA fallback; deploy an empty page to Vercel Hobby.
+1. ~~**Scaffold:** Vite + React + TS + Tailwind + React Router; ESLint, Prettier, Vitest; `vercel.json` with SPA fallback~~ (done); deploy an empty page to Vercel Hobby.
 2. **Gate (D1):** `api/login.ts` compares the passphrase (constant-time) to `APP_PASSPHRASE`, sets `yr_session` = HMAC(`COOKIE_SECRET`, issuedAt) — `HttpOnly; Secure; SameSite=Strict; Max-Age=30d`. `middleware.ts` verifies it for every `/api/*` path except `/api/login`, returning 401. The SPA shows `/login` on 401. No CORS headers anywhere.
 3. **Epic client:** `epicToken.ts` (D6), `client.ts` (bearer header, ≥1 s spacing between calls within an instance, one retry on 401 after re-mint, typed `UpstreamError` on 429/5xx), `endpoints.ts`.
 4. **Parsers:** `epic/events.ts` + `cms.ts` with fixture tests. Classification helpers `classifyType()` / `classifyMode()` / `teamSize()` from event IDs and CMS text — table-driven tests, since these are heuristics.

@@ -117,7 +117,10 @@ export function findLeaks(rawDocs: unknown[], outputText: string, keepIds: Itera
   const count = (set: Set<string>, present: (s: string) => boolean) => [...set].filter(present).length;
   return {
     ids: count(ids, (s) => outputText.includes(s)),
-    names: count(names, (s) => outputText.includes(JSON.stringify(s)) || outputText.includes(`/displayName/${encodeURIComponent(s)}`)),
+    names: count(
+      names,
+      (s) => outputText.includes(JSON.stringify(s)) || outputText.includes(`/displayName/${encodeURIComponent(s)}`),
+    ),
     countries: count(countries, (s) => outputText.includes(s)),
     tokens: count(tokens, (s) => outputText.includes(s)),
   };

@@ -204,7 +204,14 @@ export async function runProbe(opts: ProbeOptions): Promise<ProbeReport> {
         log(`${String(res.status).padStart(3)} ${step}`);
         return res;
       } catch (err) {
-        report.calls.push({ step, method: init?.method ?? 'GET', url: shortUrl(input), status: 0, ms: Date.now() - started, error: message(err) });
+        report.calls.push({
+          step,
+          method: init?.method ?? 'GET',
+          url: shortUrl(input),
+          status: 0,
+          ms: Date.now() - started,
+          error: message(err),
+        });
         log(`ERR ${step}: ${message(err)}`);
         throw err;
       }
@@ -315,7 +322,9 @@ export async function runProbe(opts: ProbeOptions): Promise<ProbeReport> {
 
     await call('leaderboard.final.p1', lb(final, { page: 1 }), { file: 'leaderboard-final-p1.json' });
     if (typeof totalPages === 'number' && totalPages > 2) {
-      await call('leaderboard.final.last', lb(final, { page: totalPages - 1 }), { file: 'leaderboard-final-last.json' });
+      await call('leaderboard.final.last', lb(final, { page: totalPages - 1 }), {
+        file: 'leaderboard-final-last.json',
+      });
     }
     // Can one team's row be fetched directly? Use a team from the middle of page 0.
     const target = teams[Math.floor(teams.length / 2)];
@@ -352,12 +361,17 @@ export async function runProbe(opts: ProbeOptions): Promise<ProbeReport> {
         sanitize: sanitizeAccount,
       });
     } else {
-      report.notes.push(`Only ${leaderboardIds.length} IDs on the final board; bulk limit above ${BULK_ACCOUNT_LIMIT} not tested.`);
+      report.notes.push(
+        `Only ${leaderboardIds.length} IDs on the final board; bulk limit above ${BULK_ACCOUNT_LIMIT} not tested.`,
+      );
     }
   }
   const name = config.displayName ?? (typeof raw.displayName === 'string' ? raw.displayName : undefined);
   if (name) {
-    await call('accounts.byName', endpoints.accountByName(name), { file: 'account-by-name.json', sanitize: sanitizeAccount });
+    await call('accounts.byName', endpoints.accountByName(name), {
+      file: 'account-by-name.json',
+      sanitize: sanitizeAccount,
+    });
   }
 
   await call('players.tokens', endpoints.playerTokens([accountId]), { file: 'player-tokens.json' });
@@ -377,7 +391,12 @@ export async function runProbe(opts: ProbeOptions): Promise<ProbeReport> {
       }
     }
     const first = statuses.indexOf(429);
-    report.rateTest = { requests: statuses.length, statuses, first429At: first === -1 ? undefined : first + 1, retryAfter };
+    report.rateTest = {
+      requests: statuses.length,
+      statuses,
+      first429At: first === -1 ? undefined : first + 1,
+      retryAfter,
+    };
   }
 
   return finish();

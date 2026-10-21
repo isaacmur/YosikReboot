@@ -10,11 +10,16 @@ Personal, single-user Fortnite competitive schedule + live leaderboard web app. 
 Vite + React + TypeScript + Tailwind (`src/`), Vercel Functions (`api/`), shared code in `lib/`, Vitest with saved Epic fixtures (`test/fixtures/epic/`).
 
 ## Commands
-- `npm test`: Vitest. `npm run typecheck`: tsc.
+- `npm run dev`: local app. `npm run build`: production build into `dist/`.
+- `npm run check`: everything CI runs (lint, format:check, typecheck, test, build). Run it before pushing.
+- `npm test`: Vitest. `npm run typecheck`: tsc for the Node side (`tsconfig.json`) and the app (`tsconfig.app.json`).
+- `npm run format`: Prettier (single quotes, 120 columns).
 - `npm run epic:device-auth`, `epic:probe`, `epic:anonymize` and `epic:analyze`: Epic capture tools; see `docs/EPIC_API_NOTES.md`.
 
+- Changing dependencies: npm 10 crashes resolving vitest's optional peers (`edgesOut`), so use `npx npm@11.6.2 install <pkg>`. `npm ci` on npm 10 is fine.
+
 ## Rules
-- Only `api/` + `lib/` talk to Epic. The browser never sees Epic's raw format or any credential.
+- Only `api/` + `lib/` talk to Epic. The browser never sees Epic's raw format or any credential. `src/` may import only `lib/types.ts` and `lib/status.ts`.
 - The passphrase gate lives in `middleware.ts` so it also covers CDN-cached responses.
 - API responses are identical for every caller (they're CDN-cached); per-user logic stays in the browser.
 - Errors are `Cache-Control: no-store`.
