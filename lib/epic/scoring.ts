@@ -3,7 +3,7 @@
 // for every entry (main boards and Ranked Cup tier boards alike).
 
 import type { Cutoff, PayoutTier, ScoringSummary } from '../types.js';
-import { humanize } from './events.js';
+import { humanize } from './text.js';
 import { asArr, asObj, num, str } from './json.js';
 
 export interface ScoringRule {
@@ -45,10 +45,15 @@ export function sessionPoints(stats: Record<string, unknown>, rules: ScoringRule
 }
 
 /** Stat names this board scores on; Ranked Cup tier boards use tier-prefixed stats. */
-export function statNames(rules: ScoringRule[]): { place: string; elims: string; victory: string } {
+export function statNames(rules: ScoringRule[]): { place: string; elims: string; victory: string; alive: string } {
   const place = rules.find((r) => r.stat.endsWith('PLACEMENT_STAT_INDEX'))?.stat ?? 'PLACEMENT_STAT_INDEX';
   const elims = rules.find((r) => r.stat.endsWith('TEAM_ELIMS_STAT_INDEX'))?.stat ?? 'TEAM_ELIMS_STAT_INDEX';
-  return { place, elims, victory: place.replace(/PLACEMENT_STAT_INDEX$/, 'VICTORY_ROYALE_STAT') };
+  return {
+    place,
+    elims,
+    victory: place.replace(/PLACEMENT_STAT_INDEX$/, 'VICTORY_ROYALE_STAT'),
+    alive: place.replace(/PLACEMENT_STAT_INDEX$/, 'TIME_ALIVE_STAT'),
+  };
 }
 
 /** Evaluates the rules at every threshold, so the UI can show "1st: 51 pts" instead of tier maths. */
@@ -73,6 +78,20 @@ export function summarizeScoring(rules: ScoringRule[]): ScoringSummary | null {
 
 const BASIS: Record<string, PayoutTier['basis']> = { rank: 'rank', percentile: 'percentile', value: 'points' };
 
+/** Cosmetic kinds (the part of a game reward's value before ':') in the names players use. */
+const COSMETIC: Record<string, string> = {
+  AthenaCharacter: 'Skin',
+  AthenaBackpack: 'Back Bling',
+  AthenaPickaxe: 'Pickaxe',
+  AthenaGlider: 'Glider',
+  AthenaDance: 'Emote',
+  AthenaItemWrap: 'Wrap',
+  CosmeticVariantToken: 'Style',
+};
+
+const isSkin = (p: Record<string, unknown>) =>
+  p.rewardType === 'game' && (str(p.value) ?? '').startsWith('AthenaCharacter:');
+
 function rewardLabel(p: Record<string, unknown>): string | undefined {
   const type = str(p.rewardType);
   const value = str(p.value) ?? '';
@@ -80,7 +99,10 @@ function rewardLabel(p: Record<string, unknown>): string | undefined {
   if (type === 'ecomm')
     return value === 'USD' ? `$${qty.toLocaleString('en-US')}` : `${qty.toLocaleString('en-US')} ${value}`;
   if (type === 'token') return `Qualifies for ${humanize(value.replace(/^S\d+_/, ''))}`;
-  if (type === 'game') return humanize((value.split(':')[0] ?? value).replace(/^Athena/, '')) || 'In-game reward';
+  if (type === 'game') {
+    const kind = value.split(':')[0] ?? value;
+    return COSMETIC[kind] ?? (humanize(kind.replace(/^Athena/, '')) || 'In-game reward');
+  }
   return undefined;
 }
 
@@ -92,6 +114,8 @@ interface Tier {
   /** Labels of the qualification rewards ("Qualifies for …"). */
   qualifyTo: string[];
   cash: boolean;
+  /** A skin (character) is among the rewards. */
+  skin: boolean;
   usd: number;
 }
 
@@ -121,6 +145,7 @@ function parseTiers(raw: unknown): Tier[] {
           rewards,
           qualifyTo: labels('token'),
           cash: payouts.some((p) => p.rewardType === 'ecomm'),
+          skin: payouts.some(isSkin),
           usd: payouts
             .filter((p) => p.rewardType === 'ecomm' && p.value === 'USD')
             .reduce((sum, p) => sum + (num(p.quantity) ?? 0), 0),
@@ -141,18 +166,20 @@ export function parsePayouts(raw: unknown): PayoutTier[] {
   }));
 }
 
-const KIND_ORDER: Cutoff['kind'][] = ['qualify', 'cash', 'item'];
+const KIND_ORDER: Cutoff['kind'][] = ['qualify', 'cash', 'skin', 'item'];
 
 /**
  * Lines to draw on a board: for each next round, the furthest tier that qualifies
- * for it; the last paid tier; and each tier of items. "Furthest" is the highest rank
- * or fraction, or the lowest points total. Points tiers at 0 are entry and lockout
+ * for it; the last paid tier; the last tier with a skin (cosmetic events' main
+ * prize); and each other tier of items. "Furthest" is the highest rank or
+ * fraction, or the lowest points total. Points tiers at 0 are entry and lockout
  * tokens that everyone who plays gets, so they draw no line.
  */
 export function parseCutoffs(raw: unknown): Cutoff[] {
   const best = new Map<string, Cutoff>();
   const keep = (c: Cutoff) => {
-    const key = `${c.basis}|${c.kind}|${c.kind === 'item' ? c.threshold : c.label}`;
+    // One line per next round, one for cash and one for skins (the furthest); every item tier.
+    const key = `${c.basis}|${c.kind}|${c.kind === 'item' ? c.threshold : c.kind === 'qualify' ? c.label : ''}`;
     const prev = best.get(key);
     const further = !prev || (c.basis === 'points' ? c.threshold < prev.threshold : c.threshold > prev.threshold);
     if (further) best.set(key, c);
@@ -161,8 +188,10 @@ export function parseCutoffs(raw: unknown): Cutoff[] {
     if (t.basis === 'points' && t.threshold <= 0) continue;
     for (const label of t.qualifyTo) keep({ basis: t.basis, threshold: t.threshold, kind: 'qualify', label });
     if (t.cash) keep({ basis: t.basis, threshold: t.threshold, kind: 'cash', label: 'Cash prizes' });
-    if (!t.cash && !t.qualifyTo.length)
-      keep({ basis: t.basis, threshold: t.threshold, kind: 'item', label: t.rewards.join(', ') });
+    const items = t.rewards.filter((r) => !t.qualifyTo.includes(r) && !/^\$/.test(r)).join(', ');
+    if (t.skin) keep({ basis: t.basis, threshold: t.threshold, kind: 'skin', label: items });
+    else if (!t.cash && !t.qualifyTo.length)
+      keep({ basis: t.basis, threshold: t.threshold, kind: 'item', label: items });
   }
   // Two rounds reached from the same place share one line.
   const lines = new Map<string, Cutoff>();

@@ -102,6 +102,14 @@ export function entryAtRank(rank: number, pages: LeaderboardPage[]): Entry | und
   return undefined;
 }
 
+/** What a summary card calls each kind of line. */
+export const CUTOFF_KIND: Record<Cutoff['kind'], string> = {
+  qualify: 'Qualify',
+  cash: 'Paid',
+  skin: 'Skin',
+  item: 'Items',
+};
+
 /** "Top 20", "Top 5%", "1,000 pts" */
 export function cutoffTitle(c: Cutoff): string {
   if (c.basis === 'rank') return `Top ${c.threshold.toLocaleString('en-US')}`;

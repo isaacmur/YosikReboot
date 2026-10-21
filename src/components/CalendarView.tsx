@@ -18,7 +18,7 @@ import {
   weekDays,
   type DaySession,
 } from '../calendar';
-import { dayIndex, formatTime, REGION_LABEL, zoneAbbrev } from '../format';
+import { dayIndex, formatTime, REGION_LABEL, STAGE_LABEL, zoneAbbrev } from '../format';
 import { EventRow } from './EventCard';
 import { FeedPanel } from './Feed';
 import { ChevronLeft, ChevronRight } from './icons';
@@ -42,7 +42,7 @@ function Agenda({ list, now, tz, showRegion }: { list: DaySession[]; now: Date; 
             <>
               {showRegion && event.homeRegion !== 'GLOBAL' && `${event.homeRegion} · `}
               {event.windows.length > 1 && `${w.label} · `}
-              {formatTime(w.begin, tz)} – {formatTime(w.end, tz)} {zoneAbbrev(tz, w.begin)}
+              {STAGE_LABEL[w.stage]} · {formatTime(w.begin, tz)} – {formatTime(w.end, tz)} {zoneAbbrev(tz, w.begin)}
             </>
           }
           right={<StateTag state={windowState(w, now)} />}

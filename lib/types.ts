@@ -27,6 +27,14 @@ export type Mode = 'BR' | 'RELOAD' | 'OTHER';
 export type TeamSize = 1 | 2 | 3 | 4;
 export type PlatformGroup = 'PC' | 'CONSOLE' | 'MOBILE' | 'CLOUD';
 
+/**
+ * Who a session is for (D27). `open`: anyone who meets the account rules.
+ * `qualified`: only players who earned a spot (or an invite), and it qualifies
+ * players onward (heats, middle rounds). `final`: qualified players only, and
+ * nothing after it.
+ */
+export type Stage = 'open' | 'qualified' | 'final';
+
 /** One session (Epic calls it an event window). Times are UTC ISO strings. */
 export interface EventWindow {
   id: string;
@@ -41,6 +49,7 @@ export interface EventWindow {
   isTBD: boolean;
   /** Plain-language entry rules for this session (qualification, rank, 2FA). */
   requirements: string[];
+  stage: Stage;
 }
 
 /** Tournament artwork and colors from Epic's CMS; any of it can be missing. */
@@ -137,8 +146,9 @@ export interface Cutoff {
   basis: PayoutTier['basis'];
   /** Last rank inside the line, the top fraction (0.05 = top 5%), or the points needed. */
   threshold: number;
-  kind: 'qualify' | 'cash' | 'item';
-  /** What crossing it gets you, e.g. "Qualifies for Event 5 Round 2", "Cash prizes", "Pickaxe". */
+  /** `skin`: the last place that wins a skin, with whatever else that tier gives. */
+  kind: 'qualify' | 'cash' | 'skin' | 'item';
+  /** What crossing it gets you, e.g. "Qualifies for Event 5 Round 2", "Cash prizes", "Skin, Pickaxe". */
   label: string;
 }
 
@@ -166,11 +176,15 @@ export interface WindowDetail {
 }
 
 export interface MatchResult {
+  /** Epic's ID for the game: every team in the same game has the same one (D28). */
+  sessionId: string;
   endedAt: string;
   place: number | null;
   elims: number;
   points: number | null;
   victory: boolean;
+  /** Seconds the team survived. */
+  timeAlive: number | null;
 }
 
 export interface EntryMember {

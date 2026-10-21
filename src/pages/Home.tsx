@@ -4,7 +4,7 @@ import type { EventInfo, EventWindow } from '../../lib/types';
 import { EventRow, PosterCard } from '../components/EventCard';
 import { ChevronRight } from '../components/icons';
 import { Chip, Countdown, Empty, LoadState, Panel, SectionHeader, Skeleton } from '../components/ui';
-import { formatAgo, formatDay, formatTime, ordinal, REGION_LABEL, useNow, zoneAbbrev } from '../format';
+import { formatAgo, formatDay, formatTime, ordinal, REGION_LABEL, STAGE_LABEL, useNow, zoneAbbrev } from '../format';
 import { useFollows } from '../follows';
 import { eventPath } from '../links';
 import { allScans, useScans } from '../scan';
@@ -148,7 +148,7 @@ export default function Home() {
                   event={e}
                   window={w}
                   to={eventPath(e.id)}
-                  sub={`${w.label} · ${formatDay(w.begin, timeZone)}, ${formatTime(w.begin, timeZone)} ${zoneAbbrev(timeZone, w.begin)}`}
+                  sub={`${w.label} · ${STAGE_LABEL[w.stage]} · ${formatDay(w.begin, timeZone)}, ${formatTime(w.begin, timeZone)} ${zoneAbbrev(timeZone, w.begin)}`}
                   right={
                     <span className="font-semibold text-accent-bright">
                       <Countdown to={w.begin} now={now} prefix="" />
@@ -171,7 +171,7 @@ export default function Home() {
                   key={w.id}
                   event={e}
                   window={w}
-                  sub={`${w.label} · ended ${formatAgo(w.end, now)}`}
+                  sub={`${w.label} · ${STAGE_LABEL[w.stage]} · ended ${formatAgo(w.end, now)}`}
                   right={<span className="text-xs font-semibold text-muted">Results</span>}
                 />
               ))}

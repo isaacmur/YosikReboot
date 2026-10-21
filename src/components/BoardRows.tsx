@@ -1,6 +1,7 @@
 // Leaderboard rows: rank with its movement arrow (F15), names with a saved
 // team's label (F24), stats, and a breakdown that opens on tap with each game
-// (F17) and buttons to follow the players or save them as a team. Cutoff lines
+// (F17, each one opening that game, D28) and buttons to follow the players or
+// save them as a team. Cutoff lines
 // (F16) and gaps between loaded pages sit between rows.
 
 import { memo, useState, type FormEvent } from 'react';
@@ -8,10 +9,11 @@ import { Link } from 'react-router';
 import type { Entry } from '../../lib/types';
 import { cutoffTitle, type PlacedCutoff } from '../board';
 import { addFollow, useFollows } from '../follows';
-import { formatTime, plural } from '../format';
+import { plural } from '../format';
 import type { Move } from '../movement';
 import { removeTeam, saveTeam, useTeams } from '../teams';
 import { MatchChart } from './Charts';
+import { GamesTable } from './MatchView';
 import { MoveIcon, PlusIcon, StarIcon } from './icons';
 import { Button, Chip } from './ui';
 
@@ -134,7 +136,7 @@ function Members({ e }: { e: Entry }) {
   );
 }
 
-function Games({ e, tz }: { e: Entry; tz: string }) {
+function Games({ e, tz, onMatch }: { e: Entry; tz: string; onMatch: (sessionId: string) => void }) {
   return (
     <div className="space-y-2.5 border-t border-line bg-bg/60 px-3 py-2.5 sm:pl-[3.25rem]">
       <Members e={e} />
@@ -143,32 +145,7 @@ function Games({ e, tz }: { e: Entry; tz: string }) {
           <MatchChart sessions={e.sessions} tz={tz} />
         </div>
       )}
-      {e.sessions.length > 0 && (
-        <table className="nums w-full max-w-md text-xs">
-          <thead className="text-faint">
-            <tr className="text-[10px] tracking-wider uppercase">
-              <th className="pb-1 text-left font-semibold">Game</th>
-              <th className="pb-1 text-right font-semibold">Place</th>
-              <th className="pb-1 text-right font-semibold">Elims</th>
-              <th className="pb-1 text-right font-semibold">Pts</th>
-              <th className="pb-1 text-right font-semibold">Ended</th>
-            </tr>
-          </thead>
-          <tbody>
-            {e.sessions.map((s, i) => (
-              <tr key={`${s.endedAt}-${i}`} className="border-t border-line/70">
-                <td className="py-1 text-muted">{i + 1}</td>
-                <td className={`py-1 text-right ${s.victory ? 'font-bold text-accent-bright' : ''}`}>
-                  {s.place ? (s.victory ? 'Win' : `#${s.place}`) : '—'}
-                </td>
-                <td className="py-1 text-right">{s.elims}</td>
-                <td className="py-1 text-right font-semibold">{s.points ?? '—'}</td>
-                <td className="py-1 text-right text-muted">{s.endedAt ? formatTime(s.endedAt, tz) : '—'}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+      {e.sessions.length > 0 && <GamesTable sessions={e.sessions} tz={tz} onGame={onMatch} />}
     </div>
   );
 }
@@ -182,6 +159,7 @@ export const Row = memo(function Row({
   flash,
   lines,
   onToggle,
+  onMatch,
   tz,
 }: {
   e: Entry;
@@ -194,6 +172,8 @@ export const Row = memo(function Row({
   /** Cutoff lines that fall right after this row. */
   lines?: PlacedCutoff[];
   onToggle: (teamKey: string) => void;
+  /** Opens one of the team's games. */
+  onMatch: (sessionId: string) => void;
   tz: string;
 }) {
   const marked = followed || !!team;
@@ -228,7 +208,7 @@ export const Row = memo(function Row({
         <span className="nums hidden text-right text-muted sm:block">{e.avgPlace ?? '—'}</span>
         <span className="nums text-right font-bold">{fmtN(e.points)}</span>
       </button>
-      {open && <Games e={e} tz={tz} />}
+      {open && <Games e={e} tz={tz} onMatch={onMatch} />}
       {lines?.map((l) => (
         <CutoffLine key={`${l.kind}|${l.basis}|${l.threshold}`} line={l} />
       ))}
@@ -255,6 +235,7 @@ export function HeaderRow() {
 const LINE_TONE: Record<PlacedCutoff['kind'], string> = {
   qualify: 'border-accent text-accent-bright bg-accent-soft',
   cash: 'border-ok text-ok bg-ok/10',
+  skin: 'border-gold text-gold bg-gold/10',
   item: 'border-line-strong text-muted',
 };
 

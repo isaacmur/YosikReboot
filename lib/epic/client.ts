@@ -39,7 +39,10 @@ export class CallLog {
 export interface EpicClientOptions {
   tokens: EpicTokenManager;
   fetch?: FetchLike;
-  /** Minimum gap between calls from this instance (politeness, F37). */
+  /**
+   * Minimum gap between calls from this instance (politeness, F37). 250 ms lets a
+   * board scan's parallel page reads through at about four a second (D26).
+   */
   minGapMs?: number;
   log?: CallLog;
   sleep?: (ms: number) => Promise<void>;
@@ -54,7 +57,7 @@ export class EpicClient {
 
   constructor(private readonly opts: EpicClientOptions) {
     this.fetchImpl = opts.fetch ?? ((input, init) => fetch(input, init));
-    this.minGap = opts.minGapMs ?? 1000;
+    this.minGap = opts.minGapMs ?? 250;
     this.log = opts.log ?? new CallLog();
     this.sleep = opts.sleep ?? ((ms) => new Promise((r) => setTimeout(r, ms)));
   }

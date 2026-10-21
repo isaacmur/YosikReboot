@@ -5,8 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="light dark" />
     <meta name="robots" content="noindex, nofollow" />
-    <meta name="theme-color" content="#09090e" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#f5f5f8" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#09090e" />
+    <script>
+      // The theme before the first paint, so light mode never flashes dark (src/theme.ts takes over after).
+      (function () {
+        var theme = 'system';
+        try {
+          theme = JSON.parse(localStorage.getItem('yr.settings.v1') || '{}').theme || 'system';
+        } catch (e) {}
+        var light = theme === 'light' || (theme === 'system' && matchMedia('(prefers-color-scheme: light)').matches);
+        document.documentElement.dataset.theme = light ? 'light' : 'dark';
+        if (light) document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f5f5f8');
+      })();
+    </script>
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="YosikReboot" />

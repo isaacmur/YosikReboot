@@ -12,6 +12,7 @@ Not affiliated with or endorsed by Epic Games.
 - **Design overhaul: done.** A dark, poster-led look with tournament art throughout. Opening an event lands on its most recent leaderboard, with session and region pickers to switch.
 - **Phase 3 (leaderboard depth): done.** Boards go down to the top 10,000 by scrolling or jumping to a rank. It adds movement arrows, qualifying and prize lines with the points they take, pinned follows and saved teams, scoring beside the board, CSV export, and an installable app.
 - **Phase 4 (schedule and history): done.** A month and week calendar, a calendar feed your calendar app subscribes to, search across every region, player pages with prize money, points per game, and the points it took to qualify in past sessions.
+- **Updates after Phase 4: done.** A light theme, skin reward lines, Open, Qualified and Final tags on every session, per-match stats with a Matches tab for set lobbies, and faster board searches with Find a player across the top 10,000.
 - **Later:** eligibility checks, projected cutoffs, a points calculator, head-to-head, replay stats and Power Rankings (see the developer plan).
 
 ## Docs

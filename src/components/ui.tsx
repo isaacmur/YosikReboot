@@ -1,8 +1,8 @@
 import type { ButtonHTMLAttributes, ReactNode, SelectHTMLAttributes } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import type { EventState } from '../../lib/status';
-import type { EventArt, WindowState } from '../../lib/types';
-import { formatCountdown } from '../format';
+import type { EventArt, Stage, WindowState } from '../../lib/types';
+import { formatCountdown, STAGE_LABEL } from '../format';
 import { ChevronDown, XIcon } from './icons';
 
 const cx = (...c: (string | false | null | undefined)[]) => c.filter(Boolean).join(' ');
@@ -26,6 +26,26 @@ export function StateTag({ state, className }: { state: WindowState | EventState
         {state === 'live' && <span className="live-dot size-1.5 rounded-full bg-white" aria-hidden />}
         {s.label}
       </span>
+    </span>
+  );
+}
+
+const STAGE_TONE: Record<Stage, string> = {
+  open: 'border-line-strong text-muted',
+  qualified: 'border-accent/50 bg-accent-soft text-accent-bright',
+  final: 'border-gold/60 bg-gold/10 text-gold',
+};
+
+/** Who a session is for (D27): Open, Qualified (earned spots that lead onward) or Final. */
+export function StageTag({ stage }: { stage: Stage }) {
+  return (
+    <span
+      className={cx(
+        'inline-flex items-center rounded-[4px] border px-1.5 py-px text-[10px] font-bold tracking-wider whitespace-nowrap uppercase',
+        STAGE_TONE[stage],
+      )}
+    >
+      {STAGE_LABEL[stage]}
     </span>
   );
 }

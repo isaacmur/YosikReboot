@@ -73,7 +73,7 @@ export function CutoffHistory({ event }: { event: EventInfo }) {
       )}
       {error && <p className="text-xs text-live">Stopped: {error}</p>}
       {!missing.length && !columns.length && (
-        <Empty>This event's sessions have no qualifying or paid places, only item rewards.</Empty>
+        <Empty>This event's sessions have no qualifying, paid or skin places, only other item rewards.</Empty>
       )}
       {chart.length > 1 && first && (
         <Panel className="p-4">

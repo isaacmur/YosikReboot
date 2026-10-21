@@ -20,7 +20,16 @@ import { dayIndex, plural } from '../src/format';
 import { eventPath, inRegion, regionOf } from '../src/links';
 import { addFollow, exportFollows, getFollows, importFollows, parseFollows, removeFollow, setMe } from '../src/follows';
 import { boardMoves, forgetBoard, movesFor, recordPage } from '../src/movement';
-import { allScans, cachedScan, isWindowChecked, lastScan, scanBoard, scanOrder, scanWindow } from '../src/scan';
+import {
+  allScans,
+  cachedScan,
+  isWindowChecked,
+  lastScan,
+  scanBoard,
+  scanOrder,
+  scanWindow,
+  searchBoard,
+} from '../src/scan';
 import { getTeams, parseTeams, removeTeam, saveTeam, teamKeyOf } from '../src/teams';
 
 const id = (c: string) => c.repeat(32);
@@ -136,13 +145,24 @@ function fakeBoards(boards: Record<string, number>, calls: string[]) {
 describe('scanBoard', () => {
   afterEach(() => vi.unstubAllGlobals());
 
-  it('stops at the page where everyone is found', async () => {
+  it('reads a few pages at a time and starts no more once everyone is found', async () => {
     const calls: string[] = [];
     const member = fakeBoards({ b1: 10 }, calls);
     const scan = await scanBoard('e', 'w', 'b1', [member(250)], { final: false, boardLabel: 'B1' });
-    expect(calls).toEqual(['b1 p0', 'b1 p1', 'b1 p2']);
+    // Page 0 says how many pages there are; then four at a time, so pages 3 and 4 were already on their way.
+    expect(calls).toEqual(['b1 p0', 'b1 p1', 'b1 p2', 'b1 p3', 'b1 p4']);
     expect(scan.found[member(250)]).toMatchObject({ rank: 251 });
     expect(scan.complete).toBe(false);
+  });
+
+  it('answers a later search from the pages it already read', async () => {
+    const calls: string[] = [];
+    const member = fakeBoards({ b4: 10 }, calls);
+    await scanBoard('e', 'w', 'b4', [member(450)], { final: true, boardLabel: 'B4' });
+    calls.length = 0;
+    const scan = await scanBoard('e', 'w', 'b4', [member(120)], { final: true, boardLabel: 'B4' });
+    expect(calls).toEqual([]);
+    expect(scan.found[member(120)]).toMatchObject({ rank: 121 });
   });
 
   it('reads every page when someone is missing, then reports a complete scan', async () => {
@@ -163,6 +183,15 @@ describe('scanBoard', () => {
     calls.length = 0;
     await scanBoard('e', 'w', 'b2', [missing], { final: true, boardLabel: 'B2' });
     expect(calls).toEqual([]);
+  });
+
+  it('searches for a name without replacing the saved search of your follows', async () => {
+    const calls: string[] = [];
+    const member = fakeBoards({ b5: 4 }, calls);
+    const saved = await scanBoard('e', 'w', 'b5', [member(30)], { final: true, boardLabel: 'B5' });
+    const result = await searchBoard('e', 'w', 'b5', [member(330)], { final: true });
+    expect(result.found[member(330)]).toMatchObject({ rank: 331 });
+    expect(lastScan('e', 'w', 'b5')).toBe(saved);
   });
 
   it('can be stopped', async () => {
@@ -446,12 +475,29 @@ describe('scan order', () => {
     expect(scanOrder(4)).toEqual([0, 1, 2, 3]);
   });
 
-  it('finds a player who moved a page in two reads', async () => {
+  it('finds a player who moved a page in one round of reads', async () => {
     const calls: string[] = [];
     const member = fakeBoards({ hb: 40 }, calls);
     const scan = await scanBoard('eh', 'wh', 'hb', [member(2_150)], { final: false, boardLabel: 'H', hints: [22] });
-    expect(calls).toEqual(['hb p22', 'hb p21']);
-    expect(scan).toMatchObject({ complete: false, pagesScanned: 2 });
+    expect(calls).toEqual(['hb p22', 'hb p21', 'hb p23', 'hb p20', 'hb p24']);
+    expect(scan).toMatchObject({ complete: false, pagesScanned: 5 });
     expect(lastScan('eh', 'wh', 'hb')).toBe(scan);
+  });
+});
+
+describe('theme setting', () => {
+  it('keeps a valid theme and falls back to System', async () => {
+    const { parseSettings } = await import('../src/settings');
+    expect(parseSettings({ theme: 'light' }).theme).toBe('light');
+    expect(parseSettings({ theme: 'purple' }).theme).toBe('system');
+    expect(parseSettings(null)).toMatchObject({ region: 'NAE', theme: 'system', refreshSec: 60 });
+  });
+
+  it('follows the device only when set to System', async () => {
+    const { resolveTheme } = await import('../src/theme');
+    expect(resolveTheme('system', true)).toBe('light');
+    expect(resolveTheme('system', false)).toBe('dark');
+    expect(resolveTheme('dark', true)).toBe('dark');
+    expect(resolveTheme('light', false)).toBe('light');
   });
 });

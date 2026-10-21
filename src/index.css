@@ -5,7 +5,9 @@
 
 /*
  * Design tokens. Dark is the primary theme; light mode redefines the same
- * tokens. Neutrals carry a faint violet tint so the accent belongs to them.
+ * tokens under data-theme="light" (set from Settings, or from the device when
+ * the setting is System; see src/theme.ts). Neutrals carry a faint violet tint
+ * so the accent belongs to them.
  */
 :root {
   color-scheme: dark;
@@ -33,31 +35,29 @@
   --shade: 9 9 14; /* --bg as RGB, for art overlays */
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color-scheme: light;
-    --bg: #f5f5f8;
-    --surface: #ffffff;
-    --raised: #efeff4;
-    --line: #e2e2ea;
-    --line-strong: #cfcfdb;
-    --ink: #121218;
-    --muted: #55556a;
-    --faint: #8a8a9e;
-    --accent: #7c3aed;
-    --accent-bright: #6d28d9;
-    --accent-soft: rgb(124 58 237 / 0.1);
-    --live: #e11d48;
-    --wrap: #b7791f;
-    --soon: #2563eb;
-    --soon-ink: #ffffff;
-    --final: #71717f;
-    --ok: #059669;
-    --gold: #b8860b;
-    --silver: #7b8394;
-    --bronze: #a0522d;
-    --shade: 245 245 248;
-  }
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f5f5f8;
+  --surface: #ffffff;
+  --raised: #efeff4;
+  --line: #e2e2ea;
+  --line-strong: #cfcfdb;
+  --ink: #121218;
+  --muted: #55556a;
+  --faint: #8a8a9e;
+  --accent: #7c3aed;
+  --accent-bright: #6d28d9;
+  --accent-soft: rgb(124 58 237 / 0.1);
+  --live: #e11d48;
+  --wrap: #b7791f;
+  --soon: #2563eb;
+  --soon-ink: #ffffff;
+  --final: #71717f;
+  --ok: #059669;
+  --gold: #b8860b;
+  --silver: #7b8394;
+  --bronze: #a0522d;
+  --shade: 245 245 248;
 }
 
 @theme inline {
