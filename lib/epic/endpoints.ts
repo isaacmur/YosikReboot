@@ -37,6 +37,8 @@ export interface LeaderboardParams {
 export const endpoints = {
   oauthToken: () => `${HOSTS.account}/account/api/oauth/token`,
   oauthExchange: () => `${HOSTS.account}/account/api/oauth/exchange`,
+  /** Device code flow: returns a link the account owner opens and approves. */
+  oauthDeviceAuthorization: () => `${HOSTS.account}/account/api/oauth/deviceAuthorization`,
   oauthKillSession: (accessToken: string) =>
     `${HOSTS.account}/account/api/oauth/sessions/kill/${seg(accessToken)}`,
   /** Opened in a signed-in browser to get a one-time authorization code. */

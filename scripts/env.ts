@@ -35,6 +35,13 @@ export function readExchangeClient(env: Env): ClientCredentials | undefined {
   return id && secret ? { id, secret } : undefined;
 }
 
+/** Client for the device code (link) sign-in; returns undefined unless both halves are set. */
+export function readDeviceCodeClient(env: Env): ClientCredentials | undefined {
+  const id = env.EPIC_DEVICE_CODE_CLIENT_ID?.trim();
+  const secret = env.EPIC_DEVICE_CODE_CLIENT_SECRET?.trim();
+  return id && secret ? { id, secret } : undefined;
+}
+
 export function readDevice(env: Env): { device?: DeviceAuth; missing: string[] } {
   const { values, missing } = pick(env, ['EPIC_ACCOUNT_ID', 'EPIC_DEVICE_ID', 'EPIC_DEVICE_SECRET']);
   if (missing.length) return { missing };

@@ -8,11 +8,11 @@ The cloud session that built this tooling could not reach `*.epicgames.com` or `
 
 1. **Secondary account.** Create a fresh Epic account that you'll never play on. Don't use your main account.
 2. **Local env.** Run `npm install`, then `cp .env.example .env.local`. The client ID and secret are filled in already.
-3. **Device auth (one time).**
-   - In a browser, sign in to epicgames.com as the secondary account.
-   - Run `npm run epic:device-auth` and open the URL it prints.
-   - Copy `authorizationCode` from the JSON. It expires within minutes.
-   - Run `npm run epic:device-auth -- <code> --write`. This saves `EPIC_ACCOUNT_ID`, `EPIC_DEVICE_ID` and `EPIC_DEVICE_SECRET` to `.env.local`, and confirms that a token can be minted from them.
+3. **Device auth (one time).** Run `npm run epic:device-auth -- --link --expect YosikReload --write`.
+   - It prints an epicgames.com/activate link. Open it on any device, sign in as YosikReload, and approve. No password or code is typed into the tool.
+   - `--expect` refuses any other account. If your browser is signed in to your main account, nothing is created for it.
+   - It saves `EPIC_ACCOUNT_ID`, `EPIC_DEVICE_ID` and `EPIC_DEVICE_SECRET` to `.env.local`, and confirms that a token can be minted from them.
+   - Fallback without `--link`: run `npm run epic:device-auth` for the authorization-code steps.
 4. **First capture.** Run `npm run epic:probe -- --label first`.
    - It writes scrubbed responses to `test/fixtures/epic/first/`, plus `probe-report.json` and `analysis.md`.
    - Calls are spaced at least 1 s apart, so a full run takes about a minute.
@@ -32,6 +32,7 @@ If the device-auth grant succeeds but events calls return 401/403, set `EPIC_EVE
 Each item maps to a section of `analysis.md`.
 
 ### Token mint (`token`)
+- [ ] The link sign-in (device code flow, Switch client) works, and so does the exchange into the Android client.
 - [ ] Device-auth grant works with the Android client.
 - [ ] `expires_in`: expected ~7200 s. Is a refresh token issued?
 - [ ] Do events calls accept this token, or is an exchange to another client needed?
