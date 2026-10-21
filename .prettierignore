@@ -4,3 +4,4 @@ test/fixtures/
 .vercel/
 package-lock.json
 *.md
+.api-smoke/

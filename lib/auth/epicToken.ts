@@ -1,5 +1,5 @@
-import { endpoints } from '../epic/endpoints';
-import { EpicHttpError, parseEpicError } from '../epic/errors';
+import { endpoints } from '../epic/endpoints.js';
+import { EpicHttpError, parseEpicError } from '../epic/errors.js';
 
 export type FetchLike = (input: string, init?: RequestInit) => Promise<Response>;
 

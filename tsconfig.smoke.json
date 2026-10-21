@@ -1,0 +1,11 @@
+{
+  // Emits api/, lib/ and middleware.ts as plain JS for scripts/smoke-api.mjs,
+  // which loads them with bare Node the way Vercel does (no bundler).
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": ".api-smoke",
+    "rootDir": "."
+  },
+  "include": ["api", "lib", "middleware.ts"]
+}

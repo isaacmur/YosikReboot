@@ -22,7 +22,9 @@ These are gaps or traps in the spec that change code structure. Each has a recom
 | D8 | Time zone. | All server data is UTC ISO strings. Formatting happens only in the browser via `Intl.DateTimeFormat` with the settings time zone (default `America/New_York`). No date library needed beyond small helpers. |
 | D9 | Monorepo vs. single package. | Single package. Vite app in `src/`, Vercel functions in `api/`, shared code in `lib/` (imported by both — types only from the browser side). |
 | D10 | Epic won't return another account's row or history: `teamAccountIds=` accepts only the caller's own team, and per-player endpoints return 403. | Find a player by **scanning** board pages (100 per page, at most 100 pages) and stopping at the first hit. Final windows: scan once and cache for 24 h. Live windows: look only at pages already being fetched, plus at most one rescan per 5 min. Results are top 10,000 only, like Fortnite Tracker. |
-| D11 | Schedule responses need `region=`, are about 1.2 to 1.9 MB each, and overlap (a region lists every event visible to it; NAE has no events of its own). | `/api/events` makes one Epic call per region (8 in all), de-duplicates events by `eventId`, takes the home region from the ID suffix, and trims to the plan's shapes before caching. Ranked cups use the main window board, not the per-tier boards. |
+| D11 | Schedule responses need `region=`, are about 1.2 to 1.9 MB each, and overlap: a region lists every event visible to it, and NAE has no events of its own. | `/api/events?region=X` makes **one** Epic call, because the response already holds everything visible in X. The route trims the response to `EventInfo` and takes the home region from the ID suffix; cards tag events from another home region. Combining regions (calendar, search) de-duplicates by `eventId`. Ranked cups use the main window board, not the per-tier boards. |
+| D12 | Browsers honour `stale-while-revalidate`, so a CDN-style `Cache-Control` let a signed-out browser show cached API data. | API responses send `Cache-Control: private, no-store` to the browser, and configure Vercel's CDN separately with `Vercel-CDN-Cache-Control`. Vercel consumes that header and never forwards it. Session state is computed in the browser from the times, so a cached schedule never shows a stale "live". |
+| D13 | Vercel compiles each function file without bundling, so Node's ESM rules apply. | Relative imports in `api/`, `lib/` and `middleware.ts` use explicit `.js` extensions. `npm run smoke:api` compiles them and loads them with bare Node in CI, and fails with `ERR_MODULE_NOT_FOUND` if one is missing. |
 
 ---
 
@@ -82,62 +84,16 @@ YosikReboot/
 
 ## 3. Core types (`lib/types.ts`)
 
-Extends the shapes in the developer plan with the fields the UI needs.
+`lib/types.ts` is the source of truth. The browser only ever sees these shapes:
+- `EventInfo` and `EventWindow`, served in `EventsResponse` from `/api/events`
+- `HealthResponse`, served from `/api/health`
 
-```ts
-export type Region = 'NAC' | 'NAE' | 'NAW' | 'EU' | 'BR' | 'OCE' | 'ME' | 'ASIA';
-export type WindowState = 'upcoming' | 'live' | 'wrapping' | 'final';
-export type Mode = 'BR' | 'ZB' | 'RELOAD' | 'OTHER';
-export type EventType = 'FNCS' | 'RANKED_CUP' | 'VICTORY_CUP' | 'CASH_CUP' | 'PERF_EVAL' | 'MOBILE' | 'OTHER';
+Phase 0 changed the original sketch in three ways:
+- `mode` is `BR | RELOAD | OTHER`, with `zeroBuild` as a separate flag.
+- Epic's "ShopCup" type is `PROMO_CUP`.
+- Windows carry no `state`. `lib/status.ts` computes `windowState`, `eventState` and `nextWindow` from the times, in the browser (D12).
 
-export interface Event {
-  id: string; region: Region; name: string;
-  type: EventType; mode: Mode; teamSize: 1 | 2 | 3 | 4;
-  platforms: string[]; posterUrl?: string; description?: string;
-  windows: Window[];
-}
-
-export interface Window {
-  id: string; eventId: string; round: number; label: string;
-  begin: string; end: string;           // UTC ISO
-  payoutDelayMin: number;               // default 60 if Epic omits it
-  state: WindowState;                   // computed at response time
-  isTBD: boolean;
-  cumulativeWindowId?: string;          // D7
-}
-
-export interface WindowDetail extends Window {
-  scoring: { placement: { upTo: number; points: number }[]; elimPoints: number; matchCap?: number };
-  payouts: { rankUpTo: number; reward: string }[];   // reward = "$500", "Qualify R2", …
-  cutoffs: { rank: number; label: string }[];
-  eligibility: string[];
-}
-
-export interface Entry {
-  rank: number; teamKey: string;        // sorted member IDs joined by ':'
-  members: { id: string; name: string }[];
-  points: number; vrs: number; matches: number; elims: number; avgPlace: number;
-  sessions: { place: number; elims: number; points: number; endedAt?: string }[];
-}
-
-export interface LeaderboardPage {
-  windowId: string; state: WindowState; page: number; totalPages: number;
-  fetchedAt: string; entries: Entry[];
-}
-```
-
-`lib/status.ts` (pure, shared, heavily tested):
-
-```ts
-windowState(w, now): WindowState
-// upcoming: now < begin | live: begin ≤ now < end
-// wrapping: end ≤ now < end + payoutDelay | final: after
-
-cacheSecondsFor(state): number   // live 30, wrapping 300, final 86400, upcoming 900
-refreshMsFor(state, setting): number | null   // live max(setting, 30s), wrapping 5 min, else null
-```
-
----
+`Entry` and `LeaderboardPage` arrive in Phase 2.
 
 ## 4. Phases
 
@@ -173,21 +129,25 @@ Goal: a deployed, passphrase-protected app that lists every region's events in E
 
 Features: F1, F2, F3, F6 (basic), F7, F32, F33 (baseline), F35, F36, F37 (server side).
 
-> **Status:** task 1 is done except the Vercel deploy. The scaffold builds, renders at phone width in light and dark, and CI (`.github/workflows/ci.yml`) runs lint, format, typecheck, tests and build on every push.
+> **Status: done** (code), pending one check in production by you, listed below.
+> - Built: the passphrase gate (`api/login.ts`, `middleware.ts`), the Epic client with token reuse, 401 retry, call spacing and a call log, the schedule parser and classifiers, `/api/events`, `/api/health`, and the pages (login, home, events with tabs and filters, event detail, settings, health).
+> - Verified locally against live Epic data through `npm run dev`, which runs the real routes and middleware:
+>   - All 8 regions load (NAC 50 events, NAE 32, NAW 50, EU 29; BR, OCE, ME and ASIA 28 each).
+>   - Signed-out requests get 401, including for a URL that was just fetched.
+>   - Sign-out takes effect immediately.
+>   - The layout has no horizontal scroll at 390 px, in light or dark mode.
+> - Not verifiable here: fortnite.com's own schedule (blocked in the build sandbox), so times were checked against Epic's raw UTC timestamps instead.
 >
-> **Your steps before task 2** (they need your accounts):
-> 1. Merge `docs/implementation-plan` into `main`. Vercel deploys `main` to production.
-> 2. Import the repo in Vercel (Hobby). `vercel.json` sets the framework, build and SPA rewrites.
-> 3. In Vercel → Settings → Environment Variables, add `APP_PASSPHRASE`, `COOKIE_SECRET`, `EPIC_CLIENT_ID`, `EPIC_CLIENT_SECRET` and the three `EPIC_*` device-auth values. Get those three from a fresh link sign-in (runbook step 3 in `EPIC_API_NOTES.md`).
+> **Production check (yours):** sign in on the deployed app and open Events, then Settings → API health; the status should read OK. Optionally, `curl -sI https://<your-app>/api/events?region=NAE` should answer 401.
 
 Tasks
-1. ~~**Scaffold:** Vite + React + TS + Tailwind + React Router; ESLint, Prettier, Vitest; `vercel.json` with SPA fallback~~ (done); deploy an empty page to Vercel Hobby.
-2. **Gate (D1):** `api/login.ts` compares the passphrase (constant-time) to `APP_PASSPHRASE`, sets `yr_session` = HMAC(`COOKIE_SECRET`, issuedAt) — `HttpOnly; Secure; SameSite=Strict; Max-Age=30d`. `middleware.ts` verifies it for every `/api/*` path except `/api/login`, returning 401. The SPA shows `/login` on 401. No CORS headers anywhere.
-3. **Epic client:** `epicToken.ts` (D6), `client.ts` (bearer header, ≥1 s spacing between calls within an instance, one retry on 401 after re-mint, typed `UpstreamError` on 429/5xx), `endpoints.ts`.
-4. **Parsers:** `epic/events.ts` + `cms.ts` with fixture tests. Classification helpers `classifyType()` / `classifyMode()` / `teamSize()` from event IDs and CMS text — table-driven tests, since these are heuristics.
-5. **`/api/events?region=`:** fetch, normalise, attach CMS display data (CMS cached 24 h in memory), compute `state`, `Cache-Control: public, s-maxage=900, stale-while-revalidate=60`.
-6. **`/api/health`:** token status (minted at, expires at, last error), last 20 upstream calls from the ring buffer, `consecutiveFailures` (≥3 = red). `Cache-Control: no-store`.
-7. **Frontend:** `Settings` store (region, tz, refresh interval) → `RegionSwitcher` in the header → `/events` with Upcoming/Live/Ended tabs and filter chips → `/events/:eventId` showing windows grouped by round with `Countdown`. Mobile-first layout from the start.
+1. ~~**Scaffold:** Vite + React + TS + Tailwind + React Router; ESLint, Prettier, Vitest; `vercel.json` with SPA fallback; deploy an empty page to Vercel Hobby.~~ Done.
+2. ~~**Gate (D1):** `api/login.ts` compares the passphrase (constant-time) to `APP_PASSPHRASE`, sets `yr_session` = HMAC(`COOKIE_SECRET`, issuedAt) — `HttpOnly; Secure; SameSite=Strict; Max-Age=30d`. `middleware.ts` verifies it for every `/api/*` path except `/api/login`, returning 401. The SPA shows `/login` on 401. No CORS headers anywhere.~~ Done.
+3. ~~**Epic client:** `epicToken.ts` (D6), `client.ts` (bearer header, ≥1 s spacing between calls within an instance, one retry on 401 after re-mint, typed `UpstreamError` on 429/5xx), `endpoints.ts`.~~ Done.
+4. ~~**Parsers:** `epic/events.ts` + `cms.ts` with fixture tests. Classification helpers `classifyType()` / `classifyMode()` / `teamSize()` from event IDs and CMS text — table-driven tests, since these are heuristics.~~ Done.
+5. ~~**`/api/events?region=`:** fetch, normalise, attach CMS display data (CMS cached 24 h in memory), compute `state`, `Cache-Control: public, s-maxage=900, stale-while-revalidate=60`.~~ Done, with D11 and D12 applied: one Epic call per region, no server-side `state`, CDN-only caching.
+6. ~~**`/api/health`:** token status (minted at, expires at, last error), last 20 upstream calls from the ring buffer, `consecutiveFailures` (≥3 = red). `Cache-Control: no-store`.~~ Done.
+7. ~~**Frontend:** `Settings` store (region, tz, refresh interval) → `RegionSwitcher` in the header → `/events` with Upcoming/Live/Ended tabs and filter chips → `/events/:eventId` showing windows grouped by round with `Countdown`. Mobile-first layout from the start.~~ Done.
 
 **Acceptance**
 - Wrong/no cookie → every `/api/*` returns 401, including a URL that was just cached (test with `curl` after a logged-in fetch).

@@ -2,8 +2,9 @@
 // probe. They assume the field names community libraries use (events[].eventWindows[],
 // templates[]) and skip anything that doesn't match rather than throwing.
 
-import { windowState } from '../../lib/status';
-import type { WindowState } from '../../lib/types';
+import { asArr, asObj, num, str } from '../../lib/epic/json.js';
+import { windowState } from '../../lib/status.js';
+import type { WindowState } from '../../lib/types.js';
 
 export interface ProbeWindow {
   eventId: string;
@@ -18,16 +19,7 @@ export interface ProbeWindow {
 export type SampleKind = WindowState | 'duos';
 export type Samples = Partial<Record<SampleKind, ProbeWindow>>;
 
-export function asObj(v: unknown): Record<string, unknown> | undefined {
-  return v && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : undefined;
-}
-
-export function asArr(v: unknown): unknown[] {
-  return Array.isArray(v) ? v : [];
-}
-
-const str = (v: unknown) => (typeof v === 'string' ? v : undefined);
-const num = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) ? v : undefined);
+export { asArr, asObj } from '../../lib/epic/json.js';
 
 export function playlistsByTemplate(download: unknown): Map<string, string> {
   const out = new Map<string, string>();

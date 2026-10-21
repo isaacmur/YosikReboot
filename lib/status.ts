@@ -1,4 +1,4 @@
-import type { WindowState } from './types';
+import type { WindowState } from './types.js';
 
 /** Used when Epic omits payoutDelay (or sends something unusable). */
 export const DEFAULT_PAYOUT_DELAY_MIN = 60;
@@ -46,4 +46,26 @@ export function refreshMsFor(state: WindowState, liveSettingMs = 60_000): number
   if (state === 'live') return Math.max(liveSettingMs, MIN_LIVE_REFRESH_MS);
   if (state === 'wrapping') return WRAPPING_REFRESH_MS;
   return null;
+}
+
+export type EventState = 'live' | 'upcoming' | 'ended';
+
+/** Live if any session is live or wrapping up; upcoming if one is still to come; else ended. */
+export function eventState(windows: WindowTimes[], now: Date = new Date()): EventState {
+  let upcoming = false;
+  for (const w of windows) {
+    const s = windowState(w, now);
+    if (s === 'live' || s === 'wrapping') return 'live';
+    if (s === 'upcoming') upcoming = true;
+  }
+  return upcoming ? 'upcoming' : 'ended';
+}
+
+/** The session to point at: a live one first, else the soonest upcoming one. */
+export function nextWindow<W extends WindowTimes>(windows: W[], now: Date = new Date()): W | undefined {
+  const live = windows.find((w) => windowState(w, now) === 'live');
+  if (live) return live;
+  return windows
+    .filter((w) => windowState(w, now) === 'upcoming')
+    .sort((a, b) => new Date(a.begin).getTime() - new Date(b.begin).getTime())[0];
 }
