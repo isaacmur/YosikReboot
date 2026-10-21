@@ -121,6 +121,20 @@ export interface PayoutTier {
   qualifies: boolean;
 }
 
+/**
+ * A line on the board where a reward stops: the furthest place that qualifies
+ * for each next round, the last paid place, and the edge of each item tier.
+ */
+export interface Cutoff {
+  /** What `threshold` measures, as for a payout tier. */
+  basis: PayoutTier['basis'];
+  /** Last rank inside the line, the top fraction (0.05 = top 5%), or the points needed. */
+  threshold: number;
+  kind: 'qualify' | 'cash' | 'item';
+  /** What crossing it gets you, e.g. "Qualifies for Event 5 Round 2", "Cash prizes", "Pickaxe". */
+  label: string;
+}
+
 export interface BoardInfo {
   /** Epic's leaderboard instance ID; pass back as `board=`. */
   id: string;
@@ -132,6 +146,7 @@ export interface BoardInfo {
   hasPoints: boolean;
   scoring: ScoringSummary | null;
   payouts: PayoutTier[];
+  cutoffs: Cutoff[];
 }
 
 /** GET /api/window */

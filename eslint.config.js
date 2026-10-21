@@ -14,6 +14,10 @@ export default defineConfig([
     rules: { 'prefer-const': ['error', { ignoreReadBeforeAssign: true }] },
   },
   {
+    files: ['pwa/sw.js'],
+    languageOptions: { globals: globals.serviceworker },
+  },
+  {
     files: ['src/**/*.{ts,tsx}'],
     plugins: { 'react-hooks': reactHooks },
     rules: reactHooks.configs.recommended.rules,

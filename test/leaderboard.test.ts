@@ -6,7 +6,14 @@ import { describe, expect, it } from 'vitest';
 import { boardInfos, boardRules, defaultBoard, parseScoreLocation, windowLocations } from '../lib/epic/boards';
 import { mergeCumulative, normalizeEntries, teamKeyOf } from '../lib/epic/leaderboard';
 import { findWindow, regionForEvent } from '../lib/epic/schedule';
-import { parsePayouts, parseRules, sessionPoints, statNames, summarizeScoring } from '../lib/epic/scoring';
+import {
+  parseCutoffs,
+  parsePayouts,
+  parseRules,
+  sessionPoints,
+  statNames,
+  summarizeScoring,
+} from '../lib/epic/scoring';
 import type { Entry } from '../lib/types';
 
 const load = (capture: string, f: string): unknown =>
@@ -138,6 +145,10 @@ describe('boards', () => {
     expect(boards[0]).toMatchObject({ kind: 'main', hasPoints: false, scoring: null });
     expect(boards.slice(1).every((b) => b.kind === 'tier' && b.hasPoints && b.scoring)).toBe(true);
     expect(boards.slice(1).every((b) => b.payouts.length > 0)).toBe(true);
+    expect(boards[0]!.cutoffs).toEqual([]);
+    const unreal = boards[boards.length - 1]!;
+    expect(unreal.cutoffs.length).toBeGreaterThan(0);
+    expect(unreal.cutoffs.every((c) => c.kind === 'item')).toBe(true);
     expect(defaultBoard(boards)).toBe('S42_RankedCupSoloReload_Event8_NAW_2_unreal');
   });
 
@@ -176,6 +187,59 @@ describe('payouts', () => {
     expect(round1.find((t) => t.qualifies)?.rewards[0]).toMatch(
       /^Qualifies for Reload Cash Cup Duos ZB Event 5 Round 2/,
     );
+  });
+
+  it('draws one cutoff per next round, one for the last paid place, and one per item tier', () => {
+    const t = NAC.payoutTables;
+    expect(parseCutoffs(t.S42_ReloadCashCup_DuosZB_Event5Round1_NAC)).toEqual([
+      {
+        basis: 'rank',
+        threshold: 20,
+        kind: 'qualify',
+        label: 'Qualifies for Reload Cash Cup Duos ZB Event 5 Round 2 NAC',
+      },
+    ]);
+    // Six cash tiers (1st to 8th) make a single line.
+    expect(parseCutoffs(t.S42_ReloadCashCup_DuosZB_Event5Round2_NAC)).toEqual([
+      { basis: 'rank', threshold: 8, kind: 'cash', label: 'Cash prizes' },
+    ]);
+    // The 0-point entry and lockout tokens every player gets draw no line.
+    expect(parseCutoffs(t.S43_FNCSSoloReloadQualifiers_Qual1Round1Day2_NAC)).toEqual([
+      { basis: 'rank', threshold: 2000, kind: 'qualify', label: 'Qualifies for FNCSSolo Reload Qual 1 Round 2 NAC' },
+    ]);
+    // Last chance: reach 1,000 points or finish top 22.
+    expect(parseCutoffs(t.epicgames_S42_FNCSSolo_LastChanceQualifier_NAC).map((c) => [c.basis, c.threshold])).toEqual([
+      ['points', 1000],
+      ['rank', 22],
+    ]);
+    expect(parseCutoffs(t.epicgames_S42_RankedCupSolo_NAC_1_Diamond)).toEqual([
+      { basis: 'percentile', threshold: 0.05, kind: 'item', label: 'Pickaxe' },
+      { basis: 'percentile', threshold: 0.15, kind: 'item', label: 'Cosmetic Variant Token' },
+      { basis: 'percentile', threshold: 0.3, kind: 'item', label: 'Backpack' },
+      { basis: 'rank', threshold: 4, kind: 'item', label: 'Character' },
+    ]);
+    expect(parseCutoffs(undefined)).toEqual([]);
+  });
+
+  it('keeps the furthest qualifying tier and merges rounds reached from the same place', () => {
+    const token = (value: string) => ({ rewardType: 'token', value, quantity: 1 });
+    const cutoffs = parseCutoffs([
+      {
+        scoringType: 'rank',
+        ranks: [
+          { threshold: 5, payouts: [token('S42_Final'), { rewardType: 'ecomm', value: 'USD', quantity: 100 }] },
+          { threshold: 50, payouts: [token('S42_Final')] },
+          { threshold: 50, payouts: [token('S42_Bonus')] },
+        ],
+      },
+      { scoringType: 'value', ranks: [{ threshold: 300, payouts: [token('S42_Final')] }] },
+      { scoringType: 'value', ranks: [{ threshold: 250, payouts: [token('S42_Final')] }] },
+    ]);
+    expect(cutoffs).toEqual([
+      { basis: 'points', threshold: 250, kind: 'qualify', label: 'Qualifies for Final' },
+      { basis: 'rank', threshold: 50, kind: 'qualify', label: 'Qualifies for Final; Qualifies for Bonus' },
+      { basis: 'rank', threshold: 5, kind: 'cash', label: 'Cash prizes' },
+    ]);
   });
 
   it('handles percentile tables and ignores junk', () => {

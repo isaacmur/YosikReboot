@@ -25,7 +25,8 @@ Vite + React + TypeScript + Tailwind (`src/`), Vercel Functions (`api/`), shared
 - API responses are identical for every caller (they're CDN-cached); per-user logic stays in the browser.
 - Errors are `Cache-Control: no-store`. Cacheable API responses use `cdnCacheHeaders()`: the browser never stores them, and Vercel's CDN caches them via `Vercel-CDN-Cache-Control` (D12).
 - Relative imports in `api/`, `lib/` and `middleware.ts` end in `.js`. Vercel doesn't bundle functions (D13).
-- Players are found by scanning boards in the browser (`src/scan.ts`, D10); never add server-side loops over many board pages (functions have a 30 s limit).
+- Players are found by scanning boards in the browser (`src/scan.ts`, D10); never add server-side loops over many board pages (functions have a 30 s limit). A board refreshes only the pages listed in D18 (`src/useBoard.ts`).
+- The service worker (`pwa/sw.js`, filled in at build time by `vite.config.ts`) never caches or handles `/api/*` (D20).
 - Ranked Cup standings are the tier boards; the main Ranked Cup board has no points (D14).
 - Route handlers are built by `make…Handler(deps)` factories, so tests can inject a fake `EpicClient`. Only `GET`/`POST`/`DELETE` exports are routes.
 - Times are UTC ISO on the wire; format in the browser with the user's time zone setting.

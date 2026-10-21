@@ -2,8 +2,9 @@ import { useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import { windowState } from '../../lib/status';
 import { EVENT_TYPES, type EventArt, type EventInfo, type EventType, type EventWindow } from '../../lib/types';
-import { ChevronRight } from '../components/icons';
+import { ChevronRight, DownloadIcon } from '../components/icons';
 import { Art, Button, Empty, LoadState, Panel, PillSelect, SectionHeader } from '../components/ui';
+import { fileName, saveFile, toCsv } from '../csv';
 import { formatDay, ordinal, plural, REGION_LABEL, TYPE_LABEL } from '../format';
 import { useFollows } from '../follows';
 import { eventPath } from '../links';
@@ -180,7 +181,38 @@ export default function Me() {
         <Stat label="Latest" value={results[0] ? ordinal(results[0].row.rank) : '—'} />
       </div>
 
-      <SectionHeader title="Your results" />
+      <SectionHeader
+        title="Your results"
+        action={
+          results.length > 0 && (
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() =>
+                saveFile(
+                  fileName([me.name, 'results']),
+                  toCsv([
+                    ['Event', 'Ended', 'Board', 'Rank', 'Points', 'Games', 'Wins', 'Elims', 'Avg place'],
+                    ...results.map(({ x, row }) => [
+                      x.title ?? x.windowId,
+                      x.endedAt ?? '',
+                      x.boardLabel,
+                      row.rank,
+                      row.points,
+                      row.matches,
+                      row.victories,
+                      row.elims,
+                      row.avgPlace,
+                    ]),
+                  ]),
+                )
+              }
+            >
+              <DownloadIcon size={14} /> CSV
+            </Button>
+          )
+        }
+      />
       {results.length ? (
         <div className="space-y-3">
           <Trend

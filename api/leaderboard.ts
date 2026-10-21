@@ -2,7 +2,8 @@
 // One page of one board, normalized, with display names. Cached on the CDN by
 // window state: live 30 s, wrapping up 5 min, final 24 h. `board=cumulative`
 // sums the event's session boards (top 300 of each, D7). `lite=1` skips names
-// and match details, for page scans that look for followed players.
+// and match details, for page scans that look for followed players and for the
+// pages a cutoff line falls on.
 
 import { boardInfos, boardLabel, boardRules, defaultBoard, isFetchable, windowLocations } from '../lib/epic/boards.js';
 import { epicClient, type EpicClient } from '../lib/epic/client.js';

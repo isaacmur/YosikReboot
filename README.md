@@ -10,7 +10,8 @@ Not affiliated with or endorsed by Epic Games.
 - **Phase 1 (gated app with the 8-region schedule): done.** It has passphrase login, all eight regions' events in your time zone with countdowns, filters, event details and an API health page.
 - **Phase 2 (live leaderboards, follows, your results): done.** It has live boards that refresh every minute (Ranked Cup tiers and FNCS cumulative included), per-match points, scoring and payouts, a follow list, and your season results.
 - **Design overhaul: done.** A dark, poster-led look with tournament art throughout. Opening an event lands on its most recent leaderboard, with session and region pickers to switch.
-- **Phase 3 (full-depth boards, movement arrows, cutoff lines): next.**
+- **Phase 3 (leaderboard depth): done.** Boards go down to the top 10,000 by scrolling or jumping to a rank. It adds movement arrows, qualifying and prize lines with the points they take, pinned follows and saved teams, scoring beside the board, CSV export, and an installable app.
+- **Phase 4 (calendar, iCal feed, search, player pages, cutoff history): next.**
 
 ## Docs
 
