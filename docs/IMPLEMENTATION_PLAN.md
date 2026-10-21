@@ -41,6 +41,7 @@ These are gaps or traps in the spec that change code structure. Each has a recom
 | D27 | Opens and finals look the same: every session's round type is "Qualifiers". | Each session gets a `stage` from its entry tokens (`windowStage()` in `lib/epic/events.ts`). No token (region locks and `fake_token` don't count) is **Open**. A token is needed and the session's own rewards qualify players onward: **Qualified** (heats, last-chance lobbies). A token is needed and nothing comes after it: **Final**. The stage shows as a tag on the event page, the session picker and list, Home, the calendar agenda and search results. |
 | D28 | Per-match stats (Fortnite Tracker's match pages) need each game's lobby, which Epic doesn't serve. | Every game in a team's history carries Epic's match ID (`sessionId`), shared by the teams that played it, and its time alive (`TIME_ALIVE_STAT`, seconds). `src/matches.ts` rebuilds games from board rows. A session is a set lobby when its games hold at least 8 of the page's teams on average; there, teams that shared games are grouped into lobbies, and each game shows every team's place, eliminations, points and time alive. Qualified and Final sessions get a **Matches** tab that reads the board's first 5 pages (up to 20 on request) and refreshes them on the board's schedule while live. A team's games open the game in place; in an open session that lists only the teams on loaded pages, since the rest of its lobby is spread across the board. |
 | D29 | In qualified rounds and finals what matters is where a team stands as the games go, not points per game. Epic only gives each team's own games. | Lite leaderboard rows keep each game's points (`gamePoints`; they add up to Epic's total in the captures). On Qualified and Final sessions, and every Performance Evaluation session (Epic's own round numbers are unreliable: Cash Cup rounds are all 0), opening a team reads every page of the board once (lite, four at a time, D26) and charts the team's **placement after each game**, with a Rank column in its games table (`src/placements.ts`). After game k every team counts its first k games, which in a set lobby is the board after each match. Ties share the better rank. Final boards are read once per visit; live ones again after 2 minutes. Open sessions keep points per game. Rank axes switch from powers of ten to whole-number steps when the ranks are close together. |
+| D30 | Me should fill itself without board scanning, but Epic answers questions about an account only when that account is signed in (D10), and keeping your main account signed in on the server would put a permanent login to it at risk. | **Sync with Epic** (Me) signs in on demand with Epic's device code flow: you open epicgames.com, sign in and approve, so no password passes through the app. The sign-in is exchanged into the app's client (as for the service account) and lives only in a sealed cookie: AES-GCM with a key from `COOKIE_SECRET`, `HttpOnly`, `Path=/api/sync`, 15 minutes (`lib/auth/seal.ts`). The server stores nothing, and the browser can't read it. `/api/sync` reads your schedule's `player.teams` (the sessions Epic lists your team in), then your row in each finished one with `teamAccountIds=` your team, 8 sessions and 16 Epic calls per request. When the sync ends, whether it finishes, fails, is cancelled or the page closes, the browser calls `DELETE /api/sync`, which ends the session at Epic. Results are kept like final board searches; sessions Epic doesn't list are marked as not played and left out of the list to check. If Epic lists none, the 40 latest sessions in your region are tried, and only solo misses count as not played. The signed-in account becomes your "me" follow. This is the one per-user API route, so it's never cached (an exception to D12). It needs `EPIC_DEVICE_CODE_CLIENT_ID` and `EPIC_DEVICE_CODE_CLIENT_SECRET` on the server. Unverified until the first real sync: the shape of `player.teams`, and that a team-filtered row carries the board rank (`EPIC_API_NOTES.md`). |
 
 ---
 
@@ -62,6 +63,7 @@ YosikReboot/
 │   ├── leaderboard.ts            # GET ?window=&page=
 │   ├── player.ts                 # GET ?name= | ?id=
 │   ├── login.ts                  # POST {passphrase} → Set-Cookie
+│   ├── sync.ts                   # POST ?step=start|poll|rows, DELETE: Sync with Epic, your own sign-in (D30)
 │   ├── health.ts                 # GET token + upstream status
 │   └── ics.ts                    # GET ?token=&region= calendar feed (D21)
 ├── lib/                          # Server-only unless noted
@@ -69,6 +71,7 @@ YosikReboot/
 │   ├── status.ts                 # windowState(), cacheSecondsFor() (shared)
 │   ├── auth/
 │   │   ├── cookie.ts             # HMAC sign/verify for the session cookie
+│   │   ├── seal.ts, deviceCode.ts   # sealed cookie values; the "open this link and approve" sign-in (D30)
 │   │   └── epicToken.ts          # Device-auth → access token, memoised
 │   ├── epic/
 │   │   ├── client.ts             # fetch wrapper: auth header, 250 ms spacing (D26), backoff, 401 retry
@@ -93,6 +96,7 @@ YosikReboot/
 │   ├── boardIndex.ts             # pages read four at a time with retries; lite pages kept in memory (D26)
 │   ├── matches.ts                # games and lobbies rebuilt from board rows (D28)
 │   ├── placements.ts             # placement after each game from every team's game points (D29)
+│   ├── sync.ts                   # Sync with Epic: sign in, read your rows, keep them, sign out (D30)
 │   ├── theme.ts                  # System, Dark or Light (Settings), applied before paint by index.html
 │   ├── csv.ts                    # CSV export
 │   ├── search.ts, calendar.ts    # event search (F8); month and week grids (F4)
@@ -109,6 +113,7 @@ YosikReboot/
 │   │   ├── PlayerView.tsx, Charts.tsx   # a player's season (Me and /players/:id); SVG charts (D24)
 │   │   ├── MatchView.tsx, MatchesTab.tsx   # a team's games, one game's lobby, a session's games (D28)
 │   │   ├── FindPlayer.tsx        # find anyone on a board by exact Epic name (D26)
+│   │   ├── SyncPanel.tsx         # Sync with Epic on Me (D30)
 │   └── pages/                    # Home, Events, EventPage, Me, Player, Follows, Settings, Health, Login
 └── test/
     ├── fixtures/epic/            # Saved, scrubbed real responses from Phase 0
@@ -308,17 +313,18 @@ Features: F4, F5, F8, F23, F28, F29.
 > - **Opens and finals:** every session is tagged Open, Qualified or Final (D27).
 > - **Per-match stats:** a team's games list place, eliminations, points and time alive, and each opens that game. Qualified and Final sessions have a Matches tab: every lobby's games in order, each with every team's result (D28).
 > - **Faster searches and Find a player:** pages are read four at a time and kept for the visit, and the leaderboard search finds anyone in the top 10,000 by exact Epic name (D26).
+> - **Sync with Epic:** Me signs in with your own account on demand (you approve on epicgames.com), reads every session Epic lists you in, keeps the results, and ends the Epic session; nothing is stored on the server (D30).
 > - **Placement after each game:** in Qualified and Final sessions and Performance Evaluations, a team's breakdown charts where it stood on the board after each game, instead of points per game, and its games table gains a Rank column (D29).
 > - **Verified locally** in scripted Chromium at 390 px and 1366 px, dark and light, with no horizontal scroll and no console errors, against the fake Epic (now with set lobbies, match IDs and 300 ms per Epic call):
 >   - The theme switched to Light, survived a reload, and set the browser bar color.
 >   - The Last Chance Lobby showed Qualified, opened a game from a team's row, then listed 6 lobbies and 36 games. Reading every team filled each lobby to 100; a game showed all 100 players with Game 2 and Game 4 links.
 >   - Find a player found someone at #5,822 of 10,000 in 16.5 s from cold, and a second player on the same board in 0.7 s.
 >   - Diamond tier showed its Top 4 skin line.
-> - **Your checks:** open a live final or heat and its Matches tab, and try Find a player with a friend's exact Epic name. If searches report rate limiting, slow the spacing back down (D26).
+> - **Your checks:** open a live final or heat and its Matches tab, and try Find a player with a friend's exact Epic name. If searches report rate limiting, slow the spacing back down (D26). For Sync with Epic, add `EPIC_DEVICE_CODE_CLIENT_ID` and `EPIC_DEVICE_CODE_CLIENT_SECRET` to Vercel (the same values as in `.env.local`), redeploy, then Me → Sync with Epic; check the results against the Compete tab.
 
 ### Later (not scheduled)
 
-- **Sign in as yourself, on demand (requested, kept for later).** To fill Me the way Osirion does, without board scanning: a "Sign in with Epic" button starts the same device-code link sign-in the setup tool uses, but for your main account. The server uses that session once to read your own season events and results, ends the session, and stores nothing; the browser keeps the results like scans today. No main-account credentials ever sit on the server. Staying signed in permanently with stored main-account credentials was considered and isn't recommended: a leak would expose your real account.
+- Staying signed in to your main account permanently (stored device auth, so Me syncs with no approval) was considered and isn't recommended: the secret is a full login that skips two-factor, and a leak would expose your real account. Sync with Epic (D30) signs in on demand instead.
 - F9 eligibility (needs the player-tokens endpoint working for *your* account, not the service account), F19 projected cutoff and F20 points calculator (build on F28 data), F26 head-to-head, F27 replay stats via api-fortnite.com, F30 Power Rankings scraper.
 
 ---
@@ -342,13 +348,14 @@ Features: F4, F5, F8, F23, F28, F29.
 | `EPIC_ACCOUNT_ID`, `EPIC_DEVICE_ID`, `EPIC_DEVICE_SECRET` | `epicToken.ts` |
 | `EPIC_CLIENT_ID`, `EPIC_CLIENT_SECRET` | OAuth client for the device-auth grant |
 | `EPIC_EVENTS_CLIENT_ID`, `EPIC_EVENTS_CLIENT_SECRET` | Optional second client to exchange into, only if Phase 0 shows it's needed |
+| `EPIC_DEVICE_CODE_CLIENT_ID`, `EPIC_DEVICE_CODE_CLIENT_SECRET` | The "open this link and approve" sign-in: the setup tool, and Sync with Epic (D30) |
 | `APP_PASSPHRASE` | `api/login.ts` |
 | `COOKIE_SECRET` | cookie HMAC |
 | `ICS_TOKEN` | Phase 4 iCal feed |
 
 **Politeness budget (F37):** server-side spacing + CDN cache + client pause-when-hidden. `/api/health` shows upstream calls per minute so this is observable, not assumed.
 
-**Security checklist:** no secrets in the bundle (CI greps the build output for env var names), `HttpOnly` cookie, middleware gate covers cached responses, no CORS, the iCal token is the only query-string secret, opens only the feed, and is rotatable (D21).
+**Security checklist:** no secrets in the bundle (CI greps the build output for env var names), `HttpOnly` cookie, middleware gate covers cached responses, no CORS, the iCal token is the only query-string secret, opens only the feed, and is rotatable (D21). Your own Epic sign-in (D30) is never stored: it rides in a sealed `HttpOnly` cookie scoped to `/api/sync` for at most 15 minutes, and is ended at Epic when the sync ends.
 
 ---
 

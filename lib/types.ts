@@ -222,6 +222,43 @@ export interface LeaderboardPage {
   entries: Entry[];
 }
 
+// --- Sync with Epic (D30): your own sign-in, for the minutes a sync takes ---
+
+/** A session to read your row from; `team` is your team's account IDs when Epic listed them. */
+export interface SyncSession {
+  eventId: string;
+  windowId: string;
+  team?: string[];
+}
+
+/** POST /api/sync?step=start: open `url`, sign in and approve. */
+export interface SyncStart {
+  url: string;
+  code: string;
+  expiresAt: string;
+  intervalMs: number;
+}
+
+/** POST /api/sync?step=poll. `played` is null when Epic lists no sessions for you. */
+export type SyncPoll =
+  | { status: 'pending'; intervalMs: number }
+  | { status: 'ready'; accountId: string; displayName: string | null; played: SyncSession[] | null };
+
+export interface SyncRowResult {
+  eventId: string;
+  windowId: string;
+  status: 'found' | 'not_found' | 'not_final' | 'unknown';
+  board?: Pick<BoardInfo, 'id' | 'label' | 'payouts'>;
+  /** Your row, without names or games (`lite`). */
+  entry?: Entry;
+}
+
+/** POST /api/sync?step=rows: what was read, and what's left for the next request. */
+export interface SyncRows {
+  results: SyncRowResult[];
+  remaining: SyncSession[];
+}
+
 /** GET /api/ics, signed in: the calendar feed's secret for the subscribe link; null while the feed is off. */
 export interface CalendarFeed {
   token: string | null;

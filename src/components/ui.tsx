@@ -95,28 +95,35 @@ export function PageTitle({ children, sub }: { children: ReactNode; sub?: ReactN
 
 // --- Controls ------------------------------------------------------------------
 
-type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+type ButtonLook = {
   variant?: 'primary' | 'secondary' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
 };
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & ButtonLook;
 
-export function Button({ variant = 'secondary', size = 'md', className, ...rest }: ButtonProps) {
-  const variants = {
-    primary: 'bg-accent text-accent-ink hover:brightness-110',
-    secondary: 'border border-line-strong bg-raised text-ink hover:border-faint',
-    ghost: 'text-accent-bright hover:bg-accent-soft',
-  };
-  const sizes = { sm: 'h-8 px-3 text-xs', md: 'h-9 px-4 text-sm', lg: 'h-11 px-5 text-sm' };
+const BUTTON_VARIANTS = {
+  primary: 'bg-accent text-accent-ink hover:brightness-110',
+  secondary: 'border border-line-strong bg-raised text-ink hover:border-faint',
+  ghost: 'text-accent-bright hover:bg-accent-soft',
+};
+const BUTTON_SIZES = { sm: 'h-8 px-3 text-xs', md: 'h-9 px-4 text-sm', lg: 'h-11 px-5 text-sm' };
+const buttonClass = ({ variant = 'secondary', size = 'md' }: ButtonLook) =>
+  cx(
+    'inline-flex items-center justify-center gap-2 rounded-md font-semibold transition disabled:pointer-events-none disabled:opacity-45',
+    BUTTON_VARIANTS[variant],
+    BUTTON_SIZES[size],
+  );
+
+export function Button({ variant, size, className, ...rest }: ButtonProps) {
+  return <button className={cx(buttonClass({ variant, size }), className)} {...rest} />;
+}
+
+/** A link to another site that looks like a Button; opens in a new tab. */
+export function ExternalButton({ href, children, ...look }: ButtonLook & { href: string; children: ReactNode }) {
   return (
-    <button
-      className={cx(
-        'inline-flex items-center justify-center gap-2 rounded-md font-semibold transition disabled:pointer-events-none disabled:opacity-45',
-        variants[variant],
-        sizes[size],
-        className,
-      )}
-      {...rest}
-    />
+    <a href={href} target="_blank" rel="noopener noreferrer" className={buttonClass(look)}>
+      {children}
+    </a>
   );
 }
 

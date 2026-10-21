@@ -32,6 +32,18 @@ export async function apiGet<T>(path: string): Promise<T> {
   return (await res.json()) as T;
 }
 
+/** POSTs JSON (or nothing) and reads the JSON answer; failures throw like `apiGet`. */
+export async function apiPost<T>(path: string, body?: unknown): Promise<T> {
+  const res = await fetch(path, {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: { Accept: 'application/json', ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
+    ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+  });
+  if (!res.ok) throw await failure(res);
+  return (await res.json()) as T;
+}
+
 export async function login(passphrase: string): Promise<void> {
   const res = await fetch('/api/login', {
     method: 'POST',

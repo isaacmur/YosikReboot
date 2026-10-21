@@ -43,6 +43,16 @@ export function epicConfig(env: Env = process.env): { client: ClientCredentials;
   };
 }
 
+/**
+ * The client for Epic's "open this link and approve" sign-in, used by Sync with
+ * Epic (D30) as well as the setup tool. Its sign-in is exchanged into the app's
+ * own client (EPIC_CLIENT_ID) before use.
+ */
+export function deviceCodeClient(env: Env = process.env): ClientCredentials {
+  const v = requireVars(env, ['EPIC_DEVICE_CODE_CLIENT_ID', 'EPIC_DEVICE_CODE_CLIENT_SECRET']);
+  return { id: v.EPIC_DEVICE_CODE_CLIENT_ID!, secret: v.EPIC_DEVICE_CODE_CLIENT_SECRET! };
+}
+
 /** The calendar feed's secret (F5, D21); undefined turns the feed off. */
 export function feedToken(env: Env = process.env): string | undefined {
   return env.ICS_TOKEN?.trim() || undefined;

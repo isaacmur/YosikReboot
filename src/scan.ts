@@ -53,12 +53,19 @@ const windowChecks = createStore<Record<string, string[]>>(
   (r) => (r && typeof r === 'object' ? (r as Record<string, string[]>) : {}),
   {},
 );
+/** Sessions a sync showed you didn't play (D30), so they're left out of the list to check. */
+const notPlayed = createStore<Record<string, string[]>>(
+  'yr.notPlayed.v1',
+  (r) => (r && typeof r === 'object' ? (r as Record<string, string[]>) : {}),
+  {},
+);
 const keyOf = (eventId: string, windowId: string, board: string) => `${eventId}|${windowId}|${board}`;
 
 /** Re-renders when saved scans or session checks change. */
 export function useScans(): void {
   permanent.use();
   windowChecks.use();
+  notPlayed.use();
 }
 
 /** Cached scan that already answers for all `ids`, if any. */
@@ -94,6 +101,54 @@ export function allScans(): BoardScan[] {
 /** True once a session was fully checked for this player (found, or every board read to the end). */
 export function isWindowChecked(eventId: string, windowId: string, id: string): boolean {
   return (windowChecks.get()[`${eventId}|${windowId}`] ?? []).includes(id);
+}
+
+/** Marks a session as fully checked for `id`, so it leaves the list of sessions to check. */
+export function markWindowChecked(eventId: string, windowId: string, id: string): void {
+  const key = `${eventId}|${windowId}`;
+  const ids = windowChecks.get()[key] ?? [];
+  if (!ids.includes(id)) windowChecks.set({ ...windowChecks.get(), [key]: [...ids, id] });
+}
+
+/** Marks a session as one you didn't play, which also counts as checked. */
+export function markNotPlayed(eventId: string, windowId: string, id: string): void {
+  markWindowChecked(eventId, windowId, id);
+  const key = `${eventId}|${windowId}`;
+  const ids = notPlayed.get()[key] ?? [];
+  if (!ids.includes(id)) notPlayed.set({ ...notPlayed.get(), [key]: [...ids, id] });
+}
+
+export function didNotPlay(eventId: string, windowId: string, id: string): boolean {
+  return (notPlayed.get()[`${eventId}|${windowId}`] ?? []).includes(id);
+}
+
+/**
+ * Keeps a row read straight from Epic (Sync with Epic, D30) like a search result
+ * on a final board, alongside whatever earlier searches of that board found.
+ */
+export function recordResult(
+  x: Pick<BoardScan, 'eventId' | 'windowId' | 'board' | 'boardLabel' | 'title' | 'endedAt' | 'payouts'>,
+  id: string,
+  entry: Entry,
+): void {
+  const key = keyOf(x.eventId, x.windowId, x.board);
+  const prev = permanent.get()[key];
+  const scan: BoardScan = {
+    complete: false,
+    pagesScanned: 0,
+    totalPages: 0,
+    ...prev,
+    ...Object.fromEntries(Object.entries(x).filter(([, v]) => v !== undefined)),
+    eventId: x.eventId,
+    windowId: x.windowId,
+    board: x.board,
+    boardLabel: x.boardLabel,
+    searchedFor: [...new Set([...(prev?.searchedFor ?? []), id])],
+    found: { ...prev?.found, [id]: toRow(entry) },
+    scannedAt: new Date().toISOString(),
+    final: true,
+  };
+  permanent.set({ ...permanent.get(), [key]: scan });
 }
 
 const toRow = (e: Entry): FoundRow => ({

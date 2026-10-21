@@ -22,7 +22,7 @@ Vite + React + TypeScript + Tailwind (`src/`), Vercel Functions (`api/`), shared
 ## Rules
 - Only `api/` + `lib/` talk to Epic. The browser never sees Epic's raw format or any credential, except the calendar feed token, which the signed-in app reads to build your subscribe link (D21). `src/` may import only `lib/types.ts` and `lib/status.ts`.
 - The passphrase gate lives in `middleware.ts` so it also covers CDN-cached responses. `/api/ics` with a `token` is unlocked by `ICS_TOKEN` instead, and only that route (D21).
-- API responses are identical for every caller (they're CDN-cached); per-user logic stays in the browser.
+- API responses are identical for every caller (they're CDN-cached); per-user logic stays in the browser. The one exception is `/api/sync` (D30), which reads your own results with your own sign-in. It's never cached, and that sign-in lives only in a sealed `HttpOnly` cookie for the sync and is ended at Epic afterwards. Never store it anywhere.
 - Errors are `Cache-Control: no-store`. Cacheable API responses use `cdnCacheHeaders()`: the browser never stores them, and Vercel's CDN caches them via `Vercel-CDN-Cache-Control` (D12).
 - Relative imports in `api/`, `lib/` and `middleware.ts` end in `.js`. Vercel doesn't bundle functions (D13).
 - Players are found by scanning boards in the browser (`src/scan.ts`, D10), four pages at a time through `src/boardIndex.ts` (D26); never add server-side loops over many board pages (functions have a 30 s limit). A board refreshes only the pages listed in D18 (`src/useBoard.ts`).
