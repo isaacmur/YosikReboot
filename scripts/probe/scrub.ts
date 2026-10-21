@@ -40,3 +40,31 @@ function walk(value: unknown, secrets: string[]): unknown {
   }
   return value;
 }
+
+/** Account lookups return profile data; fixtures keep only these fields' values. */
+const ACCOUNT_KEEP = new Set(['id', 'displayName']);
+
+/**
+ * Account lookups (by name, bulk) include email, real name, country and linked
+ * platform accounts. Keep `id` and `displayName`; every other field keeps its key
+ * with the value redacted, so the response shape stays visible.
+ */
+export function sanitizeAccount(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(sanitizeAccount);
+  if (!value || typeof value !== 'object') return value;
+  const o = value as Record<string, unknown>;
+  if (typeof o.errorCode === 'string') return o; // an error body, not an account
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(o)) out[k] = ACCOUNT_KEEP.has(k) ? v : REDACTED;
+  return out;
+}
+
+/** Fields of the service account's own token response that are personal, not technical. */
+const TOKEN_PERSONAL = new Set(['country']);
+
+export function sanitizeToken(value: unknown): unknown {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return value;
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(value)) out[k] = TOKEN_PERSONAL.has(k) ? REDACTED : v;
+  return out;
+}

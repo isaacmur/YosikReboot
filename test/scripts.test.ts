@@ -3,7 +3,7 @@ import type { FetchLike } from '../lib/auth/epicToken';
 import { createDeviceAuth, createDeviceAuthByLink, WrongAccountError, type DeviceCodeLogin } from '../scripts/deviceAuth';
 import { readClient, readDevice, readDeviceCodeClient, readExchangeClient, upsertEnv } from '../scripts/env';
 import { parseLabel, parseRateTest, parseRegions } from '../scripts/probe/args';
-import { REDACTED, scrub } from '../scripts/probe/scrub';
+import { REDACTED, sanitizeAccount, sanitizeToken, scrub } from '../scripts/probe/scrub';
 import { listWindows, pickSampleWindows, teamSizeHint } from '../scripts/probe/select';
 
 describe('scrub', () => {
@@ -22,6 +22,23 @@ describe('scrub', () => {
 
   it('leaves competitive token lists alone (key is "tokens", not a credential)', () => {
     expect(scrub({ tokens: ['ARENA_S99_Division1'] })).toEqual({ tokens: ['ARENA_S99_Division1'] });
+  });
+});
+
+describe('sanitizeAccount / sanitizeToken', () => {
+  it('keeps id and displayName, redacts everything else but keeps the keys', () => {
+    expect(sanitizeAccount([{ id: 'a', displayName: 'n', email: 'e@x', externalAuths: { psn: {} } }])).toEqual([
+      { id: 'a', displayName: 'n', email: REDACTED, externalAuths: REDACTED },
+    ]);
+  });
+
+  it('leaves Epic error bodies alone', () => {
+    const err = { errorCode: 'errors.com.epicgames.account.invalid_account_id_count', errorMessage: 'm' };
+    expect(sanitizeAccount(err)).toEqual(err);
+  });
+
+  it('drops only personal fields from the token response', () => {
+    expect(sanitizeToken({ country: 'US', expires_in: 7200 })).toEqual({ country: REDACTED, expires_in: 7200 });
   });
 });
 

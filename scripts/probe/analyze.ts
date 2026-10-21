@@ -263,17 +263,22 @@ export function analyze(report: ProbeReport | undefined, files: Map<string, unkn
     add('filtered', "Can one team's row be fetched directly (teamAccountIds=)?", 'Not captured.');
   }
 
-  // Cumulative
-  const cumulative = allWindows
+  // Cumulative: separate windows, or score locations / leaderboard defs inside the events payload?
+  const cumulativeWindows = allWindows
     .map((w) => asObj(w)?.eventWindowId)
     .filter((id): id is string => typeof id === 'string' && /cumulative/i.test(id));
+  const cumulativeRefs = [
+    ...new Set(regionFiles.flatMap((f) => [...allStringsAndKeys(files.get(f))].filter((s) => /cumulative/i.test(s)))),
+  ].sort();
   add(
     'cumulative',
     'Are cumulative leaderboards separate windows?',
-    cumulative.length
-      ? `Yes, at least for some events: ${cumulative.length} window IDs mention "cumulative".`
-      : 'No window IDs mention "cumulative" in this capture; check an FNCS event with multiple sessions.',
-    cumulative.slice(0, 5),
+    cumulativeWindows.length
+      ? `Yes, at least for some events: ${cumulativeWindows.length} window IDs mention "cumulative".`
+      : cumulativeRefs.length
+        ? `Not as windows, but the events payload references ${cumulativeRefs.length} cumulative score locations or leaderboard defs.`
+        : 'Nothing in this capture mentions "cumulative"; check an FNCS event with multiple sessions.',
+    [...cumulativeWindows, ...cumulativeRefs].slice(0, 8),
   );
 
   // Bulk accounts

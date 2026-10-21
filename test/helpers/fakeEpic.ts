@@ -86,6 +86,7 @@ export function fakeEpic(opts: FakeEpicOptions): { fetch: FetchLike; calls: Fake
         token_type: 'bearer',
         account_id: SERVICE_ACCOUNT,
         client_id: 'client123',
+        country: 'US',
         displayName: 'YosikService',
       });
     }
@@ -129,10 +130,10 @@ export function fakeEpic(opts: FakeEpicOptions): { fetch: FetchLike; calls: Fake
     if (path === '/account/api/public/account') {
       const ids = url.searchParams.getAll('accountId');
       if (ids.length > 100) return json({ errorCode: 'errors.com.epicgames.account.too_many_accounts' }, 400);
-      return json(ids.map((id) => ({ id, displayName: `name-${id.slice(0, 6)}` })));
+      return json(ids.map((id) => ({ id, displayName: `name-${id.slice(0, 6)}`, externalAuths: { psn: { externalDisplayName: 'psn-name' } } })));
     }
     if (path.startsWith('/account/api/public/account/displayName/')) {
-      return json({ id: SERVICE_ACCOUNT, displayName: decodeURIComponent(path.split('/').pop()!) });
+      return json({ id: SERVICE_ACCOUNT, displayName: decodeURIComponent(path.split('/').pop()!), email: 'owner@example.com', lastName: 'Owner' });
     }
     if (path.startsWith('/api/v1/players/Fortnite/tokens')) {
       return json({ accounts: [{ accountId: SERVICE_ACCOUNT, tokens: ['ARENA_S99_Division1'] }] });

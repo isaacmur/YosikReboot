@@ -12,7 +12,7 @@ import {
 import { BULK_ACCOUNT_LIMIT, endpoints } from '../../lib/epic/endpoints';
 import { parseEpicError } from '../../lib/epic/errors';
 import { REGIONS, type Region } from '../../lib/types';
-import { scrub } from './scrub';
+import { sanitizeAccount, sanitizeToken, scrub } from './scrub';
 import { asArr, asObj, listWindows, pickSampleWindows, type ProbeWindow, type SampleKind } from './select';
 
 export interface ProbeConfig {
@@ -140,7 +140,7 @@ export async function runProbe(opts: ProbeOptions): Promise<ProbeReport> {
   async function call(
     step: string,
     url: string,
-    o: { file?: string; auth?: boolean; method?: string; spaced?: boolean } = {},
+    o: { file?: string; auth?: boolean; method?: string; spaced?: boolean; sanitize?: (body: unknown) => unknown } = {},
   ): Promise<{ status: number; body: unknown; headers?: Headers }> {
     const method = o.method ?? 'GET';
     if (o.spaced !== false) await space();
@@ -169,7 +169,7 @@ export async function runProbe(opts: ProbeOptions): Promise<ProbeReport> {
       };
       if (!res.ok) rec.errorCode = parseEpicError(body).errorCode;
       if (o.file && body !== undefined) {
-        await save(o.file, body);
+        await save(o.file, o.sanitize ? o.sanitize(body) : body);
         rec.file = o.file;
       }
       report.calls.push(rec);
@@ -257,7 +257,7 @@ export async function runProbe(opts: ProbeOptions): Promise<ProbeReport> {
     tokenType: typeof raw.token_type === 'string' ? raw.token_type : undefined,
     hasRefreshToken: typeof raw.refresh_token === 'string',
   };
-  await save('oauth-token.json', raw);
+  await save('oauth-token.json', sanitizeToken(raw));
 
   // --- Schedule -----------------------------------------------------------------
   const windows = new Map<string, ProbeWindow>();
@@ -341,11 +341,15 @@ export async function runProbe(opts: ProbeOptions): Promise<ProbeReport> {
   // --- Accounts -----------------------------------------------------------------
   if (leaderboardIds.length) {
     const batch = leaderboardIds.slice(0, BULK_ACCOUNT_LIMIT);
-    await call(`accounts.bulk.${batch.length}`, endpoints.accountsById(batch), { file: 'accounts-bulk.json' });
+    await call(`accounts.bulk.${batch.length}`, endpoints.accountsById(batch), {
+      file: 'accounts-bulk.json',
+      sanitize: sanitizeAccount,
+    });
     if (leaderboardIds.length > BULK_ACCOUNT_LIMIT) {
       const over = leaderboardIds.slice(0, BULK_ACCOUNT_LIMIT + 1);
       await call(`accounts.bulk.${over.length}`, endpoints.accountsByIdUnchecked(over), {
         file: 'accounts-bulk-over-limit.json',
+        sanitize: sanitizeAccount,
       });
     } else {
       report.notes.push(`Only ${leaderboardIds.length} IDs on the final board; bulk limit above ${BULK_ACCOUNT_LIMIT} not tested.`);
@@ -353,7 +357,7 @@ export async function runProbe(opts: ProbeOptions): Promise<ProbeReport> {
   }
   const name = config.displayName ?? (typeof raw.displayName === 'string' ? raw.displayName : undefined);
   if (name) {
-    await call('accounts.byName', endpoints.accountByName(name), { file: 'account-by-name.json' });
+    await call('accounts.byName', endpoints.accountByName(name), { file: 'account-by-name.json', sanitize: sanitizeAccount });
   }
 
   await call('players.tokens', endpoints.playerTokens([accountId]), { file: 'player-tokens.json' });

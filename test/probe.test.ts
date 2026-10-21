@@ -90,6 +90,19 @@ describe('runProbe (against a synthetic fake)', () => {
     expect(token.expires_in).toBe(7200);
   });
 
+  it('keeps only id and displayName from account lookups, and drops the token country', async () => {
+    await probe();
+    const text = await allFileText();
+    for (const personal of ['owner@example.com', '"Owner"', 'psn-name', '"US"']) expect(text).not.toContain(personal);
+    const self = JSON.parse(await readFile(join(dir, 'account-by-name.json'), 'utf8'));
+    expect(self).toEqual({ id: SERVICE_ACCOUNT, displayName: 'YosikService', email: '[redacted]', lastName: '[redacted]' });
+    const bulk = JSON.parse(await readFile(join(dir, 'accounts-bulk.json'), 'utf8'));
+    expect(bulk[0]).toMatchObject({ externalAuths: '[redacted]' });
+    expect(bulk[0].displayName).toMatch(/^name-/);
+    const over = JSON.parse(await readFile(join(dir, 'accounts-bulk-over-limit.json'), 'utf8'));
+    expect(over.errorCode).toBe('errors.com.epicgames.account.too_many_accounts');
+  });
+
   it('sends the bearer token to Epic APIs but not to the CMS or the no-auth check', async () => {
     const { epic } = await probe();
     const cms = epic.calls.find((c) => c.url.includes('tournamentinformation'))!;
@@ -158,8 +171,25 @@ describe('analyze (against a synthetic fake)', () => {
     expect(byId('filtered').answer).toMatch(/^Yes: HTTP 200/);
     expect(byId('bulk-accounts').answer).toBe('100 IDs -> HTTP 200; 101 IDs -> HTTP 400 errors.com.epicgames.account.too_many_accounts');
     expect(byId('cms').answer).toBe('1 of 1 event displayDataId values appear in the CMS document.');
-    expect(byId('cumulative').answer).toMatch(/^No window IDs mention/);
+    expect(byId('cumulative').answer).toMatch(/^Nothing in this capture mentions "cumulative"/);
     expect(byId('rate').answer).toBe('Not tested (run the probe with --rate-test N).');
+  });
+
+  it('finds cumulative boards referenced as score locations, not just as window IDs', () => {
+    const events = {
+      events: [
+        {
+          eventId: 'epicgames_S99_FNCS_NAE',
+          eventWindows: [
+            { eventWindowId: 'S99_FNCS_Day1_NAE', scoreLocations: [{ leaderboardDefId: 'Official_CumulativeLeaderboardDef' }] },
+          ],
+        },
+      ],
+      resolvedWindowLocations: { x: ['cumulative:epicgames_S99_FNCS_NAE_cumulative'] },
+    };
+    const f = analyze(undefined, new Map([['events-download-NAE.json', events]])).find((x) => x.id === 'cumulative')!;
+    expect(f.answer).toBe('Not as windows, but the events payload references 2 cumulative score locations or leaderboard defs.');
+    expect(f.evidence).toEqual(['Official_CumulativeLeaderboardDef', 'cumulative:epicgames_S99_FNCS_NAE_cumulative']);
   });
 
   it('notices when teamAccountIds does not filter', async () => {

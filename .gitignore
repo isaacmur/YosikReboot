@@ -3,3 +3,7 @@ dist/
 .vercel/
 .env*
 !.env.example
+
+# Live Epic captures hold other players' account IDs and country flags; keep
+# them local while the repo is public (see docs/EPIC_API_NOTES.md).
+test/fixtures/epic/*/
