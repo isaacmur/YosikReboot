@@ -1,25 +1,52 @@
-// The leaderboard for one session: board (tier) choice, live refresh, compact
-// rows with a per-game breakdown, follows, search and paging; plus the scoring
-// and prize panels the Rules tab shows for the same board.
+// The leaderboard for one session: board (tier) choice, live refresh of the
+// pages in view, every page to the top 10,000 by scrolling or jumping to a rank
+// (F14), movement arrows (F15), cutoff lines (F16), pinned follows and teams
+// (F18, F24), the scoring table beside it (F21), and CSV export (F31).
 
-import { useMemo, useState } from 'react';
+import {
+  Fragment,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from 'react';
 import { useSearchParams } from 'react-router';
 import { windowState } from '../../lib/status';
-import type { BoardInfo, Entry, EventWindow, LeaderboardPage, PayoutTier, WindowDetail } from '../../lib/types';
-import { apiGet, ApiError } from '../api';
-import { dedupeTeams } from '../entries';
-import { formatSecondsAgo, formatTime, ordinal, plural, useNow } from '../format';
-import { getFollows, useFollows } from '../follows';
-import { useLiveQuery } from '../live';
-import { scanBoard, type BoardScan } from '../scan';
+import type { BoardInfo, Entry, EventWindow, LeaderboardPage, WindowDetail } from '../../lib/types';
+import {
+  boardRows,
+  cutoffTitle,
+  entryAtRank,
+  linesAfter,
+  PAGE_SIZE,
+  pageOfRank,
+  pageRuns,
+  pinnedRows,
+  placeCutoffs,
+  watchedIds,
+  type BoardRow,
+  type PlacedCutoff,
+} from '../board';
+import { formatSecondsAgo, formatTime, plural, useNow } from '../format';
+import { useFollows } from '../follows';
+import { boardMoves, type Move } from '../movement';
+import { lastScan, LIVE_TTL_MS, scanBoard, type BoardScan } from '../scan';
 import { useSettings } from '../settings';
 import { createStore } from '../store';
-import { RefreshIcon, SearchIcon, StarIcon } from './icons';
-import { Button, Chip, Countdown, Empty, ListSkeleton, Panel, Segmented, ErrorNote } from './ui';
+import { useTeams } from '../teams';
+import { useBoard } from '../useBoard';
+import { BoardExport } from './BoardExport';
+import { fmtN, GapRow, HeaderRow, Row } from './BoardRows';
+import { DownloadIcon, InfoIcon, RefreshIcon, SearchIcon } from './icons';
+import { PinnedStrip, type SearchState } from './Pinned';
+import { PrizesPanel, ScoringPanel } from './Scoring';
+import { Button, Countdown, Empty, ErrorNote, ListSkeleton, Panel, SectionHeader, Segmented, Sheet } from './ui';
 
 const tierPref = createStore<string>('yr.tier.v1', (r) => (typeof r === 'string' ? r : ''), '');
-
-const fmtN = (n: number) => n.toLocaleString('en-US');
 
 /** Boards worth showing (scored ones, or the only one) and the chosen one, kept in `?board=`. */
 export function useBoardChoice(detail: WindowDetail | undefined) {
@@ -57,194 +84,196 @@ export function BoardPicker({
   );
 }
 
-// --- Rows ----------------------------------------------------------------------
+// --- The list ------------------------------------------------------------------------
 
-const RANK_TONE: Record<number, string> = { 1: 'text-gold', 2: 'text-silver', 3: 'text-bronze' };
-const COLS =
-  'grid grid-cols-[2.75rem_minmax(0,1fr)_auto] sm:grid-cols-[3.25rem_minmax(0,1fr)_3.5rem_3.5rem_3.5rem_3.75rem_4.5rem]';
-
-function Names({ e }: { e: Entry }) {
-  return (
-    <span className="block truncate font-semibold">
-      {e.members.map((m, i) => (
-        <span key={m.id}>
-          {i > 0 && <span className="px-1 font-normal text-faint">/</span>}
-          {m.name ?? `${m.id.slice(0, 6)}…`}
-        </span>
-      ))}
-    </span>
-  );
+interface Run {
+  pages: number[];
+  rows: BoardRow[];
+  lines: Map<string, PlacedCutoff[]>;
 }
 
-function Games({ e, tz }: { e: Entry; tz: string }) {
-  return (
-    <div className="border-t border-line bg-bg/60 px-3 py-2.5 sm:pl-[3.25rem]">
-      <table className="nums w-full max-w-md text-xs">
-        <thead className="text-faint">
-          <tr className="text-[10px] tracking-wider uppercase">
-            <th className="pb-1 text-left font-semibold">Game</th>
-            <th className="pb-1 text-right font-semibold">Place</th>
-            <th className="pb-1 text-right font-semibold">Elims</th>
-            <th className="pb-1 text-right font-semibold">Pts</th>
-            <th className="pb-1 text-right font-semibold">Ended</th>
-          </tr>
-        </thead>
-        <tbody>
-          {e.sessions.map((s, i) => (
-            <tr key={`${s.endedAt}-${i}`} className="border-t border-line/70">
-              <td className="py-1 text-muted">{i + 1}</td>
-              <td className={`py-1 text-right ${s.victory ? 'font-bold text-accent-bright' : ''}`}>
-                {s.place ? (s.victory ? 'Win' : `#${s.place}`) : '—'}
-              </td>
-              <td className="py-1 text-right">{s.elims}</td>
-              <td className="py-1 text-right font-semibold">{s.points ?? '—'}</td>
-              <td className="py-1 text-right text-muted">{s.endedAt ? formatTime(s.endedAt, tz) : '—'}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
-function Row({
-  e,
-  followed,
+/** Loaded pages as blocks of rows, with gaps between runs. Memoized: the page re-renders every second. */
+const BoardList = memo(function BoardList({
+  runs,
+  moves,
+  followSet,
+  teamNames,
   open,
+  flashTeam,
   onToggle,
+  observe,
+  pending,
+  onLoad,
   tz,
 }: {
-  e: Entry;
-  followed: boolean;
-  open: boolean;
-  onToggle: () => void;
+  runs: Run[];
+  moves: Map<string, Move>;
+  followSet: Set<string>;
+  teamNames: Map<string, string>;
+  open?: string;
+  flashTeam?: string;
+  onToggle: (teamKey: string) => void;
+  observe: (page: number) => (el: HTMLElement | null) => () => void;
+  pending: number[];
+  onLoad: (page: number) => void;
   tz: string;
 }) {
   return (
-    <li className={`relative ${followed ? 'bg-accent-soft' : ''}`}>
-      {followed && <span className="absolute inset-y-0 left-0 w-[3px] bg-accent" aria-hidden />}
-      <button
-        onClick={onToggle}
-        aria-expanded={open}
-        disabled={!e.sessions.length}
-        className={`${COLS} min-h-11 w-full items-center gap-x-2 px-3 py-1.5 text-left text-sm transition hover:bg-raised/60 disabled:cursor-default`}
-      >
-        <span className={`nums font-display text-lg leading-none font-bold ${RANK_TONE[e.rank] ?? 'text-muted'}`}>
-          {fmtN(e.rank)}
-        </span>
-        <span className="min-w-0">
-          <span className="flex items-center gap-1.5">
-            {followed && <StarIcon size={13} className="shrink-0 fill-accent text-accent" />}
-            <Names e={e} />
-          </span>
-          <span className="nums block text-[11px] text-faint sm:hidden">
-            {plural(e.matches, 'game')} · {plural(e.victories, 'win')} · {plural(e.elims, 'elim')}
-          </span>
-        </span>
-        <span className="nums hidden text-right text-muted sm:block">{e.matches}</span>
-        <span className="nums hidden text-right text-muted sm:block">{e.victories}</span>
-        <span className="nums hidden text-right text-muted sm:block">{e.elims}</span>
-        <span className="nums hidden text-right text-muted sm:block">{e.avgPlace ?? '—'}</span>
-        <span className="nums text-right font-bold">{fmtN(e.points)}</span>
-      </button>
-      {open && e.sessions.length > 0 && <Games e={e} tz={tz} />}
-    </li>
+    <Panel className="overflow-hidden">
+      <HeaderRow />
+      <div className="divide-y divide-line">
+        {runs.map((run, i) => {
+          const first = run.pages[0]!;
+          const gapFrom = i > 0 ? runs[i - 1]!.pages[runs[i - 1]!.pages.length - 1]! + 1 : 0;
+          return (
+            <Fragment key={first}>
+              {first > gapFrom && <GapRow fromPage={gapFrom} toPage={first - 1} pending={pending} onLoad={onLoad} />}
+              {run.pages.map((p) => (
+                <ul key={p} data-page={p} ref={observe(p)} className="page-block divide-y divide-line">
+                  {run.rows
+                    .filter((r) => r.page === p)
+                    .map(({ entry: e }) => (
+                      <Row
+                        key={e.teamKey}
+                        e={e}
+                        tz={tz}
+                        move={moves.get(e.teamKey)}
+                        team={teamNames.get(e.teamKey)}
+                        followed={e.members.some((m) => followSet.has(m.id))}
+                        open={open === e.teamKey}
+                        flash={flashTeam === e.teamKey}
+                        lines={run.lines.get(e.teamKey)}
+                        onToggle={onToggle}
+                      />
+                    ))}
+                </ul>
+              ))}
+            </Fragment>
+          );
+        })}
+      </div>
+    </Panel>
   );
-}
+});
 
-function HeaderRow() {
+/** Loads the next page when it scrolls near, and on tap. */
+function MoreRows({
+  page,
+  totalPages,
+  loading,
+  failed,
+  onLoad,
+}: {
+  page: number;
+  totalPages: number;
+  loading: boolean;
+  failed: boolean;
+  onLoad: (page: number) => void;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || loading || failed) return;
+    const io = new IntersectionObserver(([e]) => e?.isIntersecting && onLoad(page), {
+      rootMargin: '0px 0px 800px 0px',
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [page, loading, failed, onLoad]);
   return (
-    <div
-      className={`${COLS} gap-x-2 border-b border-line px-3 py-2 text-[10px] font-semibold tracking-wider text-faint uppercase`}
-    >
-      <span>#</span>
-      <span>Player</span>
-      <span className="hidden text-right sm:block">Games</span>
-      <span className="hidden text-right sm:block">Wins</span>
-      <span className="hidden text-right sm:block">Elims</span>
-      <span className="hidden text-right sm:block">Avg</span>
-      <span className="text-right">Points</span>
+    <div ref={ref}>
+      <Button className="w-full" onClick={() => onLoad(page)} disabled={loading}>
+        {loading ? 'Loading…' : `Show ranks ${fmtN(page * PAGE_SIZE + 1)}–${fmtN((page + 1) * PAGE_SIZE)}`}
+        <span className="font-normal text-faint">
+          page {page + 1} of {totalPages}
+        </span>
+      </Button>
     </div>
   );
 }
 
-// --- Follows ---------------------------------------------------------------------
+// --- Cutoffs -------------------------------------------------------------------------
 
-interface ScanState {
-  running: boolean;
-  done?: number;
-  total?: number;
-  result?: BoardScan;
-  error?: string;
-}
-
-function FollowStrip({
-  rows,
-  scan,
-  onFind,
-  board,
+/** The qualifying and paid lines, with the points each takes now (or took). Tap to see it on the board. */
+function CutoffStrip({
+  lines,
+  pages,
+  firstRun,
+  teams,
+  boardEnd,
+  final,
+  onJump,
 }: {
-  rows: Entry[];
-  scan: ScanState;
-  onFind: () => void;
-  board: BoardInfo;
+  lines: PlacedCutoff[];
+  pages: LeaderboardPage[];
+  /** Rows from rank 1 down, for counting who reached a points line. */
+  firstRun: Entry[];
+  /** Teams on the board, once the last page is in. */
+  teams?: number;
+  boardEnd: boolean;
+  final: boolean;
+  onJump: (rank: number) => void;
 }) {
-  const follows = useFollows();
-  if (!follows.length) return null;
-  const canScan = board.id !== 'cumulative';
+  if (!lines.length) return null;
   return (
-    <Panel className="p-3">
-      <div className="flex items-center justify-between gap-3">
-        <h3 className="font-display text-sm font-bold tracking-wider text-muted uppercase">Your follows</h3>
-        {canScan && (
-          <Button size="sm" variant="ghost" onClick={onFind} disabled={scan.running}>
-            <SearchIcon size={14} />
-            {scan.running ? `Searching ${scan.done ?? 0}/${scan.total ?? '…'}` : 'Find on all pages'}
-          </Button>
-        )}
-      </div>
-      {scan.running && scan.total ? (
-        <div className="mt-2 h-1 overflow-hidden rounded-full bg-raised">
-          <div
-            className="h-full bg-accent transition-all"
-            style={{ width: `${((scan.done ?? 0) / scan.total) * 100}%` }}
-          />
-        </div>
-      ) : null}
-      <ul className="mt-2 flex flex-wrap gap-1.5">
-        {follows.map((f) => {
-          const onPage = rows.find((e) => e.members.some((m) => m.id === f.id));
-          const scanned = scan.result?.found[f.id];
-          const rank = onPage?.rank ?? scanned?.rank;
-          const points = onPage?.points ?? scanned?.points;
-          return (
-            <li
-              key={f.id}
-              className="flex items-center gap-2 rounded-md border border-line bg-raised px-2 py-1 text-xs"
-            >
-              <span className="max-w-[9rem] truncate font-semibold">{f.name}</span>
-              {f.isMe && <Chip tone="accent">You</Chip>}
-              <span className="nums text-muted">
-                {rank !== undefined ? (
-                  <>
-                    <span className="font-bold text-ink">{ordinal(rank)}</span> · {fmtN(points ?? 0)}
-                  </>
-                ) : scan.result?.complete ? (
-                  'not in top 10k'
-                ) : (
-                  '—'
-                )}
-              </span>
-            </li>
-          );
-        })}
-      </ul>
-      {scan.error && <p className="mt-2 text-xs text-live">{scan.error}</p>}
-    </Panel>
+    <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4" aria-label="Cutoffs">
+      {lines.map((l) => {
+        let value: string;
+        let note: string;
+        if (l.rank === null) {
+          const below = firstRun.find((e) => e.points < l.threshold);
+          const last = firstRun[firstRun.length - 1];
+          value = below
+            ? plural(below.rank - 1, 'team')
+            : last
+              ? `${fmtN(last.rank)}${boardEnd ? '' : '+'} team${last.rank === 1 ? '' : 's'}`
+              : '…';
+          note = final ? 'reached it' : 'reached it so far';
+        } else if (teams !== undefined && l.rank > teams) {
+          value = final ? 'Everyone' : 'Everyone so far';
+          note = `${plural(teams, 'team')} on the board`;
+        } else {
+          const at = entryAtRank(l.rank, pages);
+          value = at ? `${fmtN(at.points)} pts` : '…';
+          note = final ? 'it took' : 'to make it now';
+        }
+        const tone = l.kind === 'cash' ? 'text-ok' : 'text-accent-bright';
+        return (
+          <button
+            key={`${l.kind}|${l.basis}|${l.threshold}|${l.label}`}
+            onClick={() => l.rank !== null && onJump(l.rank)}
+            disabled={l.rank === null}
+            title={l.label}
+            className="w-40 shrink-0 rounded-lg border border-line bg-surface px-3 py-2 text-left transition hover:border-accent/60 disabled:pointer-events-none"
+          >
+            <span className={`nums block text-[10px] font-bold tracking-wider uppercase ${tone}`}>
+              {l.approx && '≈ '}
+              {cutoffTitle(l)} · {l.kind === 'cash' ? 'Paid' : 'Qualify'}
+            </span>
+            <span className="nums mt-0.5 block font-display text-xl leading-tight font-bold">{value}</span>
+            <span className="block truncate text-[11px] text-faint">
+              {note} · {l.label}
+            </span>
+          </button>
+        );
+      })}
+    </div>
   );
 }
 
-// --- The board -------------------------------------------------------------------
+function ToolButton({ onClick, children, label }: { onClick: () => void; children: ReactNode; label?: string }) {
+  return (
+    <button
+      onClick={onClick}
+      aria-label={label}
+      className="inline-flex items-center gap-1 font-semibold text-accent-bright hover:underline"
+    >
+      {children}
+    </button>
+  );
+}
+
+// --- The board -----------------------------------------------------------------------
 
 export function Leaderboard({
   eventId,
@@ -259,223 +288,360 @@ export function Leaderboard({
 }) {
   const [{ timeZone, refreshSec }] = useSettings();
   const follows = useFollows();
+  const teams = useTeams();
   const now = useNow(1000);
   const state = windowState(w, now);
-  const q = new URLSearchParams({ event: eventId, window: w.id, board: board.id });
-  const live = useLiveQuery<LeaderboardPage>(`/api/leaderboard?${q}`, state, refreshSec * 1000);
-  // Extra pages loaded on request, for the board they belong to.
-  const [more, setMore] = useState<{ key: string; pages: LeaderboardPage[] }>({ key: '', pages: [] });
-  const extra = more.key === q.toString() ? more.pages : [];
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [moreError, setMoreError] = useState<Error>();
-  const [open, setOpen] = useState<string>();
-  const [search, setSearch] = useState('');
-  const [scan, setScan] = useState<ScanState & { key?: string }>({ running: false });
-  const scanHere = scan.key === q.toString() ? scan : { running: false };
+  const final = state === 'final';
+  const followIds = useMemo(() => follows.map((f) => f.id), [follows]);
+  const ids = useMemo(() => watchedIds(followIds, teams), [followIds, teams]);
+  const watchRef = useRef<() => number[]>(() => []);
+  const { pages, lite, totalPages, live, pending, loadError, loadPage, observe } = useBoard({
+    eventId,
+    windowId: w.id,
+    board: board.id,
+    state,
+    liveMs: refreshSec * 1000,
+    watch: () => watchRef.current(),
+  });
+  const boardKey = `${eventId}|${w.id}|${board.id}`;
+  const query = new URLSearchParams({ event: eventId, window: w.id, board: board.id }).toString();
 
-  const followIds = useMemo(() => new Set(follows.map((f) => f.id)), [follows]);
-  const rows = dedupeTeams([...(live.data?.entries ?? []), ...extra.flatMap((p) => p.entries)]);
-  const needle = search.trim().toLowerCase();
-  const shown = needle ? rows.filter((e) => e.members.some((m) => m.name?.toLowerCase().includes(needle))) : rows;
-  const totalPages = live.data?.totalPages ?? 0;
-  const loadedPages = 1 + extra.length;
+  // Rows, runs and movement.
+  const rows = useMemo(() => boardRows(pages), [pages]);
+  const entries = useMemo(() => rows.map((r) => r.entry), [rows]);
+  const liteRows = useMemo(() => Object.values(lite).flatMap((p) => p.entries), [lite]);
+  const moves = useMemo(
+    () => (final ? new Map<string, Move>() : boardMoves(boardKey, pages, rows)),
+    [final, boardKey, pages, rows],
+  );
+  const lastPage = pages[totalPages - 1] ?? lite[totalPages - 1];
+  const teamsOnBoard = lastPage ? (totalPages - 1) * PAGE_SIZE + lastPage.entries.length : undefined;
+  const placed = useMemo(
+    () => placeCutoffs(board.cutoffs, totalPages, lastPage?.entries.length),
+    [board.cutoffs, totalPages, lastPage],
+  );
+  const runs = useMemo(
+    () =>
+      pageRuns(Object.keys(pages).map(Number)).map((run): Run => {
+        const runRows = rows.filter((r) => run.includes(r.page));
+        return {
+          pages: run,
+          rows: runRows,
+          lines: linesAfter(
+            runRows.map((r) => r.entry),
+            placed,
+          ),
+        };
+      }),
+    [pages, rows, placed],
+  );
+  const lastLoaded = runs.length ? runs[runs.length - 1]!.pages[runs[runs.length - 1]!.pages.length - 1]! : -1;
 
-  async function loadMore() {
-    setLoadingMore(true);
-    setMoreError(undefined);
-    const key = q.toString();
+  // Cutoff summary: qualifying and paid lines; read their pages (lite) when not loaded.
+  const summary = placed.filter((c) => c.kind !== 'item');
+  const summaryPages = [
+    ...new Set(
+      summary.flatMap((c) => (c.rank !== null && c.rank <= totalPages * PAGE_SIZE ? [pageOfRank(c.rank)] : [])),
+    ),
+  ];
+  const followPages = [
+    ...new Set(rows.filter((r) => r.entry.members.some((m) => ids.includes(m.id))).map((r) => r.page)),
+  ];
+  watchRef.current = () => [...followPages, ...summaryPages];
+  const needLite = summaryPages.filter((p) => !pages[p] && !lite[p]).join(',');
+  useEffect(() => {
+    if (needLite) for (const p of needLite.split(',')) void loadPage(Number(p), true);
+  }, [needLite, loadPage]);
+
+  // Pinned follows and teams.
+  const [search, setSearch] = useState<SearchState>({ running: false });
+  const [scan, setScan] = useState<BoardScan | undefined>(() => lastScan(eventId, w.id, board.id));
+  const canSearch = board.id !== 'cumulative';
+  const allRows = useMemo(() => [...entries, ...liteRows], [entries, liteRows]);
+  const { pinned, missing } = useMemo(() => pinnedRows(allRows, scan?.found, ids), [allRows, scan, ids]);
+  const searchComplete = !!scan?.complete && missing.every((id) => scan.searchedFor.includes(id));
+  const followNames = useMemo(() => new Map(follows.map((f) => [f.id, f.name])), [follows]);
+
+  async function find(quiet: boolean) {
+    // Final boards: everyone, so the saved result answers for all your follows (Me, Home).
+    // Live boards: only who isn't on a loaded page, starting where they were last found.
+    const onLoaded = new Set(allRows.flatMap((r) => r.members.map((m) => m.id)));
+    const want = final ? ids : ids.filter((id) => !onLoaded.has(id));
+    if (!want.length) return;
+    const hints = [...new Set(want.flatMap((id) => (scan?.found[id] ? [pageOfRank(scan.found[id].rank)] : [])))];
+    setSearch({ running: true, quiet });
     try {
-      const next = await apiGet<LeaderboardPage>(`/api/leaderboard?${q}&page=${loadedPages}`);
-      setMore({ key, pages: [...extra, next] });
-    } catch (err) {
-      setMoreError(err as Error);
-    } finally {
-      setLoadingMore(false);
-    }
-  }
-
-  async function findFollows() {
-    const ids = getFollows().map((f) => f.id);
-    if (!ids.length) return;
-    const key = q.toString();
-    setScan({ running: true, key });
-    try {
-      const result = await scanBoard(eventId, w.id, board.id, ids, {
-        final: state === 'final',
+      const result = await scanBoard(eventId, w.id, board.id, want, {
+        final,
         boardLabel: board.label,
         title: `${eventName} · ${w.label}`,
         endedAt: w.end,
-        onProgress: (done, total) => setScan((s) => ({ ...s, done, total })),
+        hints,
+        onProgress: (done, total) => setSearch((s) => ({ ...s, done, total })),
       });
-      setScan({ running: false, result, key });
+      setScan(result);
+      setSearch({ running: false });
     } catch (err) {
-      setScan({
-        running: false,
-        key,
-        error: err instanceof ApiError || err instanceof Error ? err.message : 'Search failed',
-      });
+      setSearch({ running: false, error: quiet ? undefined : (err as Error).message || 'Search failed' });
     }
   }
+  const findRef = useRef(find);
+  findRef.current = find;
+  const watchState = useRef({ scan, running: search.running });
+  watchState.current = { scan, running: search.running };
+  // A live board repeats your last search every few minutes, for follows off the loaded pages (D10).
+  // Attempts are spaced out too, so a failing search (Epic rate limiting) doesn't retry every tick.
+  const polling = state === 'live' || state === 'wrapping';
+  const lastTry = useRef(0);
+  useEffect(() => {
+    if (!polling || !canSearch) return;
+    const id = setInterval(() => {
+      const { scan: last, running } = watchState.current;
+      if (!last || running || document.hidden) return;
+      if (Date.now() - Date.parse(last.scannedAt) < LIVE_TTL_MS || Date.now() - lastTry.current < LIVE_TTL_MS) return;
+      lastTry.current = Date.now();
+      void findRef.current(true);
+    }, 30_000);
+    return () => clearInterval(id);
+  }, [polling, canSearch]);
+
+  // Expanding rows, searching names, jumping to a rank.
+  const [open, setOpen] = useState<string>();
+  const onToggle = useCallback((k: string) => setOpen((o) => (o === k ? undefined : k)), []);
+  const [filter, setFilter] = useState('');
+  const [jump, setJump] = useState('');
+  const [flash, setFlash] = useState<{ rank: number; teamKey?: string; n: number }>();
+  const needle = filter.trim().toLowerCase();
+  const filtered = needle ? entries.filter((e) => e.members.some((m) => m.name?.toLowerCase().includes(needle))) : [];
+  const maxRank = Math.max(1, totalPages) * PAGE_SIZE;
+
+  const jumpTo = useCallback(
+    async (rank: number, teamKey?: string) => {
+      const r = Math.min(Math.max(1, Math.round(rank)), maxRank);
+      setFilter('');
+      if (!pages[pageOfRank(r)]) await loadPage(pageOfRank(r));
+      setFlash((f) => ({ rank: r, teamKey, n: (f?.n ?? 0) + 1 }));
+    },
+    [maxRank, pages, loadPage],
+  );
+  const flashTeam = flash
+    ? flash.teamKey && entries.some((e) => e.teamKey === flash.teamKey)
+      ? flash.teamKey
+      : entries.find((e) => e.rank === flash.rank)?.teamKey
+    : undefined;
+  useEffect(() => {
+    if (!flash) return;
+    const el =
+      (flash.teamKey && document.querySelector(`[data-team="${CSS.escape(flash.teamKey)}"]`)) ||
+      document.querySelector(`[data-rank="${flash.rank}"]`);
+    const smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    el?.scrollIntoView({ block: 'center', behavior: smooth ? 'smooth' : 'auto' });
+    const t = setTimeout(() => setFlash(undefined), 2400);
+    return () => clearTimeout(t);
+  }, [flash]);
+  const onJump = (e: FormEvent) => {
+    e.preventDefault();
+    const n = Number(jump.replace(/[^\d]/g, ''));
+    if (n > 0) void jumpTo(n);
+  };
+
+  const [sheet, setSheet] = useState<'scoring' | 'export'>();
+  const followSet = useMemo(() => new Set(followIds), [followIds]);
+  const teamNames = useMemo(() => new Map(teams.map((t) => [t.key, t.name])), [teams]);
+  const loaded = !!pages[0];
 
   return (
-    <div className="space-y-3">
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
-        {live.receivedAt && <span>Updated {formatSecondsAgo(live.receivedAt, now)}</span>}
-        {live.nextAt && (
-          <span>
-            Next refresh <Countdown to={live.nextAt.toISOString()} now={now} />
+    <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_19rem] lg:items-start lg:gap-5">
+      <div className="min-w-0 space-y-3">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
+          {live.receivedAt && <span>Updated {formatSecondsAgo(live.receivedAt, now)}</span>}
+          {live.nextAt && (
+            <span>
+              Next refresh <Countdown to={live.nextAt.toISOString()} now={now} />
+            </span>
+          )}
+          {final && loaded && <span>Final standings</span>}
+          {state === 'wrapping' && <span>Results can still change while Epic settles them</span>}
+          <span className="ml-auto flex items-center gap-3">
+            <span className="lg:hidden">
+              <ToolButton onClick={() => setSheet('scoring')}>
+                <InfoIcon size={13} /> Scoring
+              </ToolButton>
+            </span>
+            <ToolButton onClick={() => setSheet('export')}>
+              <DownloadIcon size={13} /> Export
+            </ToolButton>
+            <ToolButton onClick={live.refresh} label="Refresh leaderboard">
+              <RefreshIcon size={13} className={live.loading ? 'animate-spin' : ''} /> Refresh
+            </ToolButton>
           </span>
+        </div>
+
+        {live.staleSince && (
+          <p role="status" className="rounded-md border border-wrap/40 bg-wrap/10 px-3 py-2 text-xs">
+            Showing data from {formatTime(live.staleSince.toISOString(), timeZone)}: {live.error?.message}. Retrying on
+            its own.
+          </p>
         )}
-        {state === 'final' && live.data && <span>Final standings</span>}
-        {state === 'wrapping' && <span>Results can still change while Epic settles them</span>}
-        <button
-          onClick={live.refresh}
-          className="ml-auto inline-flex items-center gap-1 font-semibold text-accent-bright hover:underline"
-          aria-label="Refresh leaderboard"
-        >
-          <RefreshIcon size={13} className={live.loading ? 'animate-spin' : ''} />
-          Refresh
-        </button>
+        {pages[0]?.approximate && (
+          <p className="text-xs text-faint">
+            Cumulative standings add up the top 300 of each session, so lower ranks are approximate.
+          </p>
+        )}
+
+        {entries.length > 0 && (
+          <CutoffStrip
+            lines={summary}
+            pages={[...Object.values(pages), ...Object.values(lite)]}
+            firstRun={runs[0]?.rows.map((r) => r.entry) ?? []}
+            teams={teamsOnBoard}
+            boardEnd={lastLoaded >= totalPages - 1}
+            final={final}
+            onJump={(r) => void jumpTo(r)}
+          />
+        )}
+
+        {ids.length > 0 && entries.length > 0 && (
+          <PinnedStrip
+            pinned={pinned}
+            missing={missing}
+            rows={entries}
+            names={followNames}
+            teams={teams}
+            moves={moves}
+            search={search}
+            searchedAt={scan?.scannedAt}
+            searchComplete={searchComplete}
+            canSearch={canSearch}
+            totalPages={totalPages}
+            final={final}
+            tz={timeZone}
+            onFind={() => void find(false)}
+            onJump={(r, k) => void jumpTo(r, k)}
+          />
+        )}
+
+        <div className="flex gap-2">
+          <label className="relative block min-w-0 flex-1">
+            <SearchIcon size={15} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-faint" />
+            <input
+              type="search"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              placeholder={`Search ${fmtN(entries.length)} loaded`}
+              aria-label="Search loaded players"
+              className="h-9 w-full rounded-md border border-line bg-surface pr-3 pl-9 text-sm outline-none placeholder:text-faint focus:border-accent"
+            />
+          </label>
+          <form onSubmit={onJump} className="flex shrink-0 gap-1.5">
+            <input
+              value={jump}
+              onChange={(e) => setJump(e.target.value)}
+              inputMode="numeric"
+              pattern="[0-9,]*"
+              placeholder="Rank"
+              aria-label={`Jump to rank (1 to ${fmtN(maxRank)})`}
+              className="nums h-9 w-20 rounded-md border border-line bg-surface px-3 text-sm outline-none placeholder:text-faint focus:border-accent"
+            />
+            <Button type="submit" disabled={!jump.trim() || !loaded}>
+              Go
+            </Button>
+          </form>
+        </div>
+
+        {!loaded ? (
+          live.error ? (
+            <ErrorNote error={live.error} onRetry={live.refresh} />
+          ) : (
+            <ListSkeleton rows={8} />
+          )
+        ) : !entries.length ? (
+          <Empty>No results yet. Check back once games finish.</Empty>
+        ) : needle ? (
+          filtered.length ? (
+            <Panel className="overflow-hidden">
+              <HeaderRow />
+              <ul className="divide-y divide-line">
+                {filtered.map((e) => (
+                  <Row
+                    key={e.teamKey}
+                    e={e}
+                    tz={timeZone}
+                    move={moves.get(e.teamKey)}
+                    team={teamNames.get(e.teamKey)}
+                    followed={e.members.some((m) => followSet.has(m.id))}
+                    open={open === e.teamKey}
+                    flash={false}
+                    onToggle={onToggle}
+                  />
+                ))}
+              </ul>
+            </Panel>
+          ) : (
+            <Empty>No one by that name on the loaded pages.</Empty>
+          )
+        ) : (
+          <BoardList
+            runs={runs}
+            moves={moves}
+            followSet={followSet}
+            teamNames={teamNames}
+            open={open}
+            flashTeam={flashTeam}
+            onToggle={onToggle}
+            observe={observe}
+            pending={pending}
+            onLoad={loadPage}
+            tz={timeZone}
+          />
+        )}
+
+        {loaded && !needle && entries.length > 0 && lastLoaded + 1 < totalPages && (
+          <MoreRows
+            key={lastLoaded + 1}
+            page={lastLoaded + 1}
+            totalPages={totalPages}
+            loading={pending.includes(lastLoaded + 1)}
+            failed={!!loadError}
+            onLoad={loadPage}
+          />
+        )}
+        {loaded && !needle && entries.length > 0 && lastLoaded + 1 >= totalPages && board.id !== 'cumulative' && (
+          <p className="text-center text-xs text-faint">
+            {totalPages >= 100
+              ? "That's the top 10,000, as far as Epic lists."
+              : `End of the board: ${plural(teamsOnBoard ?? entries.length, 'team')}.`}
+          </p>
+        )}
+        {loadError && <ErrorNote error={loadError} onRetry={() => void loadPage(lastLoaded + 1)} />}
       </div>
 
-      {live.staleSince && (
-        <p role="status" className="rounded-md border border-wrap/40 bg-wrap/10 px-3 py-2 text-xs">
-          Showing data from {formatTime(live.staleSince.toISOString(), timeZone)}: {live.error?.message}. Retrying on
-          its own.
-        </p>
-      )}
-      {live.data?.approximate && (
-        <p className="text-xs text-faint">
-          Cumulative standings add up the top 300 of each session, so lower ranks are approximate.
-        </p>
-      )}
+      <aside
+        className="sticky top-20 hidden max-h-[calc(100dvh-6rem)] overflow-y-auto overscroll-contain lg:block"
+        aria-label="Scoring and prizes"
+      >
+        <SectionHeader title="Scoring" />
+        <ScoringPanel board={board} />
+        <SectionHeader title="Prizes" />
+        <PrizesPanel board={board} />
+      </aside>
 
-      <FollowStrip rows={rows} scan={scanHere} onFind={() => void findFollows()} board={board} />
-
-      <label className="relative block">
-        <SearchIcon size={15} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-faint" />
-        <input
-          type="search"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder={`Search ${fmtN(rows.length)} loaded players`}
-          aria-label="Search loaded players"
-          className="h-9 w-full rounded-md border border-line bg-surface pr-3 pl-9 text-sm outline-none placeholder:text-faint focus:border-accent"
+      <Sheet open={sheet === 'scoring'} onClose={() => setSheet(undefined)} title={`Scoring · ${board.label}`}>
+        <ScoringPanel board={board} />
+        <SectionHeader title="Prizes" />
+        <PrizesPanel board={board} />
+      </Sheet>
+      <Sheet open={sheet === 'export'} onClose={() => setSheet(undefined)} title="Export CSV">
+        <BoardExport
+          rows={entries}
+          pages={pages}
+          query={query}
+          totalPages={totalPages}
+          final={final}
+          name={[eventName, w.label, board.kind === 'main' ? '' : board.label]}
+          teamName={(k) => teamNames.get(k)}
         />
-      </label>
-
-      {!live.data ? (
-        live.error ? (
-          <ErrorNote error={live.error} onRetry={live.refresh} />
-        ) : (
-          <ListSkeleton rows={8} />
-        )
-      ) : shown.length ? (
-        <Panel className="overflow-hidden">
-          <HeaderRow />
-          <ul className="divide-y divide-line">
-            {shown.map((e) => (
-              <Row
-                key={e.teamKey}
-                e={e}
-                tz={timeZone}
-                followed={e.members.some((m) => followIds.has(m.id))}
-                open={open === e.teamKey}
-                onToggle={() => setOpen(open === e.teamKey ? undefined : e.teamKey)}
-              />
-            ))}
-          </ul>
-        </Panel>
-      ) : (
-        <Empty>
-          {needle ? 'No one by that name on the loaded pages.' : 'No results yet. Check back once games finish.'}
-        </Empty>
-      )}
-
-      {live.data && loadedPages < totalPages && board.id !== 'cumulative' && (
-        <Button className="w-full" onClick={() => void loadMore()} disabled={loadingMore}>
-          {loadingMore ? 'Loading…' : `Show ranks ${fmtN(loadedPages * 100 + 1)}–${fmtN((loadedPages + 1) * 100)}`}
-          <span className="font-normal text-faint">
-            page {loadedPages + 1} of {totalPages}
-          </span>
-        </Button>
-      )}
-      {moreError && <ErrorNote error={moreError} onRetry={() => void loadMore()} />}
+      </Sheet>
     </div>
-  );
-}
-
-// --- Scoring and prizes (Rules tab) ------------------------------------------------
-
-const PLACES_SHOWN = 12;
-
-export function ScoringPanel({ board }: { board: BoardInfo }) {
-  const [all, setAll] = useState(false);
-  const s = board.scoring;
-  if (!s) return <Empty>Epic doesn't publish points for this board.</Empty>;
-  const first = s.elims[0];
-  const perElim = first && s.elims.every((r) => r.points === r.elims * first.points);
-  // Neighbouring places worth the same points share a tile ("11th–15th").
-  const places: { from: number; to: number; points: number }[] = [];
-  for (const p of s.placement) {
-    const last = places[places.length - 1];
-    if (last && last.points === p.points && last.to === p.place - 1) last.to = p.place;
-    else places.push({ from: p.place, to: p.place, points: p.points });
-  }
-  return (
-    <Panel className="p-4">
-      <h3 className="font-display text-sm font-bold tracking-wider text-muted uppercase">Placement points</h3>
-      <ul className="nums mt-2 grid grid-cols-[repeat(auto-fill,minmax(5rem,1fr))] gap-1.5">
-        {(all ? places : places.slice(0, PLACES_SHOWN)).map((p) => (
-          <li key={p.from} className="rounded-md bg-raised px-2 py-1.5 text-center">
-            <span className="block text-[11px] text-faint">
-              {p.from === p.to ? ordinal(p.from) : `${ordinal(p.from)}–${ordinal(p.to)}`}
-            </span>
-            <span className="font-display text-lg leading-none font-bold">{p.points}</span>
-          </li>
-        ))}
-      </ul>
-      {places.length > PLACES_SHOWN && (
-        <button onClick={() => setAll(!all)} className="mt-2 text-xs font-semibold text-accent-bright hover:underline">
-          {all ? 'Show fewer' : `Show all ${places.length}`}
-        </button>
-      )}
-      {s.elims.length > 0 && (
-        <>
-          <h3 className="mt-4 font-display text-sm font-bold tracking-wider text-muted uppercase">Eliminations</h3>
-          <p className="mt-1 text-sm">
-            {perElim
-              ? `${first.points} point${first.points === 1 ? '' : 's'} per elimination${s.elims.length < 100 ? `, up to ${s.elims.length}` : ''}`
-              : s.elims.map((r) => `${r.elims}: ${r.points}`).join(' · ')}
-          </p>
-        </>
-      )}
-    </Panel>
-  );
-}
-
-const payoutLabel = (p: PayoutTier) =>
-  p.basis === 'rank'
-    ? `Top ${fmtN(p.threshold)}`
-    : p.basis === 'percentile'
-      ? `Top ${+(p.threshold * 100).toFixed(2)}%`
-      : `${fmtN(p.threshold)} points`;
-
-export function PrizesPanel({ board }: { board: BoardInfo }) {
-  if (!board.payouts.length) return <Empty>No prizes listed for this board.</Empty>;
-  return (
-    <Panel className="overflow-hidden">
-      <ul className="divide-y divide-line">
-        {board.payouts.map((p) => (
-          <li key={`${p.basis}${p.threshold}`} className="flex items-start gap-3 px-4 py-2.5 text-sm">
-            <span className="nums w-28 shrink-0 font-display text-base font-bold tracking-wide uppercase">
-              {payoutLabel(p)}
-            </span>
-            <span className="min-w-0 flex-1 text-muted">{p.rewards.join(', ')}</span>
-            {p.qualifies && <Chip tone="accent">Qualifies</Chip>}
-          </li>
-        ))}
-      </ul>
-    </Panel>
   );
 }

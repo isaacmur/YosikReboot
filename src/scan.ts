@@ -1,7 +1,8 @@
 // Finding followed players on a board (D10: Epic won't look them up directly).
 // Walks the board's pages one at a time through /api/leaderboard in lite mode
-// (CDN-cached, no names), stopping once everyone is found. Results for final
-// boards never change, so they're kept in this browser for good; others for 5 min.
+// (CDN-cached, no names), stopping once everyone is found. A repeat search starts
+// around the pages where they were last found. Results for final boards never
+// change, so they're kept in this browser for good; others for 5 min.
 
 import type { Entry, LeaderboardPage, WindowDetail } from '../lib/types';
 import { ApiError, apiGet } from './api';
@@ -35,7 +36,7 @@ export interface BoardScan {
   endedAt?: string;
 }
 
-const LIVE_TTL_MS = 5 * 60_000;
+export const LIVE_TTL_MS = 5 * 60_000;
 const permanent = createStore<Record<string, BoardScan>>(
   'yr.scans.v1',
   (r) => (r && typeof r === 'object' ? (r as Record<string, BoardScan>) : {}),
@@ -65,6 +66,12 @@ export function cachedScan(eventId: string, windowId: string, board: string, ids
   return hit.complete || ids.every((id) => hit.searchedFor.includes(id)) ? hit : undefined;
 }
 
+/** The latest scan of a board, however old, for showing where follows were last found. */
+export function lastScan(eventId: string, windowId: string, board: string): BoardScan | undefined {
+  const key = keyOf(eventId, windowId, board);
+  return permanent.get()[key] ?? recent.get(key);
+}
+
 /** All kept scans (final ones and recent live ones), most recent session first. */
 export function allScans(): BoardScan[] {
   const when = (x: BoardScan) => x.endedAt ?? x.scannedAt;
@@ -92,8 +99,22 @@ const sleep = (ms: number, signal?: AbortSignal) =>
     signal?.addEventListener('abort', () => (clearTimeout(t), reject(new DOMException('Aborted', 'AbortError'))));
   });
 
+/**
+ * Pages in reading order: each hinted page and its neighbours out to `reach`
+ * (nearest first), then the rest from the top.
+ */
+export function scanOrder(totalPages: number, hints: number[] = [], reach = 2): number[] {
+  const order = new Set<number>();
+  const add = (p: number) => p >= 0 && p < totalPages && order.add(p);
+  for (const h of hints) for (let d = 0; d <= reach; d++) [h - d, h + d].forEach(add);
+  for (let p = 0; p < totalPages; p++) add(p);
+  return [...order];
+}
+
 export interface ScanOptions {
   signal?: AbortSignal;
+  /** Pages to read first, e.g. where the players were last found. */
+  hints?: number[];
   onProgress?: (pagesDone: number, totalPages: number) => void;
   /** True if the board will never change (final), so the result is kept for good. */
   final: boolean;
@@ -113,9 +134,12 @@ export async function scanBoard(
   if (cached) return cached;
   const want = new Set(ids);
   const found: Record<string, FoundRow> = {};
+  const read = new Set<number>();
   let totalPages = 1;
-  let page = 0;
-  for (; page < totalPages && page < 100; page++) {
+  // The first page read says how many there are; then read in scanOrder.
+  let queue = [o.hints?.[0] ?? 0];
+  while (queue.length) {
+    const page = queue.shift()!;
     if (o.signal?.aborted) throw new DOMException('Aborted', 'AbortError');
     const q = new URLSearchParams({ event: eventId, window: windowId, board, page: String(page), lite: '1' });
     let data: LeaderboardPage;
@@ -127,21 +151,22 @@ export async function scanBoard(
       await sleep(3000, o.signal);
       data = await apiGet<LeaderboardPage>(`/api/leaderboard?${q}`);
     }
-    totalPages = Math.min(data.totalPages, 100);
-    for (const e of data.entries) for (const m of e.members) if (want.has(m.id)) found[m.id] = toRow(e);
-    o.onProgress?.(page + 1, totalPages);
-    if (Object.keys(found).length === want.size) {
-      page++;
-      break;
+    read.add(page);
+    if (read.size === 1) {
+      totalPages = Math.min(data.totalPages, 100);
+      queue = scanOrder(totalPages, o.hints).filter((p) => !read.has(p));
     }
+    for (const e of data.entries) for (const m of e.members) if (want.has(m.id)) found[m.id] = toRow(e);
+    o.onProgress?.(read.size, totalPages);
+    if (Object.keys(found).length === want.size) break;
   }
   const scan: BoardScan = {
     eventId,
     windowId,
     board,
     boardLabel: o.boardLabel,
-    complete: page >= totalPages,
-    pagesScanned: page,
+    complete: [...Array(totalPages).keys()].every((p) => read.has(p)),
+    pagesScanned: read.size,
     totalPages,
     searchedFor: [...want],
     found,

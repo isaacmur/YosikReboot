@@ -157,3 +157,24 @@ export const InfoIcon = (p: IconProps) => (
     <path d="M12 11v5M12 8h.01" />
   </Icon>
 );
+
+export const PlusIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M12 5v14M5 12h14" />
+  </Icon>
+);
+
+export const TargetIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <circle cx="12" cy="12" r="8" />
+    <circle cx="12" cy="12" r="3" />
+    <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
+  </Icon>
+);
+
+/** Solid triangle for movement arrows; points up unless `down`. */
+export const MoveIcon = ({ down, size = 8, ...p }: IconProps & { down?: boolean }) => (
+  <svg width={size} height={size} viewBox="0 0 10 10" fill="currentColor" aria-hidden {...p}>
+    <path d={down ? 'M1 2.5h8L5 8.5z' : 'M1 7.5h8L5 1.5z'} />
+  </svg>
+);

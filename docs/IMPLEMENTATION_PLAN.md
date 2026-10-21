@@ -28,6 +28,10 @@ These are gaps or traps in the spec that change code structure. Each has a recom
 | D14 | A session can have several boards: the main board, one per Ranked Cup tier, and an FNCS cumulative board. Ranked Cup main boards carry no points (Phase 2 finding). | `/api/window` lists a session's boards, with scoring and payouts in plain terms. `/api/leaderboard` takes `board=`, and defaults to the main board if it scores, else the top tier. The UI hides unscored boards and remembers your tier. `board=cumulative` sums the top 300 of each session (D7) and says when lower ranks are approximate. |
 | D15 | The leaderboard and window routes need window times and scoring rules from the schedule. | The raw schedule document is kept per warm function instance for 15 minutes (`lib/epic/schedule.ts`), shared with `/api/events`, so a board request costs one Epic call. Display names are kept for 24 hours (`lib/epic/accounts.ts`). |
 | D16 | Opening an event should land on results, not a schedule (design overhaul). Epic's event and session IDs end in the region (`…_EU`). | The event page opens the latest session's board: a live one (latest start) first, else the one that ended last (`latestWindow()` in `lib/status.ts`); before any session starts it opens the session list. Session and region pickers switch in place. Another region's copy is the same ID with the suffix swapped (`src/links.ts`); NAE is offered only when a NAE copy exists (D11). |
+| D17 | Cutoff lines (F16) have to come from payout tables, which mix cash, qualification tokens and cosmetics, by rank, top percentage or points. Points tiers at 0 are entry and lockout tokens every player gets. | `BoardInfo.cutoffs` (`parseCutoffs()` in `lib/epic/scoring.ts`) draws one line per next round at its furthest qualifying tier, one at the last paid place, and one per item tier, skipping 0-point tiers. The browser places percentile lines from the team count (exact once the last page is loaded); a full board (100 pages) doesn't say how many teams there are, so those lines are left out. Qualifying and paid lines get a summary with the points the line takes now, or took. |
+| D18 | Full depth (F14) means many loaded pages, but refreshing all of them every tick would multiply Epic calls. | Each tick re-reads page 0, the loaded pages on screen, pages holding a follow, and the pages a qualifying or paid line falls on, read in `lite` mode when they aren't loaded: at most 5 full and 3 lite pages (`src/useBoard.ts`). Other pages load as you scroll or jump, and stay as they were. Pinned rows off the loaded pages (F18) come from the last search of all pages, which a live board repeats every 5 minutes, starting around the pages where they were last found, once you've searched once (D10). |
+| D19 | Movement arrows (F15) that compare with the previous fetch vanish whenever a refresh brings no change (Epic hasn't updated, or the CDN served the same copy). | A row's baseline is the newest earlier sighting of that team on any page, and a refresh where nobody moved keeps the old baseline (`src/movement.ts`). The ranks last shown are kept per board in localStorage (4 boards, 6 pages each), so arrows also cover the time since you last looked, and are dropped once the session is final. |
+| D20 | The plan named `vite-plugin-pwa` for F34, but its `workbox-build` peer brings Babel, Rollup and Terser to emit a ~50-line worker, and npm 10 already struggles with peer dependencies here. | A hand-written worker (`pwa/sw.js`) with the build's file list and a version filled in by a small Vite plugin in `vite.config.ts`. Navigations go network first, with the saved shell offline; hashed assets come from the cache; `/api/*` is never cached or handled. It is registered in production builds only. |
 
 ---
 
@@ -66,17 +70,24 @@ YosikReboot/
 │   │   └── cms.ts                # tournamentinformation (posters, titles)
 │   ├── http.ts                   # json(), cacheHeaders(), error envelope
 │   └── health.ts                 # in-memory ring buffer of recent upstream calls
+├── pwa/sw.js                     # Service worker template; vite.config.ts fills in the build's files (D20)
+├── public/                       # Web manifest and app icons (PNGs rendered from icons/icon.svg)
 ├── src/                          # Vite + React + Tailwind
-│   ├── main.tsx, App.tsx         # router and the top bar
+│   ├── main.tsx, App.tsx         # router and the top bar; registers the service worker in production
 │   ├── index.css                 # design tokens (dark default, light override), fonts
 │   ├── api.ts, live.ts           # typed fetchers; live polling by window state
-│   ├── scan.ts, follows.ts, settings.ts, store.ts   # browser-side state (localStorage)
+│   ├── useBoard.ts, board.ts     # a board's loaded pages and what refreshes (D18); rows, gaps, cutoffs, pins
+│   ├── movement.ts               # movement arrows (D19)
+│   ├── scan.ts, follows.ts, teams.ts, settings.ts, store.ts   # browser-side state (localStorage)
+│   ├── csv.ts                    # CSV export
 │   ├── links.ts, format.ts       # event URLs and region suffixes; dates in your time zone
 │   ├── components/
-│   │   ├── ui.tsx                # primitives: tags, tabs, pills, buttons, panels, Art
+│   │   ├── ui.tsx                # primitives: tags, tabs, pills, buttons, panels, sheets, Art
 │   │   ├── icons.tsx             # stroke icon set
 │   │   ├── EventCard.tsx         # poster card, grid tile, compact row
-│   │   └── Board.tsx             # leaderboard rows, follows strip, scoring and prizes
+│   │   ├── Board.tsx             # the leaderboard: refresh, depth, jump, cutoffs, side panel
+│   │   ├── BoardRows.tsx         # rows, match breakdown, cutoff lines, gaps
+│   │   ├── Pinned.tsx, BoardExport.tsx, Scoring.tsx   # pinned follows; CSV export; scoring and prizes
 │   └── pages/                    # Home, Events, EventPage, Me, Follows, Settings, Health, Login
 └── test/
     ├── fixtures/epic/            # Saved, scrubbed real responses from Phase 0
@@ -98,7 +109,7 @@ Phase 0 changed the original sketch in three ways:
 - Epic's "ShopCup" type is `PROMO_CUP`.
 - Windows carry no `state`. `lib/status.ts` computes `windowState`, `eventState` and `nextWindow` from the times, in the browser (D12).
 
-`Entry` and `LeaderboardPage` arrive in Phase 2.
+`Entry` and `LeaderboardPage` arrive in Phase 2. Phase 3 adds `Cutoff` to `BoardInfo` (D17).
 
 ## 4. Phases
 
@@ -212,6 +223,25 @@ Tasks
 
 Features: F14, F15, F16, F17, F18, F21, F24, F31, F34.
 
+> **Status: done** (code), pending your checks on a phone during a live session.
+> - **Built:**
+>   - Full depth: pages load as you scroll, a rank box jumps anywhere in the top 10,000, and gaps between loaded pages can be filled from either side. What refreshes is in D18.
+>   - Movement arrows, including "new" for teams that just reached a page (D19).
+>   - Cutoff lines in the board, and a summary of the qualifying and paid lines with the points they take now or took (D17). Tap a summary to jump to its line.
+>   - Pinned follows and saved teams above the board, wherever they rank. Tap one to jump to its row. A live board repeats your last search every 5 minutes.
+>   - Teams: save a duo or trio from a board row or the Follows page. Saved teams are labelled on boards, pinned, and exported and imported with your follows (export format version 2).
+>   - Scoring and prizes beside the board on desktop, and in a sheet on phones.
+>   - CSV export of the loaded rows, of every page once a session is final, and of your results on Me.
+>   - Installable app: manifest, icons and an app-shell service worker (D20).
+> - **Verified locally** in scripted Chromium at 390 px and 1366 px, dark and light, with no horizontal scroll and no console errors. The build sandbox has no Epic credentials, so the real API routes ran against a fake Epic that serves the captured schedules and CMS and generates boards whose ranks drift every 30 s:
+>   - On a live FNCS Last Chance board, arrows appeared after a refresh (86 of 100 rows moved), and the Top 22 and 1,000-point lines showed with their current points.
+>   - Find on all pages pinned three follows at ranks 167, 278 and 2,003. Tapping the 2,003rd jumped to it, and scrolling loaded three more pages.
+>   - A finished Cash Cup round drew Top 20 qualify (with the points it took) and pinned a saved duo at 1,571. Export of every page wrote 10,000 rows.
+>   - A Ranked Cup tier drew its Top 6 and percentile lines.
+>   - The production build's service worker cached 20 shell files and nothing under `/api/`, and the app opened offline.
+> - **Your checks:** during a real live session on a phone, the arrows move, the cutoff summary matches the board, and `/api/health` stays polite with a deep page open. Then add the app to your home screen.
+
+
 - **F14 Full depth:** infinite scroll fetching subsequent pages only on scroll; jump-to-rank input.
 - **F15 Movement:** `store/lastBoard` saves `{teamKey → rank}` for the visible page + follows per window; diff on each refresh; cleared when the window is final.
 - **F16 Cutoff line:** from `WindowDetail.cutoffs`; points taken = the entry at that rank (fetch that single page if needed).
@@ -220,7 +250,7 @@ Features: F14, F15, F16, F17, F18, F21, F24, F31, F34.
 - **F21 Scoring panel:** side panel on desktop, bottom sheet on phone.
 - **F24 Team grouping:** `teamKey` = sorted member IDs; follows can be grouped into named teams.
 - **F31 CSV export:** client-side from loaded pages (and "export all" that walks pages for final windows only).
-- **F34 PWA:** `vite-plugin-pwa` manifest + app-shell cache (never cache `/api/*` in the service worker — Epic data must stay fresh). Dark mode shipped with the design overhaul.
+- **F34 PWA:** manifest + app-shell cache (never cache `/api/*` in the service worker — Epic data must stay fresh). Built without `vite-plugin-pwa` (D20). Dark mode shipped with the design overhaul.
 - F17 (match breakdown) shipped in Phase 2: tap a row.
 
 ### Phase 4 — v1 schedule & history (~3–4 sessions)

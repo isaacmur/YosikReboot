@@ -1,13 +1,14 @@
 // Live polling for leaderboards (F11): every `refreshSec` while a session is live,
 // every 5 min while it wraps up, not at all once final. Pauses while the tab is
 // hidden (phone locked), fetches at once on return, and backs off 2 then 4 min on
-// errors, reporting since when the data is stale.
+// errors, reporting since when the data is stale. `load` does the fetching, so one
+// refresh can cover several board pages.
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { refreshMsFor } from '../lib/status';
 import type { WindowState } from '../lib/types';
-import { apiGet, AuthError } from './api';
+import { AuthError } from './api';
 
 const BACKOFF_MS = [2 * 60_000, 4 * 60_000];
 
@@ -24,19 +25,27 @@ export interface LiveQuery<T> {
   refresh: () => void;
 }
 
-export function useLiveQuery<T>(path: string | null, state: WindowState | undefined, liveMs: number): LiveQuery<T> {
+/** Polls `load` on the window's schedule; a new `key` starts over with no data. */
+export function useLive<T>(
+  key: string | null,
+  load: () => Promise<T>,
+  state: WindowState | undefined,
+  liveMs: number,
+): LiveQuery<T> {
   const navigate = useNavigate();
   const location = useLocation();
   const here = useRef('');
   here.current = location.pathname + location.search;
-  const [s, setS] = useState<Omit<LiveQuery<T>, 'refresh'>>({ loading: path !== null });
+  const [s, setS] = useState<Omit<LiveQuery<T>, 'refresh'>>({ loading: key !== null });
   const failures = useRef(0);
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
   /** Every fetch gets a number; only the latest one may update state. */
   const seq = useRef(0);
-  const shownPath = useRef<string | null>(null);
-  const pathRef = useRef(path);
-  pathRef.current = path;
+  const shownKey = useRef<string | null>(null);
+  const keyRef = useRef(key);
+  keyRef.current = key;
+  const loadRef = useRef(load);
+  loadRef.current = load;
 
   const schedule = useCallback((ms: number | null) => {
     clearTimeout(timer.current);
@@ -49,12 +58,11 @@ export function useLiveQuery<T>(path: string | null, state: WindowState | undefi
   }, []);
 
   const run = useCallback(async () => {
-    const p = pathRef.current;
-    if (!p) return;
+    if (!keyRef.current) return;
     const mine = ++seq.current;
     setS((prev) => ({ ...prev, loading: true }));
     try {
-      const data = await apiGet<T>(p);
+      const data = await loadRef.current();
       if (mine !== seq.current) return;
       failures.current = 0;
       setS({ data, loading: false, receivedAt: new Date() });
@@ -75,18 +83,18 @@ export function useLiveQuery<T>(path: string | null, state: WindowState | undefi
   const runRef = useRef(run);
   runRef.current = run;
 
-  // Fetch on mount and whenever the path or refresh rule changes.
+  // Fetch on mount and whenever the key or refresh rule changes.
   useEffect(() => {
-    if (!path) return;
+    if (!key) return;
     failures.current = 0;
     // A different board: drop the old rows rather than show them under the new tab.
-    if (shownPath.current !== path) {
-      shownPath.current = path;
+    if (shownKey.current !== key) {
+      shownKey.current = key;
       setS({ loading: true });
     }
     void runRef.current();
     return () => clearTimeout(timer.current);
-  }, [path, state, liveMs]);
+  }, [key, state, liveMs]);
 
   // Pause while hidden; refresh at once when visible again (if this board polls).
   useEffect(() => {

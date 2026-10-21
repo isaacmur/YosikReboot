@@ -2,7 +2,7 @@
 // these rules over each match's tracked stats reproduces Epic's `pointsEarned`
 // for every entry (main boards and Ranked Cup tier boards alike).
 
-import type { PayoutTier, ScoringSummary } from '../types.js';
+import type { Cutoff, PayoutTier, ScoringSummary } from '../types.js';
 import { humanize } from './events.js';
 import { asArr, asObj, num, str } from './json.js';
 
@@ -84,8 +84,17 @@ function rewardLabel(p: Record<string, unknown>): string | undefined {
   return undefined;
 }
 
-export function parsePayouts(raw: unknown): PayoutTier[] {
-  const out: PayoutTier[] = [];
+interface Tier {
+  basis: PayoutTier['basis'];
+  threshold: number;
+  rewards: string[];
+  /** Labels of the qualification rewards ("Qualifies for …"). */
+  qualifyTo: string[];
+  cash: boolean;
+}
+
+function parseTiers(raw: unknown): Tier[] {
+  const out: Tier[] = [];
   for (const table of asArr(raw)) {
     const t = asObj(table);
     const basis = BASIS[str(t?.scoringType) ?? ''];
@@ -97,10 +106,67 @@ export function parsePayouts(raw: unknown): PayoutTier[] {
       const payouts = asArr(r?.payouts)
         .map(asObj)
         .filter((p): p is Record<string, unknown> => !!p);
-      const rewards = [...new Set(payouts.map(rewardLabel).filter((l): l is string => !!l))];
+      const labels = (type?: string) =>
+        [...new Set(payouts.filter((p) => !type || p.rewardType === type).map(rewardLabel))].filter(
+          (l): l is string => !!l,
+        );
+      const rewards = labels();
       if (rewards.length)
-        out.push({ basis, threshold, rewards, qualifies: payouts.some((p) => p.rewardType === 'token') });
+        out.push({
+          basis,
+          threshold,
+          rewards,
+          qualifyTo: labels('token'),
+          cash: payouts.some((p) => p.rewardType === 'ecomm'),
+        });
     }
   }
   return out.sort((a, b) => (a.basis === b.basis ? a.threshold - b.threshold : a.basis.localeCompare(b.basis)));
+}
+
+export function parsePayouts(raw: unknown): PayoutTier[] {
+  return parseTiers(raw).map(({ basis, threshold, rewards, qualifyTo }) => ({
+    basis,
+    threshold,
+    rewards,
+    qualifies: qualifyTo.length > 0,
+  }));
+}
+
+const KIND_ORDER: Cutoff['kind'][] = ['qualify', 'cash', 'item'];
+
+/**
+ * Lines to draw on a board: for each next round, the furthest tier that qualifies
+ * for it; the last paid tier; and each tier of items. "Furthest" is the highest rank
+ * or fraction, or the lowest points total. Points tiers at 0 are entry and lockout
+ * tokens that everyone who plays gets, so they draw no line.
+ */
+export function parseCutoffs(raw: unknown): Cutoff[] {
+  const best = new Map<string, Cutoff>();
+  const keep = (c: Cutoff) => {
+    const key = `${c.basis}|${c.kind}|${c.kind === 'item' ? c.threshold : c.label}`;
+    const prev = best.get(key);
+    const further = !prev || (c.basis === 'points' ? c.threshold < prev.threshold : c.threshold > prev.threshold);
+    if (further) best.set(key, c);
+  };
+  for (const t of parseTiers(raw)) {
+    if (t.basis === 'points' && t.threshold <= 0) continue;
+    for (const label of t.qualifyTo) keep({ basis: t.basis, threshold: t.threshold, kind: 'qualify', label });
+    if (t.cash) keep({ basis: t.basis, threshold: t.threshold, kind: 'cash', label: 'Cash prizes' });
+    if (!t.cash && !t.qualifyTo.length)
+      keep({ basis: t.basis, threshold: t.threshold, kind: 'item', label: t.rewards.join(', ') });
+  }
+  // Two rounds reached from the same place share one line.
+  const lines = new Map<string, Cutoff>();
+  for (const c of best.values()) {
+    const key = `${c.basis}|${c.kind}|${c.threshold}`;
+    const prev = lines.get(key);
+    lines.set(key, prev ? { ...prev, label: `${prev.label}; ${c.label}` } : c);
+  }
+  return [...lines.values()].sort(
+    (a, b) =>
+      KIND_ORDER.indexOf(a.kind) - KIND_ORDER.indexOf(b.kind) ||
+      a.basis.localeCompare(b.basis) ||
+      a.threshold - b.threshold,
+  );
 }

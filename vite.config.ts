@@ -1,8 +1,39 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
+import { createHash } from 'node:crypto';
+import { readdirSync, readFileSync } from 'node:fs';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import type { Plugin, ViteDevServer } from 'vite';
 import { defineConfig } from 'vitest/config';
+
+/**
+ * Build only: emits sw.js (the app-shell service worker, F34) from pwa/sw.js with
+ * this build's files and a version from their hashed names. No /api/* path is
+ * ever listed, and the worker itself never handles /api/* requests.
+ */
+function serviceWorker(): Plugin {
+  return {
+    name: 'yosik-sw',
+    apply: 'build',
+    generateBundle(_options, bundle) {
+      const publicFiles = readdirSync('public', { recursive: true, withFileTypes: true })
+        .filter((d) => d.isFile())
+        .map((d) => `${d.parentPath.slice('public'.length).replace(/\\/g, '/')}/${d.name}`);
+      const built = Object.keys(bundle)
+        // Browsers that run service workers load .woff2, never the .woff fallbacks.
+        .filter((f) => !f.endsWith('.map') && !f.endsWith('.woff'))
+        .map((f) => `/${f}`);
+      // Vite adds index.html to the bundle after this hook, so it's listed by name.
+      const shell = [...new Set(['/index.html', ...built, ...publicFiles])].sort();
+      const version = createHash('sha256').update(shell.join('\n')).digest('hex').slice(0, 12);
+      const template = readFileSync('pwa/sw.js', 'utf8');
+      const source = template.replace("['__SHELL__']", JSON.stringify(shell)).replace('__VERSION__', version);
+      if (source.includes('__SHELL__') || source.includes('__VERSION__'))
+        throw new Error('pwa/sw.js placeholders missing');
+      this.emitFile({ type: 'asset', fileName: 'sw.js', source });
+    },
+  };
+}
 
 /**
  * Dev only: serves /api/* from the real handlers in api/, behind the real
@@ -68,7 +99,7 @@ async function handle(server: ViteDevServer, req: IncomingMessage, res: ServerRe
 }
 
 export default defineConfig({
-  plugins: [react(), tailwindcss(), devApi()],
+  plugins: [react(), tailwindcss(), devApi(), serviceWorker()],
   test: {
     include: ['test/**/*.test.ts'],
     environment: 'node',

@@ -1,7 +1,8 @@
 // Followed players (F22), keyed by account ID and kept in this browser.
-// Export/import moves the list between devices.
+// Export/import moves the list, with your saved teams, between devices.
 
 import { createStore } from './store';
+import { getTeams, mergeTeams, parseTeams } from './teams';
 
 export interface Follow {
   id: string;
@@ -67,17 +68,25 @@ export function renameFollows(names: Map<string, string>): void {
 }
 
 export function exportFollows(): string {
-  return JSON.stringify({ version: 1, exportedAt: new Date().toISOString(), follows: store.get() }, null, 2);
+  return JSON.stringify(
+    { version: 2, exportedAt: new Date().toISOString(), follows: store.get(), teams: getTeams() },
+    null,
+    2,
+  );
 }
 
-/** Merges an exported list into this one; returns how many were added. Keeps your own "me" if set. */
-export function importFollows(text: string): number {
-  const incoming = parseFollows(JSON.parse(text));
+/**
+ * Merges an exported list (version 1 has no teams) into this one; returns how many
+ * follows and teams were added. Keeps your own "me" if set.
+ */
+export function importFollows(text: string): { follows: number; teams: number } {
+  const raw: unknown = JSON.parse(text);
+  const incoming = parseFollows(raw);
   const have = new Set(store.get().map((f) => f.id));
   const keepMe = !store.get().some((f) => f.isMe);
   const added = incoming
     .filter((f) => !have.has(f.id))
     .map(({ id, name, addedAt, isMe }) => ({ id, name, addedAt, ...(isMe && keepMe ? { isMe: true } : {}) }));
   store.set([...store.get(), ...added]);
-  return added.length;
+  return { follows: added.length, teams: mergeTeams(parseTeams((raw as { teams?: unknown })?.teams)) };
 }

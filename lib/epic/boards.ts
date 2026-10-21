@@ -7,7 +7,7 @@
 
 import type { BoardInfo, BoardKind } from '../types.js';
 import { asArr, asObj, str } from './json.js';
-import { parsePayouts, parseRules, summarizeScoring, type ScoringRule } from './scoring.js';
+import { parseCutoffs, parsePayouts, parseRules, summarizeScoring, type ScoringRule } from './scoring.js';
 
 export interface ScoreLocation {
   /** `Fortnite:<group>:<instance>`, the key Epic's scoring and payout maps use. */
@@ -43,10 +43,11 @@ export function boardRules(rawSchedule: unknown, loc: ScoreLocation, templateRul
   return parseRules(set ?? templateRules);
 }
 
-function boardPayouts(rawSchedule: unknown, loc: ScoreLocation): ReturnType<typeof parsePayouts> {
+/** The board's raw payout table, if it has one. */
+function payoutTable(rawSchedule: unknown, loc: ScoreLocation): unknown {
   const raw = asObj(rawSchedule);
   const tableId = str(asObj(raw?.scoreLocationPayoutTables)?.[loc.key]);
-  return tableId ? parsePayouts(asObj(raw?.payoutTables)?.[tableId]) : [];
+  return tableId ? asObj(raw?.payoutTables)?.[tableId] : undefined;
 }
 
 const titleCase = (s: string) => (s ? s[0]!.toUpperCase() + s.slice(1).toLowerCase() : s);
@@ -81,7 +82,8 @@ export function boardInfos(
       computed: kind === 'cumulative',
       hasPoints: rules.some((r) => r.tiers.some((t) => t.points > 0)),
       scoring: summarizeScoring(rules),
-      payouts: boardPayouts(rawSchedule, loc),
+      payouts: parsePayouts(payoutTable(rawSchedule, loc)),
+      cutoffs: parseCutoffs(payoutTable(rawSchedule, loc)),
     };
   });
 }

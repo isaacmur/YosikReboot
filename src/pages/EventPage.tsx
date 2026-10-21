@@ -6,8 +6,9 @@ import { useLocation, useNavigate, useParams, useSearchParams } from 'react-rout
 import { eventState, latestWindow, windowState } from '../../lib/status';
 import { REGIONS, type EventInfo, type EventWindow, type Region, type WindowDetail } from '../../lib/types';
 import { useApi } from '../api';
-import { BoardPicker, Leaderboard, PrizesPanel, ScoringPanel, useBoardChoice } from '../components/Board';
+import { BoardPicker, Leaderboard, useBoardChoice } from '../components/Board';
 import { eventTags } from '../components/EventCard';
+import { PrizesPanel, ScoringPanel } from '../components/Scoring';
 import { ChevronLeft, ChevronRight, ClockIcon, GlobeIcon } from '../components/icons';
 import {
   Art,

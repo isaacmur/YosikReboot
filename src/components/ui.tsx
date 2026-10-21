@@ -1,9 +1,9 @@
 import type { ButtonHTMLAttributes, ReactNode, SelectHTMLAttributes } from 'react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { EventState } from '../../lib/status';
 import type { EventArt, WindowState } from '../../lib/types';
 import { formatCountdown } from '../format';
-import { ChevronDown } from './icons';
+import { ChevronDown, XIcon } from './icons';
 
 const cx = (...c: (string | false | null | undefined)[]) => c.filter(Boolean).join(' ');
 
@@ -201,6 +201,56 @@ export function Segmented<T extends string>({
         </button>
       ))}
     </div>
+  );
+}
+
+/**
+ * A native modal dialog: a bottom sheet on phones, a centered panel on wider
+ * screens. Escape, the close button and a tap outside all close it.
+ */
+export function Sheet({
+  open,
+  onClose,
+  title,
+  children,
+}: {
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  children: ReactNode;
+}) {
+  const ref = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    const d = ref.current;
+    if (open && !d?.open) d?.showModal();
+    if (!open && d?.open) d.close();
+  }, [open]);
+  return (
+    <dialog
+      ref={ref}
+      aria-label={title}
+      onClose={onClose}
+      onClick={(e) => e.target === ref.current && onClose()}
+      className="m-0 mt-auto max-h-[88dvh] w-full max-w-none rounded-t-xl border border-line-strong bg-surface p-0 text-ink shadow-2xl backdrop:bg-black/60 backdrop:backdrop-blur-[2px] sm:m-auto sm:max-w-lg sm:rounded-xl"
+    >
+      {open && (
+        <div className="flex max-h-[88dvh] flex-col">
+          <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
+            <h2 className="font-display text-lg leading-none font-bold tracking-wide uppercase">{title}</h2>
+            <button
+              onClick={onClose}
+              aria-label="Close"
+              className="grid size-8 place-items-center rounded-md text-muted transition hover:bg-raised hover:text-ink"
+            >
+              <XIcon size={16} />
+            </button>
+          </div>
+          <div className="overflow-y-auto overscroll-contain p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+            {children}
+          </div>
+        </div>
+      )}
+    </dialog>
   );
 }
 
