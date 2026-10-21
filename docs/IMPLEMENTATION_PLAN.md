@@ -33,6 +33,7 @@ YosikReboot/
 │   ├── DEVELOPER_PLAN.md         # Product spec (source of truth for scope)
 │   ├── IMPLEMENTATION_PLAN.md    # This file
 │   └── EPIC_API_NOTES.md         # Phase 0 output: verified shapes, quirks
+├── scripts/                      # Local-only tools (Phase 0 probe, device-auth setup); never deployed
 ├── middleware.ts                 # Passphrase gate (D1)
 ├── vercel.json                   # SPA rewrites, function config
 ├── api/                          # One file = one Vercel Function
@@ -144,9 +145,11 @@ Each phase ends with a deployed preview you can open, a commit, and a push. **MV
 
 Goal: replace every "not yet verified" line in the spec with facts and fixtures. No UI.
 
+> **Status:** tooling is done and tested (`npm run epic:device-auth`, `epic:probe` and `epic:analyze`; the token manager; endpoint URL builders; window state rules). The live capture is still to do: run it on your machine, following the runbook in [`EPIC_API_NOTES.md`](./EPIC_API_NOTES.md).
+
 Tasks
 1. Create the secondary Epic account; generate device-auth credentials (`accountId`, `deviceId`, `secret`) via a one-off local script (`scripts/create-device-auth.ts`, never deployed). Store them in `.env.local` and Vercel env vars.
-2. Script `scripts/probe.ts` that mints a token and hits each endpoint, writing raw responses to `test/fixtures/epic/` (scrub nothing secret leaks — responses contain other players' IDs, which is fine for a private repo; tokens must never be saved).
+2. Script `scripts/probe.ts` that mints a token and hits each endpoint, writing scrubbed responses to `test/fixtures/epic/<label>/` and an `analysis.md` that answers the checklist below. Tokens and device credentials are never saved; responses still contain other players' IDs, so keep the repo private.
 3. Answer and record in `docs/EPIC_API_NOTES.md`:
    - [ ] Token mint request/response, `expires_in`, refresh behaviour.
    - [ ] Does one `events/download` call return all regions, or is `region=` required? (Sets how `/api/events` fans out.)
@@ -250,7 +253,8 @@ F9 eligibility (needs the player-tokens endpoint working for *your* account, not
 | Name | Used by |
 | --- | --- |
 | `EPIC_ACCOUNT_ID`, `EPIC_DEVICE_ID`, `EPIC_DEVICE_SECRET` | `epicToken.ts` |
-| `EPIC_CLIENT_AUTH` | Basic auth header for the OAuth client used in the device-auth grant |
+| `EPIC_CLIENT_ID`, `EPIC_CLIENT_SECRET` | OAuth client for the device-auth grant |
+| `EPIC_EVENTS_CLIENT_ID`, `EPIC_EVENTS_CLIENT_SECRET` | Optional second client to exchange into, only if Phase 0 shows it's needed |
 | `APP_PASSPHRASE` | `api/login.ts` |
 | `COOKIE_SECRET` | cookie HMAC |
 | `ICS_TOKEN` | Phase 4 iCal feed |
