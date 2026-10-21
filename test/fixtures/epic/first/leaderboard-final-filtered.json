@@ -1,0 +1,8 @@
+{
+  "errorCode": "com.epicgames.api.malformed_data",
+  "errorMessage": "player 'f0000000000000000000000000000001' is not a member of team Set(f0000000000000000000000000000102, f0000000000000000000000000000428)",
+  "code": "com.epicgames.api.malformed_data",
+  "message": "player 'f0000000000000000000000000000001' is not a member of team Set(f0000000000000000000000000000102, f0000000000000000000000000000428)",
+  "status": 400,
+  "context": {}
+}

@@ -1,0 +1,8 @@
+{
+  "errorCode": "errors.com.epicgames.common.rejection.MissingQueryParamRejection",
+  "errorMessage": "Missing query: region",
+  "code": "errors.com.epicgames.common.rejection.MissingQueryParamRejection",
+  "message": "Missing query: region",
+  "status": 400,
+  "context": {}
+}

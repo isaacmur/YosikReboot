@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.vercel/
+.env*
+!.env.example
+
+# Raw Epic captures hold other players' account IDs and country flags. Only
+# anonymized copies (npm run epic:anonymize) go in test/fixtures/epic/.
+captures/

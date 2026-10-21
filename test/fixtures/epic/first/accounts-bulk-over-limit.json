@@ -1,0 +1,10 @@
+{
+  "errorCode": "errors.com.epicgames.account.invalid_account_id_count",
+  "errorMessage": "Sorry, the number of account id should be at least one and not more than 100.",
+  "messageVars": [
+    "100"
+  ],
+  "numericErrorCode": 18066,
+  "originatingService": "com.epicgames.account.public",
+  "intent": "prod"
+}
