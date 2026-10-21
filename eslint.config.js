@@ -5,7 +5,7 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig([
-  { ignores: ['dist/', 'captures/', 'test/fixtures/', '.vercel/'] },
+  { ignores: ['dist/', 'captures/', 'test/fixtures/', '.vercel/', '.api-smoke/'] },
   {
     files: ['**/*.{ts,tsx,js}'],
     extends: [js.configs.recommended, tseslint.configs.recommended],

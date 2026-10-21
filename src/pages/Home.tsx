@@ -1,11 +1,72 @@
-// Placeholder until Phase 1: live now, next sessions, follows (see docs/IMPLEMENTATION_PLAN.md).
+import { Link } from 'react-router';
+import { eventState, windowState } from '../../lib/status';
+import type { EventInfo, EventWindow } from '../../lib/types';
+import { EventCard } from '../components/EventCard';
+import { Card, Countdown, LoadState, SectionTitle } from '../components/ui';
+import { formatAgo, formatDateTime, REGION_LABEL, useNow, zoneAbbrev } from '../format';
+import { useSettings } from '../settings';
+import { useEvents } from '../useEvents';
+
 export default function Home() {
+  const [{ region, timeZone }] = useSettings();
+  const { data, error, loading, reload } = useEvents();
+  const now = useNow();
+  if (!data) return <LoadState loading={loading} error={error} onRetry={reload} />;
+
+  const live = data.events.filter((e) => eventState(e.windows, now) === 'live');
+  const upcoming: [EventInfo, EventWindow][] = data.events
+    .flatMap((e) =>
+      e.windows.filter((w) => windowState(w, now) === 'upcoming').map((w) => [e, w] as [EventInfo, EventWindow]),
+    )
+    .sort((a, b) => a[1].begin.localeCompare(b[1].begin))
+    .slice(0, 3);
+
   return (
-    <section className="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
-      <h1 className="text-xl font-semibold">Fortnite events and live leaderboards</h1>
-      <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-        The schedule for all eight regions arrives in Phase 1, followed by live leaderboards in Phase 2.
+    <div>
+      <p className="text-xs text-zinc-500">
+        {REGION_LABEL[region]} schedule · updated {formatAgo(data.fetchedAt, now)}
       </p>
-    </section>
+      <SectionTitle>Live now</SectionTitle>
+      {live.length ? (
+        <div className="space-y-2">
+          {live.map((e) => (
+            <EventCard key={e.id} event={e} now={now} />
+          ))}
+        </div>
+      ) : (
+        <Card className="p-4 text-sm text-zinc-600 dark:text-zinc-400">
+          Nothing live in {REGION_LABEL[region]} right now.
+        </Card>
+      )}
+      <SectionTitle>Next up</SectionTitle>
+      {upcoming.length ? (
+        <Card className="divide-y divide-zinc-200 dark:divide-zinc-800">
+          {upcoming.map(([e, w]) => (
+            <Link
+              key={w.id}
+              to={`/events/${encodeURIComponent(e.id)}`}
+              className="flex items-center justify-between gap-3 p-3"
+            >
+              <div className="min-w-0">
+                <p className="truncate font-medium">{e.name}</p>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                  {w.label} · {formatDateTime(w.begin, timeZone)} {zoneAbbrev(timeZone, w.begin)}
+                </p>
+              </div>
+              <span className="shrink-0 text-sm font-medium">
+                <Countdown to={w.begin} now={now} />
+              </span>
+            </Link>
+          ))}
+        </Card>
+      ) : (
+        <Card className="p-4 text-sm text-zinc-600 dark:text-zinc-400">No upcoming sessions listed.</Card>
+      )}
+      <p className="mt-6 text-sm">
+        <Link to="/events" className="font-medium text-blue-600 underline dark:text-blue-400">
+          All events in {REGION_LABEL[region]}
+        </Link>
+      </p>
+    </div>
   );
 }
