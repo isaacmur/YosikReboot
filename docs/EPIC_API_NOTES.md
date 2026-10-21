@@ -68,7 +68,9 @@ In a cloud session, prefix commands with `NODE_USE_ENV_PROXY=1`, so Node's fetch
 - [x] Entry fields:
   - `teamAccountIds[]` and `teamId` (`<id>:<id>`)
   - `rank`, `pointsEarned`, `score`, `percentile`
-  - `pointBreakdown`, keyed `"STAT:value"` with `{ timesAchieved, pointsEarned }`
+  - `pointBreakdown`, keyed `"STAT:value"` with `{ timesAchieved, pointsEarned }`. Its points add up to `pointsEarned`; the app splits them into placement and eliminations for the tournament card.
+  - `percentile` is 0 even for top teams on the captured final boards, so Top % comes from the team count instead.
+  - Session stats are per team only: placement, team eliminations, time alive, Victory Royale, matches played. No damage, accuracy, healing or materials (those are in match replays).
   - `sessionHistory[]` (one per match, at most `maxSessionHistorySize`), each `{ sessionId, endTime, trackedStats }`
   - `playerFlagTokens` (account ID to `GroupIdentity_GeoIdentity_<country>`)
   - `unscoredSessions[]`

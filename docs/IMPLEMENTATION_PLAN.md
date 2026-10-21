@@ -314,6 +314,7 @@ Features: F4, F5, F8, F23, F28, F29.
 > - **Per-match stats:** a team's games list place, eliminations, points and time alive, and each opens that game. Qualified and Final sessions have a Matches tab: every lobby's games in order, each with every team's result (D28).
 > - **Faster searches and Find a player:** pages are read four at a time and kept for the visit, and the leaderboard search finds anyone in the top 10,000 by exact Epic name (D26).
 > - **Sync with Epic:** Me signs in with your own account on demand (you approve on epicgames.com), reads your recent sessions one by one (Epic's own list turned out not to be a history), keeps the results, and ends the Epic session; nothing is stored on the server (D30).
+> - **Tournament card on Me:** opening a result shows an Osirion-style card: the team, rank and Top % (an upper bound past the top 10,000), points with Epic's placement and elimination split (its `pointBreakdown`), and the stats Epic's tournament data has (eliminations, games, wins, average and best placement, per-game rates, time alive). They're per team; per-player stats like damage, accuracy, healing, edits and materials need match replays (F27, Later). Results are tagged Solo, Duos or Trios.
 > - **Placement after each game:** in Qualified and Final sessions and Performance Evaluations, a team's breakdown charts where it stood on the board after each game, instead of points per game, and its games table gains a Rank column (D29).
 > - **Verified locally** in scripted Chromium at 390 px and 1366 px, dark and light, with no horizontal scroll and no console errors, against the fake Epic (now with set lobbies, match IDs and 300 ms per Epic call):
 >   - The theme switched to Light, survived a reload, and set the browser bar color.
@@ -325,7 +326,7 @@ Features: F4, F5, F8, F23, F28, F29.
 ### Later (not scheduled)
 
 - Staying signed in to your main account permanently (stored device auth, so Me syncs with no approval) was considered and isn't recommended: the secret is a full login that skips two-factor, and a leak would expose your real account. Sync with Epic (D30) signs in on demand instead.
-- F9 eligibility (needs the player-tokens endpoint working for *your* account, not the service account), F19 projected cutoff and F20 points calculator (build on F28 data), F26 head-to-head, F27 replay stats via api-fortnite.com, F30 Power Rankings scraper.
+- F9 eligibility (needs the player-tokens endpoint working for *your* account, not the service account), F19 projected cutoff and F20 points calculator (build on F28 data), F26 head-to-head, F27 replay stats (Osirion's per-player damage, accuracy, healing, edits and materials come from match replays, which Epic's tournament API doesn't carry; it would mean downloading and parsing each game's replay, or a paid service like api-fortnite.com), F30 Power Rankings scraper.
 
 ---
 

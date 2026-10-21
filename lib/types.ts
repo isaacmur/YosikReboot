@@ -207,6 +207,8 @@ export interface Entry {
   sessions: MatchResult[];
   /** `lite` responses only: each game's points, oldest first; missing when a game's points are unknown (D29). */
   gamePoints?: number[];
+  /** Epic's split of `points`: placement, eliminations and anything else (from its point breakdown). */
+  pointSplit?: { placement: number; elims: number; other: number };
 }
 
 /** GET /api/leaderboard */

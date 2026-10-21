@@ -16,7 +16,7 @@ import {
   watchedIds,
 } from '../src/board';
 import { boardCsv, fileName, toCsv } from '../src/csv';
-import { dayIndex, plural } from '../src/format';
+import { dayIndex, formatDuration, plural, topShare } from '../src/format';
 import { eventPath, inRegion, regionOf } from '../src/links';
 import { addFollow, exportFollows, getFollows, importFollows, parseFollows, removeFollow, setMe } from '../src/follows';
 import { boardMoves, forgetBoard, movesFor, recordPage } from '../src/movement';
@@ -499,5 +499,19 @@ describe('theme setting', () => {
     expect(resolveTheme('system', false)).toBe('dark');
     expect(resolveTheme('dark', true)).toBe('dark');
     expect(resolveTheme('light', false)).toBe('light');
+  });
+});
+
+describe('tournament card numbers', () => {
+  it('writes time alive in hours and minutes', () => {
+    expect(formatDuration(6720)).toBe('1h 52m');
+    expect(formatDuration(840)).toBe('14m');
+    expect(formatDuration(25)).toBe('25s');
+  });
+
+  it('writes Top % with a decimal under 10%', () => {
+    expect(topShare(88, 2750)).toBe('Top 3.2%');
+    expect(topShare(1, 50_000)).toBe('Top 0.1%');
+    expect(topShare(900, 2000)).toBe('Top 45%');
   });
 });

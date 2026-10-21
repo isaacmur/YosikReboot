@@ -17,6 +17,27 @@ function summarize(sessions: MatchResult[]): Pick<Entry, 'matches' | 'victories'
   };
 }
 
+/**
+ * Epic's own split of a team's points (`pointBreakdown`, keyed "STAT:value"):
+ * placement, eliminations (tier-prefixed on Ranked Cup boards) and anything else.
+ */
+export function pointSplit(raw: unknown): Entry['pointSplit'] {
+  const breakdown = asObj(raw);
+  if (!breakdown) return undefined;
+  const split = { placement: 0, elims: 0, other: 0 };
+  for (const [key, v] of Object.entries(breakdown)) {
+    const points = num(asObj(v)?.pointsEarned) ?? 0;
+    const stat = key.split(':')[0] ?? '';
+    if (/PLACEMENT_STAT_INDEX$/.test(stat)) split.placement += points;
+    else if (/ELIMS_STAT_INDEX$/.test(stat)) split.elims += points;
+    else split.other += points;
+  }
+  return split;
+}
+
+const addSplits = (a: Entry['pointSplit'], b: Entry['pointSplit']): Entry['pointSplit'] =>
+  a && b ? { placement: a.placement + b.placement, elims: a.elims + b.elims, other: a.other + b.other } : undefined;
+
 export function normalizeEntries(rawPage: unknown, rules: ScoringRule[]): Entry[] {
   const names = statNames(rules);
   const out: Entry[] = [];
@@ -42,6 +63,7 @@ export function normalizeEntries(rawPage: unknown, rules: ScoringRule[]): Entry[
         };
       })
       .sort((a, b) => a.endedAt.localeCompare(b.endedAt));
+    const split = pointSplit(o.pointBreakdown);
     out.push({
       rank,
       teamKey: teamKeyOf(ids),
@@ -49,6 +71,7 @@ export function normalizeEntries(rawPage: unknown, rules: ScoringRule[]): Entry[
       points: num(o.pointsEarned) ?? 0,
       ...summarize(sessions),
       sessions,
+      ...(split ? { pointSplit: split } : {}),
     });
   }
   return out;
@@ -64,6 +87,7 @@ export function mergeCumulative(boards: Entry[][]): Entry[] {
       else {
         prev.points += e.points;
         prev.sessions.push(...e.sessions);
+        prev.pointSplit = addSplits(prev.pointSplit, e.pointSplit);
       }
     }
   }
