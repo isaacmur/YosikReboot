@@ -4,10 +4,18 @@
 
 import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router';
 import { eventState, latestWindow, windowState } from '../../lib/status';
-import { REGIONS, type EventInfo, type EventWindow, type Region, type WindowDetail } from '../../lib/types';
+import {
+  REGIONS,
+  type EventInfo,
+  type EventWindow,
+  type Region,
+  type WindowDetail,
+  type WindowState,
+} from '../../lib/types';
 import { useApi } from '../api';
 import { BoardPicker, Leaderboard, useBoardChoice } from '../components/Board';
 import { CutoffHistory } from '../components/CutoffHistory';
+import { MatchesTab } from '../components/MatchesTab';
 import { finishedSessions } from '../cutoffHistory';
 import { eventTags } from '../components/EventCard';
 import { PrizesPanel, ScoringPanel } from '../components/Scoring';
@@ -23,16 +31,17 @@ import {
   PillSelect,
   SectionHeader,
   Skeleton,
+  StageTag,
   StateTag,
   Tabs,
 } from '../components/ui';
-import { formatDay, formatRange, formatTime, REGION_LABEL, useNow, zoneAbbrev } from '../format';
+import { formatDay, formatRange, formatTime, REGION_LABEL, STAGE_LABEL, useNow, zoneAbbrev } from '../format';
 import { eventPath, inRegion, regionOf } from '../links';
 import { useSettings } from '../settings';
 import { useEvent } from '../useEvent';
 import { useEvents } from '../useEvents';
 
-type Tab = 'board' | 'sessions' | 'rules';
+type Tab = 'board' | 'matches' | 'sessions' | 'rules';
 type DetailQuery = ReturnType<typeof useApi<WindowDetail>>;
 const PLATFORM_LABEL = { PC: 'PC', CONSOLE: 'Console', MOBILE: 'Mobile', CLOUD: 'Cloud' } as const;
 
@@ -114,7 +123,7 @@ function HeroSkeleton() {
 function sessionLabel(w: EventWindow, now: Date, tz: string): string {
   const s = windowState(w, now);
   const tag = s === 'live' ? ' · LIVE' : s === 'wrapping' ? ' · settling' : '';
-  return `${w.label} · ${formatDay(w.begin, tz)}${tag}`;
+  return `${w.label} · ${STAGE_LABEL[w.stage]} · ${formatDay(w.begin, tz)}${tag}`;
 }
 
 function SessionPicker({
@@ -264,7 +273,10 @@ function SessionsTab({
                         className={`flex w-full items-center gap-3 px-4 py-3 text-left transition hover:bg-raised/60 ${isSel ? 'bg-accent-soft' : ''}`}
                       >
                         <span className="min-w-0 flex-1">
-                          <span className="block font-semibold">{w.label}</span>
+                          <span className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                            <span className="font-semibold">{w.label}</span>
+                            <StageTag stage={w.stage} />
+                          </span>
                           <span className="block text-xs text-muted">
                             {formatRange(w.begin, w.end, timeZone)}
                             {w.isTBD && ' · times to be confirmed'}
@@ -362,6 +374,25 @@ function BoardTab({ event, w, detail }: { event: EventInfo; w: EventWindow; deta
   );
 }
 
+/** A set lobby's games (D28). A combined board has no lobbies, so it shows the session's own. */
+function GamesTab({
+  event,
+  w,
+  state,
+  detail,
+}: {
+  event: EventInfo;
+  w: EventWindow;
+  state: WindowState;
+  detail: DetailQuery;
+}) {
+  const { board: chosen } = useBoardChoice(detail.data);
+  const board = chosen?.computed ? detail.data?.boards.find((b) => b.id === detail.data?.defaultBoard) : chosen;
+  if (detail.error && !board) return <ErrorNote error={detail.error} onRetry={detail.reload} />;
+  if (!board) return <Skeleton className="h-96" />;
+  return <MatchesTab key={`${w.id}|${board.id}`} eventId={event.id} w={w} board={board} state={state} />;
+}
+
 // --- Page ----------------------------------------------------------------------
 
 function EventView({ event, windowId }: { event: EventInfo; windowId?: string }) {
@@ -371,8 +402,10 @@ function EventView({ event, windowId }: { event: EventInfo; windowId?: string })
   const [params, setParams] = useSearchParams();
   const latest = latestWindow(event.windows, now);
   const w = event.windows.find((x) => x.id === windowId) ?? latest;
-  const tab =
-    (['board', 'sessions', 'rules'] as const).find((t) => t === params.get('tab')) ?? (w ? 'board' : 'sessions');
+  // Set lobbies (qualified rounds and finals) list their games; open sessions don't have lobbies to list.
+  const hasGames = !!w && w.stage !== 'open';
+  const asked = (['board', 'matches', 'sessions', 'rules'] as const).find((t) => t === params.get('tab'));
+  const tab = asked === 'matches' && !hasGames ? 'board' : (asked ?? (w ? 'board' : 'sessions'));
   const state = w && windowState(w, now);
   // Rules and prizes still show before the first session starts, from the first session.
   const ruleWindow = w ?? event.windows[0];
@@ -388,6 +421,7 @@ function EventView({ event, windowId }: { event: EventInfo; windowId?: string })
   };
   const setTab = (t: Tab) => {
     const next = new URLSearchParams(params);
+    next.delete('match');
     if (t === 'board' && w) next.delete('tab');
     else next.set('tab', t);
     setParams(next, { replace: true });
@@ -402,6 +436,7 @@ function EventView({ event, windowId }: { event: EventInfo; windowId?: string })
           {multi && <SessionPicker event={event} w={w} onPick={pickSession} now={now} />}
           <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted">
             {state && <StateTag state={state} />}
+            <StageTag stage={w.stage} />
             {!multi && <span className="font-semibold text-ink">{w.label}</span>}
             <span>
               {formatDay(w.begin, timeZone)}, {formatTime(w.begin, timeZone)} – {formatTime(w.end, timeZone)}{' '}
@@ -423,6 +458,7 @@ function EventView({ event, windowId }: { event: EventInfo; windowId?: string })
           onChange={setTab}
           tabs={[
             { id: 'board', label: 'Leaderboard' },
+            ...(hasGames ? [{ id: 'matches' as const, label: 'Matches' }] : []),
             { id: 'sessions', label: `Sessions${event.windows.length > 1 ? ` · ${event.windows.length}` : ''}` },
             { id: 'rules', label: 'Rules & prizes' },
           ]}
@@ -437,6 +473,14 @@ function EventView({ event, windowId }: { event: EventInfo; windowId?: string })
             <NotStarted w={w} latest={latest} onPick={(x) => pickSession(x, true)} now={now} />
           ) : (
             <BoardTab event={event} w={w} detail={detail} />
+          ))}
+        {tab === 'matches' &&
+          w &&
+          state &&
+          (state === 'upcoming' ? (
+            <NotStarted w={w} latest={latest} onPick={(x) => pickSession(x, true)} now={now} />
+          ) : (
+            <GamesTab event={event} w={w} state={state} detail={detail} />
           ))}
         {tab === 'sessions' && (
           <SessionsTab event={event} selected={w} onPick={(x) => pickSession(x, true)} now={now} />

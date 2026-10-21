@@ -88,6 +88,12 @@ export function boardInfos(
   });
 }
 
+/** Cutoff lines of a window's own board (D17), straight from the schedule document. */
+export function windowCutoffs(rawSchedule: unknown, eventId: string, windowId: string) {
+  const loc = parseScoreLocation(locationKey(eventId, windowId));
+  return loc ? parseCutoffs(payoutTable(rawSchedule, loc)) : [];
+}
+
 /** Main board if it scores; otherwise the last tier Epic lists (the top tier for Ranked Cups). */
 export function defaultBoard(boards: BoardInfo[]): string {
   const main = boards.find((b) => b.kind === 'main');

@@ -14,11 +14,12 @@ import {
   type FormEvent,
   type ReactNode,
 } from 'react';
-import { useSearchParams } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 import { windowState } from '../../lib/status';
 import type { BoardInfo, Entry, EventWindow, LeaderboardPage, WindowDetail } from '../../lib/types';
 import {
   boardRows,
+  CUTOFF_KIND,
   cutoffTitle,
   entryAtRank,
   linesAfter,
@@ -33,6 +34,7 @@ import {
 } from '../board';
 import { formatSecondsAgo, formatTime, plural, useNow } from '../format';
 import { useFollows } from '../follows';
+import { isSetLobby, matchesOf, type Match } from '../matches';
 import { boardMoves, type Move } from '../movement';
 import { lastScan, LIVE_TTL_MS, scanBoard, type BoardScan } from '../scan';
 import { useSettings } from '../settings';
@@ -40,8 +42,10 @@ import { createStore } from '../store';
 import { useTeams } from '../teams';
 import { useBoard } from '../useBoard';
 import { BoardExport } from './BoardExport';
+import { HuntNote, useFindPlayer } from './FindPlayer';
 import { fmtN, GapRow, HeaderRow, Row } from './BoardRows';
 import { DownloadIcon, InfoIcon, RefreshIcon, SearchIcon } from './icons';
+import { MatchTable } from './MatchView';
 import { PinnedStrip, type SearchState } from './Pinned';
 import { PrizesPanel, ScoringPanel } from './Scoring';
 import { Button, Countdown, Empty, ErrorNote, ListSkeleton, Panel, SectionHeader, Segmented, Sheet } from './ui';
@@ -101,6 +105,7 @@ const BoardList = memo(function BoardList({
   open,
   flashTeam,
   onToggle,
+  onMatch,
   observe,
   pending,
   onLoad,
@@ -113,6 +118,7 @@ const BoardList = memo(function BoardList({
   open?: string;
   flashTeam?: string;
   onToggle: (teamKey: string) => void;
+  onMatch: (sessionId: string) => void;
   observe: (page: number) => (el: HTMLElement | null) => () => void;
   pending: number[];
   onLoad: (page: number) => void;
@@ -144,6 +150,7 @@ const BoardList = memo(function BoardList({
                         flash={flashTeam === e.teamKey}
                         lines={run.lines.get(e.teamKey)}
                         onToggle={onToggle}
+                        onMatch={onMatch}
                       />
                     ))}
                 </ul>
@@ -194,7 +201,7 @@ function MoreRows({
 
 // --- Cutoffs -------------------------------------------------------------------------
 
-/** The qualifying and paid lines, with the points each takes now (or took). Tap to see it on the board. */
+/** The qualifying, paid and skin lines, with the points each takes now (or took). Tap to see it on the board. */
 function CutoffStrip({
   lines,
   pages,
@@ -237,7 +244,7 @@ function CutoffStrip({
           value = at ? `${fmtN(at.points)} pts` : '…';
           note = final ? 'it took' : 'to make it now';
         }
-        const tone = l.kind === 'cash' ? 'text-ok' : 'text-accent-bright';
+        const tone = { qualify: 'text-accent-bright', cash: 'text-ok', skin: 'text-gold', item: 'text-muted' }[l.kind];
         return (
           <button
             key={`${l.kind}|${l.basis}|${l.threshold}|${l.label}`}
@@ -248,7 +255,7 @@ function CutoffStrip({
           >
             <span className={`nums block text-[10px] font-bold tracking-wider uppercase ${tone}`}>
               {l.approx && '≈ '}
-              {cutoffTitle(l)} · {l.kind === 'cash' ? 'Paid' : 'Qualify'}
+              {cutoffTitle(l)} · {CUTOFF_KIND[l.kind]}
             </span>
             <span className="nums mt-0.5 block font-display text-xl leading-tight font-bold">{value}</span>
             <span className="block truncate text-[11px] text-faint">
@@ -270,6 +277,51 @@ function ToolButton({ onClick, children, label }: { onClick: () => void; childre
     >
       {children}
     </button>
+  );
+}
+
+/**
+ * One game from the loaded rows (D28): in a set lobby the whole lobby once every
+ * page is loaded, with a link to the session's games; in an open session only
+ * the teams on loaded pages, since the rest of its lobby is spread across the board.
+ */
+function GameSheet({
+  match,
+  setLobby,
+  allLoaded,
+  gamesHref,
+  followSet,
+  teamNames,
+  tz,
+}: {
+  match?: Match;
+  setLobby: boolean;
+  allLoaded: boolean;
+  /** The session's Matches tab, if it has one. */
+  gamesHref?: string;
+  followSet: Set<string>;
+  teamNames: Map<string, string>;
+  tz: string;
+}) {
+  if (!match) return <Empty>That game isn't on the loaded pages any more.</Empty>;
+  const teams = plural(match.teams.length, 'team');
+  return (
+    <div className="space-y-3">
+      <p className="text-xs text-muted">
+        Ended {formatTime(match.endedAt, tz)} ·{' '}
+        {!setLobby
+          ? `${teams} from this game on the loaded pages; the rest of its lobby is spread across the board`
+          : allLoaded
+            ? teams
+            : `${teams} on the loaded pages`}
+      </p>
+      <MatchTable match={match} followSet={followSet} teamNames={teamNames} />
+      {setLobby && gamesHref && (
+        <Link to={gamesHref} className="inline-block text-xs font-semibold text-accent-bright hover:underline">
+          {allLoaded ? "All of this session's games" : "The whole lobby, and all of this session's games"}
+        </Link>
+      )}
+    </div>
   );
 }
 
@@ -337,7 +389,7 @@ export function Leaderboard({
   );
   const lastLoaded = runs.length ? runs[runs.length - 1]!.pages[runs[runs.length - 1]!.pages.length - 1]! : -1;
 
-  // Cutoff summary: qualifying and paid lines; read their pages (lite) when not loaded.
+  // Cutoff summary: qualifying, paid and skin lines; read their pages (lite) when not loaded.
   const summary = placed.filter((c) => c.kind !== 'item');
   const summaryPages = [
     ...new Set(
@@ -409,6 +461,8 @@ export function Leaderboard({
   // Expanding rows, searching names, jumping to a rank.
   const [open, setOpen] = useState<string>();
   const onToggle = useCallback((k: string) => setOpen((o) => (o === k ? undefined : k)), []);
+  const [matchId, setMatchId] = useState<string>();
+  const onMatch = useCallback((id: string) => setMatchId(id), []);
   const [filter, setFilter] = useState('');
   const [jump, setJump] = useState('');
   const [flash, setFlash] = useState<{ rank: number; teamKey?: string; n: number }>();
@@ -440,6 +494,25 @@ export function Leaderboard({
     const t = setTimeout(() => setFlash(undefined), 2400);
     return () => clearTimeout(t);
   }, [flash]);
+  const {
+    hunt,
+    find: findName,
+    stop: stopHunt,
+  } = useFindPlayer({
+    eventId,
+    windowId: w.id,
+    board: board.id,
+    final,
+    entries,
+    hint: (id) => (scan?.found[id] ? pageOfRank(scan.found[id].rank) : undefined),
+    jumpTo,
+  });
+  const findEverywhere = canSearch && needle.length >= 3 && totalPages > 1;
+  const findButton = (
+    <Button size="sm" variant={filtered.length ? 'ghost' : 'primary'} onClick={() => void findName(filter)}>
+      <SearchIcon size={13} /> Find “{filter.trim()}” on every page
+    </Button>
+  );
   const onJump = (e: FormEvent) => {
     e.preventDefault();
     const n = Number(jump.replace(/[^\d]/g, ''));
@@ -447,6 +520,7 @@ export function Leaderboard({
   };
 
   const [sheet, setSheet] = useState<'scoring' | 'export'>();
+  const [params] = useSearchParams();
   const followSet = useMemo(() => new Set(followIds), [followIds]);
   const teamNames = useMemo(() => new Map(teams.map((t) => [t.key, t.name])), [teams]);
   const loaded = !!pages[0];
@@ -529,8 +603,11 @@ export function Leaderboard({
               type="search"
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
-              placeholder={`Search ${fmtN(entries.length)} loaded`}
-              aria-label="Search loaded players"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && findEverywhere && !filtered.length) void findName(filter);
+              }}
+              placeholder={canSearch && totalPages > 1 ? 'Find a player' : `Search ${fmtN(entries.length)} loaded`}
+              aria-label="Search players by name"
               className="h-9 w-full rounded-md border border-line bg-surface pr-3 pl-9 text-sm outline-none placeholder:text-faint focus:border-accent"
             />
           </label>
@@ -550,6 +627,8 @@ export function Leaderboard({
           </form>
         </div>
 
+        {hunt && <HuntNote hunt={hunt} onStop={stopHunt} />}
+
         {!loaded ? (
           live.error ? (
             <ErrorNote error={live.error} onRetry={live.refresh} />
@@ -560,26 +639,35 @@ export function Leaderboard({
           <Empty>No results yet. Check back once games finish.</Empty>
         ) : needle ? (
           filtered.length ? (
-            <Panel className="overflow-hidden">
-              <HeaderRow />
-              <ul className="divide-y divide-line">
-                {filtered.map((e) => (
-                  <Row
-                    key={e.teamKey}
-                    e={e}
-                    tz={timeZone}
-                    move={moves.get(e.teamKey)}
-                    team={teamNames.get(e.teamKey)}
-                    followed={e.members.some((m) => followSet.has(m.id))}
-                    open={open === e.teamKey}
-                    flash={false}
-                    onToggle={onToggle}
-                  />
-                ))}
-              </ul>
-            </Panel>
+            <>
+              <Panel className="overflow-hidden">
+                <HeaderRow />
+                <ul className="divide-y divide-line">
+                  {filtered.map((e) => (
+                    <Row
+                      key={e.teamKey}
+                      e={e}
+                      tz={timeZone}
+                      move={moves.get(e.teamKey)}
+                      team={teamNames.get(e.teamKey)}
+                      followed={e.members.some((m) => followSet.has(m.id))}
+                      open={open === e.teamKey}
+                      flash={false}
+                      onToggle={onToggle}
+                      onMatch={onMatch}
+                    />
+                  ))}
+                </ul>
+              </Panel>
+              {findEverywhere && (
+                <p className="flex flex-wrap items-center gap-2 text-xs text-muted">Not who you meant? {findButton}</p>
+              )}
+            </>
           ) : (
-            <Empty>No one by that name on the loaded pages.</Empty>
+            <Empty action={findEverywhere ? findButton : undefined}>
+              No one by that name on the loaded pages.
+              {findEverywhere && ' Search every page by their exact Epic name.'}
+            </Empty>
           )
         ) : (
           <BoardList
@@ -590,6 +678,7 @@ export function Leaderboard({
             open={open}
             flashTeam={flashTeam}
             onToggle={onToggle}
+            onMatch={onMatch}
             observe={observe}
             pending={pending}
             onLoad={loadPage}
@@ -631,6 +720,23 @@ export function Leaderboard({
         <ScoringPanel board={board} />
         <SectionHeader title="Prizes" />
         <PrizesPanel board={board} />
+      </Sheet>
+      <Sheet open={!!matchId} onClose={() => setMatchId(undefined)} title="Game">
+        {matchId && (
+          <GameSheet
+            match={matchesOf(entries).get(matchId)}
+            setLobby={isSetLobby(entries)}
+            allLoaded={Object.keys(pages).length >= totalPages}
+            gamesHref={
+              w.stage === 'open'
+                ? undefined
+                : `?${new URLSearchParams({ ...Object.fromEntries(params), tab: 'matches', match: matchId })}`
+            }
+            followSet={followSet}
+            teamNames={teamNames}
+            tz={timeZone}
+          />
+        )}
       </Sheet>
       <Sheet open={sheet === 'export'} onClose={() => setSheet(undefined)} title="Export CSV">
         <BoardExport

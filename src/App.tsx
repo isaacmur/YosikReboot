@@ -15,6 +15,7 @@ import NotFound from './pages/NotFound';
 import Player from './pages/Player';
 import Settings from './pages/Settings';
 import { useSettings } from './settings';
+import { useTheme } from './theme';
 
 const NAV = [
   { to: '/', label: 'Home', icon: HomeIcon, end: true },
@@ -108,6 +109,8 @@ function useScrollToTop(pathname: string) {
 
 export default function App() {
   const { pathname } = useLocation();
+  const [{ theme }] = useSettings();
+  useTheme(theme);
   const onLogin = pathname === '/login';
   useScrollToTop(pathname);
   return (

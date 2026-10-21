@@ -103,6 +103,17 @@ describe('normalizeEntries', () => {
     expect(first.avgPlace).toBeGreaterThan(0);
     const ends = first.sessions.map((s) => s.endedAt);
     expect(ends).toEqual([...ends].sort());
+    // Each game keeps Epic's match ID and how long the team survived.
+    expect(first.sessions.every((s) => /^[0-9a-f]{32}$/.test(s.sessionId))).toBe(true);
+    expect(first.sessions[0]!.timeAlive).toBeGreaterThan(60);
+  });
+
+  it('shares match IDs between teams that played the same game', () => {
+    const seen = new Map<string, number>();
+    for (const e of entries) for (const s of e.sessions) seen.set(s.sessionId, (seen.get(s.sessionId) ?? 0) + 1);
+    // An open cup's top 100 met in some lobbies, but most games are one team's own.
+    expect(Math.max(...seen.values())).toBeGreaterThan(5);
+    expect([...seen.values()].filter((n) => n === 1).length).toBeGreaterThan(seen.size / 2);
   });
 
   it('reads places from unprefixed stats on a Ranked Cup main board, where nothing scores', () => {
@@ -147,8 +158,8 @@ describe('boards', () => {
     expect(boards.slice(1).every((b) => b.payouts.length > 0)).toBe(true);
     expect(boards[0]!.cutoffs).toEqual([]);
     const unreal = boards[boards.length - 1]!;
-    expect(unreal.cutoffs.length).toBeGreaterThan(0);
-    expect(unreal.cutoffs.every((c) => c.kind === 'item')).toBe(true);
+    expect(unreal.cutoffs.filter((c) => c.kind === 'skin')).toHaveLength(1);
+    expect(unreal.cutoffs.every((c) => c.kind === 'skin' || c.kind === 'item')).toBe(true);
     expect(defaultBoard(boards)).toBe('S42_RankedCupSoloReload_Event8_NAW_2_unreal');
   });
 
@@ -230,11 +241,18 @@ describe('payouts', () => {
       ['points', 1000],
       ['rank', 22],
     ]);
+    // A Ranked Cup tier: the top 4 win the skin, the line players chase; the rest are item tiers.
     expect(parseCutoffs(t.epicgames_S42_RankedCupSolo_NAC_1_Diamond)).toEqual([
+      { basis: 'rank', threshold: 4, kind: 'skin', label: 'Skin' },
       { basis: 'percentile', threshold: 0.05, kind: 'item', label: 'Pickaxe' },
-      { basis: 'percentile', threshold: 0.15, kind: 'item', label: 'Cosmetic Variant Token' },
-      { basis: 'percentile', threshold: 0.3, kind: 'item', label: 'Backpack' },
-      { basis: 'rank', threshold: 4, kind: 'item', label: 'Character' },
+      { basis: 'percentile', threshold: 0.15, kind: 'item', label: 'Style' },
+      { basis: 'percentile', threshold: 0.3, kind: 'item', label: 'Back Bling' },
+    ]);
+    // A cup whose top 200 win a skin with three more cosmetics: one skin line, labelled with all four.
+    expect(parseCutoffs(t.S42_ChampionTealKnightFNCSCup_ZB_NAW)).toEqual([
+      { basis: 'rank', threshold: 200, kind: 'skin', label: 'Skin, Pickaxe, Back Bling, Wrap' },
+      { basis: 'points', threshold: 8, kind: 'item', label: 'Emote' },
+      { basis: 'points', threshold: 40, kind: 'item', label: 'Back Bling' },
     ]);
     expect(parseCutoffs(undefined)).toEqual([]);
   });
@@ -284,7 +302,9 @@ describe('mergeCumulative', () => {
     victories: place === 1 ? 1 : 0,
     elims: 1,
     avgPlace: place,
-    sessions: [{ endedAt, place, elims: 1, points, victory: place === 1 }],
+    sessions: [
+      { sessionId: `${team}${endedAt}`, endedAt, place, elims: 1, points, victory: place === 1, timeAlive: 600 },
+    ],
   });
 
   it('sums points per team across sessions and re-ranks, sharing ranks on ties', () => {

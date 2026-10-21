@@ -6,7 +6,7 @@ import { FeedPanel } from '../components/Feed';
 import { ActivityIcon, ChevronRight, LogOutIcon, UsersIcon } from '../components/icons';
 import { Button, PageTitle, Panel, PillSelect, SectionHeader } from '../components/ui';
 import { REGION_LABEL, zoneAbbrev } from '../format';
-import { DEFAULT_SETTINGS, useSettings } from '../settings';
+import { DEFAULT_SETTINGS, useSettings, type Theme } from '../settings';
 
 function timeZones(): string[] {
   try {
@@ -72,6 +72,17 @@ export default function Settings() {
                 {z.replace(/_/g, ' ')} ({zoneAbbrev(z)})
               </option>
             ))}
+          </PillSelect>
+        </Row>
+        <Row label="Theme" hint="Dark, light, or your device's setting">
+          <PillSelect
+            value={settings.theme}
+            onChange={(e) => update({ theme: e.target.value as Theme })}
+            aria-label="Theme"
+          >
+            <option value="system">System</option>
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
           </PillSelect>
         </Row>
         <Row label="Live refresh" hint="How often a live leaderboard updates">

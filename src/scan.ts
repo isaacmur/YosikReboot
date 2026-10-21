@@ -1,11 +1,13 @@
 // Finding followed players on a board (D10: Epic won't look them up directly).
-// Walks the board's pages one at a time through /api/leaderboard in lite mode
-// (CDN-cached, no names), stopping once everyone is found. A repeat search starts
-// around the pages where they were last found. Results for final boards never
-// change, so they're kept in this browser for good; others for 5 min.
+// Reads the board's pages through /api/leaderboard in lite mode (CDN-cached, no
+// names), a few at a time and kept in memory (D26), stopping once everyone is
+// found. A repeat search starts around the pages where they were last found.
+// Results for final boards never change, so they're kept in this browser for
+// good; others for 5 min.
 
-import type { Entry, LeaderboardPage, PayoutTier, WindowDetail } from '../lib/types';
-import { ApiError, apiGet } from './api';
+import type { Entry, PayoutTier, WindowDetail } from '../lib/types';
+import { apiGet } from './api';
+import { CONCURRENCY, litePage, runPool } from './boardIndex';
 import { createStore } from './store';
 
 export interface FoundRow {
@@ -104,12 +106,6 @@ const toRow = (e: Entry): FoundRow => ({
   memberIds: e.members.map((m) => m.id),
 });
 
-const sleep = (ms: number, signal?: AbortSignal) =>
-  new Promise<void>((resolve, reject) => {
-    const t = setTimeout(resolve, ms);
-    signal?.addEventListener('abort', () => (clearTimeout(t), reject(new DOMException('Aborted', 'AbortError'))));
-  });
-
 /**
  * Pages in reading order: each hinted page and its neighbours out to `reach`
  * (nearest first), then the rest from the top.
@@ -135,6 +131,54 @@ export interface ScanOptions {
   payouts?: PayoutTier[];
 }
 
+export interface BoardSearch {
+  found: Record<string, FoundRow>;
+  /** Pages read, so `complete` can be told from a stopped search. */
+  read: Set<number>;
+  totalPages: number;
+}
+
+/**
+ * Reads a board until every one of `ids` is found or every page is read, and
+ * keeps nothing but the pages in memory (D26). `scanBoard` saves the result.
+ */
+export async function searchBoard(
+  eventId: string,
+  windowId: string,
+  board: string,
+  ids: string[],
+  o: Pick<ScanOptions, 'signal' | 'hints' | 'onProgress' | 'final'>,
+): Promise<BoardSearch> {
+  const want = new Set(ids);
+  const found: Record<string, FoundRow> = {};
+  const read = new Set<number>();
+  const q = { event: eventId, window: windowId, board };
+  const take = (page: number, entries: Entry[]) => {
+    read.add(page);
+    for (const e of entries) for (const m of e.members) if (want.has(m.id)) found[m.id] = toRow(e);
+  };
+  const done = () => o.signal?.aborted || Object.keys(found).length === want.size;
+  // The first page read says how many there are; then the rest in scanOrder, a few at a time.
+  const first = o.hints?.[0] ?? 0;
+  const head = await litePage({ ...q, page: first }, { final: o.final, signal: o.signal });
+  const totalPages = Math.min(head.totalPages, 100);
+  take(first, head.entries);
+  o.onProgress?.(read.size, totalPages);
+  const rest = scanOrder(totalPages, o.hints).filter((p) => p !== first);
+  await runPool(
+    rest,
+    CONCURRENCY,
+    async (page) => {
+      const data = await litePage({ ...q, page }, { final: o.final, signal: o.signal });
+      take(page, data.entries);
+      o.onProgress?.(read.size, totalPages);
+    },
+    done,
+  );
+  if (o.signal?.aborted) throw new DOMException('Aborted', 'AbortError');
+  return { found, read, totalPages };
+}
+
 export async function scanBoard(
   eventId: string,
   windowId: string,
@@ -144,34 +188,8 @@ export async function scanBoard(
 ): Promise<BoardScan> {
   const cached = cachedScan(eventId, windowId, board, ids);
   if (cached) return cached;
+  const { found, read, totalPages } = await searchBoard(eventId, windowId, board, ids, o);
   const want = new Set(ids);
-  const found: Record<string, FoundRow> = {};
-  const read = new Set<number>();
-  let totalPages = 1;
-  // The first page read says how many there are; then read in scanOrder.
-  let queue = [o.hints?.[0] ?? 0];
-  while (queue.length) {
-    const page = queue.shift()!;
-    if (o.signal?.aborted) throw new DOMException('Aborted', 'AbortError');
-    const q = new URLSearchParams({ event: eventId, window: windowId, board, page: String(page), lite: '1' });
-    let data: LeaderboardPage;
-    try {
-      data = await apiGet<LeaderboardPage>(`/api/leaderboard?${q}`);
-    } catch (err) {
-      // Rate limited or Epic hiccup: wait once, then try the page again.
-      if (!(err instanceof ApiError) || err.status < 500) throw err;
-      await sleep(3000, o.signal);
-      data = await apiGet<LeaderboardPage>(`/api/leaderboard?${q}`);
-    }
-    read.add(page);
-    if (read.size === 1) {
-      totalPages = Math.min(data.totalPages, 100);
-      queue = scanOrder(totalPages, o.hints).filter((p) => !read.has(p));
-    }
-    for (const e of data.entries) for (const m of e.members) if (want.has(m.id)) found[m.id] = toRow(e);
-    o.onProgress?.(read.size, totalPages);
-    if (Object.keys(found).length === want.size) break;
-  }
   const scan: BoardScan = {
     eventId,
     windowId,

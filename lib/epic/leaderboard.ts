@@ -32,11 +32,13 @@ export function normalizeEntries(rawPage: unknown, rules: ScoringRule[]): Entry[
         const stats = asObj(s.trackedStats) ?? {};
         const place = num(stats[names.place]) ?? num(stats.PLACEMENT_STAT_INDEX) ?? null;
         return {
+          sessionId: str(s.sessionId) ?? '',
           endedAt: str(s.endTime) ?? '',
           place,
           elims: num(stats[names.elims]) ?? num(stats.TEAM_ELIMS_STAT_INDEX) ?? 0,
           points: rules.length ? sessionPoints(stats, rules) : null,
           victory: num(stats[names.victory]) === 1 || place === 1,
+          timeAlive: num(stats[names.alive]) ?? num(stats.TIME_ALIVE_STAT) ?? null,
         };
       })
       .sort((a, b) => a.endedAt.localeCompare(b.endedAt));

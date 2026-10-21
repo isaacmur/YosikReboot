@@ -1,12 +1,13 @@
-// Cutoff history (F28): the points each qualifying or paid line took in a
+// Cutoff history (F28): the points each qualifying, paid or skin line took in a
 // finished session. Reading one costs the session's rules (/api/window) and
 // one lite page per line; final standings never change, so the answer is kept
 // in this browser for good (D25).
 
 import { windowState } from '../lib/status';
-import type { EventWindow, LeaderboardPage, WindowDetail } from '../lib/types';
-import { apiGet, apiGetCached } from './api';
-import { cutoffTitle, entryAtRank, pageOfRank } from './board';
+import type { EventWindow, WindowDetail } from '../lib/types';
+import { apiGetCached } from './api';
+import { CUTOFF_KIND, cutoffTitle, entryAtRank, pageOfRank } from './board';
+import { litePage } from './boardIndex';
 import { createStore } from './store';
 
 export interface CutoffPoints {
@@ -27,7 +28,8 @@ export interface SessionCutoffs {
 }
 
 const store = createStore<Record<string, SessionCutoffs>>(
-  'yr.cutoffHistory.v1',
+  // v2: skin lines; sessions read before them are read again.
+  'yr.cutoffHistory.v2',
   (r) => (r && typeof r === 'object' ? (r as Record<string, SessionCutoffs>) : {}),
   {},
 );
@@ -44,9 +46,9 @@ export const finishedSessions = (windows: EventWindow[], now = new Date()) =>
   windows.filter((w) => windowState(w, now) === 'final').sort((a, b) => a.end.localeCompare(b.end));
 
 /**
- * Reads a finished session's qualifying and paid rank lines on its main board
- * (Ranked Cups have only item tiers, so none). Points lines aren't read: what
- * they take is in their name.
+ * Reads a finished session's qualifying, paid and skin rank lines on its main
+ * board (for Ranked Cups, the top tier and its skin line). Points lines aren't
+ * read: what they take is in their name.
  */
 export async function loadCutoffs(eventId: string, w: EventWindow): Promise<SessionCutoffs> {
   const saved = savedCutoffs(eventId, w.id);
@@ -57,17 +59,17 @@ export async function loadCutoffs(eventId: string, w: EventWindow): Promise<Sess
   );
   const board = detail.boards.find((b) => b.id === detail.defaultBoard) ?? detail.boards[0]!;
   const lines = board.cutoffs.filter((c) => c.kind !== 'item' && c.basis === 'rank');
-  const pages: LeaderboardPage[] = [];
-  for (const page of new Set(lines.map((c) => pageOfRank(c.threshold)))) {
-    const q = new URLSearchParams({ event: eventId, window: w.id, board: board.id, page: String(page), lite: '1' });
-    pages.push(await apiGet<LeaderboardPage>(`/api/leaderboard?${q}`));
-  }
+  const pages = await Promise.all(
+    [...new Set(lines.map((c) => pageOfRank(c.threshold)))].map((page) =>
+      litePage({ event: eventId, window: w.id, board: board.id, page }, { final: true }),
+    ),
+  );
   const result: SessionCutoffs = {
     board: board.id,
     boardLabel: board.label,
     lines: lines.map((c) => ({
       key: `${c.kind}|${c.basis}|${c.threshold}`,
-      title: `${cutoffTitle(c)} · ${c.kind === 'cash' ? 'Paid' : 'Qualify'}`,
+      title: `${cutoffTitle(c)} · ${CUTOFF_KIND[c.kind]}`,
       label: c.label,
       rank: c.threshold,
       points: entryAtRank(c.threshold, pages)?.points ?? null,

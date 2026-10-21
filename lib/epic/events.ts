@@ -10,10 +10,15 @@ import {
   type Mode,
   type PlatformGroup,
   type Region,
+  type Stage,
   type TeamSize,
 } from '../types.js';
+import { windowCutoffs } from './boards.js';
 import type { CmsIndex } from './cms.js';
 import { asArr, asObj, num, str, strings } from './json.js';
+import { humanize } from './text.js';
+
+export { humanize };
 
 const REGION_SUFFIX = new RegExp(`_(${REGIONS.join('|')})$`);
 
@@ -91,17 +96,6 @@ export function platformGroups(platforms: string[]): PlatformGroup[] {
   return (['PC', 'CONSOLE', 'MOBILE', 'CLOUD'] as const).filter((g) => groups.has(g));
 }
 
-/** `Qual1Round1Day2` -> `Qual 1 Round 1 Day 2`, `Final_Day1` -> `Final Day 1` */
-export function humanize(s: string): string {
-  return s
-    .replace(/_/g, ' ')
-    .replace(/([a-z])([A-Z])/g, '$1 $2')
-    .replace(/([A-Za-z])(\d)/g, '$1 $2')
-    .replace(/(\d)([A-Za-z])/g, '$1 $2')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
 /**
  * The part of a window ID that isn't already in the event ID, made readable:
  * leading segments the event ID shares (season, series) are dropped, e.g.
@@ -133,6 +127,25 @@ export function requirements(window: Record<string, unknown>): string[] {
   return out;
 }
 
+/**
+ * Tokens that don't mean an earlier round: region locks (FNCS), which anyone
+ * playing there has, and `fake_token`, which locks a region's copy of a cup
+ * meant for other players (mobile cups outside their regions).
+ */
+const isEligibility = (t: string) => t.startsWith('RegionLock_') || t === 'fake_token';
+
+/**
+ * Opens vs finals (D27): open unless entry needs a token from an earlier round
+ * or an invite; then "qualified" if the session's own rewards qualify players
+ * for something after it, else "final".
+ */
+export function windowStage(w: Record<string, unknown>, rawSchedule: unknown, eventId: string): Stage {
+  const gate = [...strings(w.requireAllTokens), ...strings(w.requireAnyTokens)].filter((t) => !isEligibility(t));
+  if (!gate.length) return 'open';
+  const leadsOn = windowCutoffs(rawSchedule, eventId, str(w.eventWindowId) ?? '').some((c) => c.kind === 'qualify');
+  return leadsOn ? 'qualified' : 'final';
+}
+
 function playlistsByTemplate(raw: Record<string, unknown>): Map<string, string> {
   const out = new Map<string, string>();
   for (const t of asArr(raw.templates)) {
@@ -143,7 +156,7 @@ function playlistsByTemplate(raw: Record<string, unknown>): Map<string, string> 
   return out;
 }
 
-function normalizeWindow(w: Record<string, unknown>, eventId: string): EventWindow | undefined {
+function normalizeWindow(w: Record<string, unknown>, eventId: string, raw: unknown): EventWindow | undefined {
   const id = str(w.eventWindowId);
   const begin = str(w.beginTime);
   const end = str(w.endTime);
@@ -158,6 +171,7 @@ function normalizeWindow(w: Record<string, unknown>, eventId: string): EventWind
     payoutDelayMin: num(w.payoutDelay) ?? null,
     isTBD: w.isTBD === true,
     requirements: requirements(w),
+    stage: windowStage(w, raw, eventId),
   };
 }
 
@@ -174,7 +188,7 @@ export function normalizeEvents(rawDoc: unknown, cms: CmsIndex): EventInfo[] {
       .map(asObj)
       .filter((w): w is Record<string, unknown> => !!w);
     const windows = rawWindows
-      .map((w) => normalizeWindow(w, id))
+      .map((w) => normalizeWindow(w, id, raw))
       .filter((w): w is EventWindow => !!w)
       .sort((a, b) => a.begin.localeCompare(b.begin));
     if (!windows.length) continue;

@@ -110,6 +110,26 @@ describe('normalizeEvents on the live capture', () => {
     expect(find('epicgames_S42_RankedCupSolo_EU').minAccountLevel).toBeGreaterThan(0);
   });
 
+  it('tells opens from qualified rounds and finals (D27)', () => {
+    const stage = (windowId: string) =>
+      REGIONS.flatMap((r) => byRegion[r]!)
+        .flatMap((e) => e.windows)
+        .find((w) => w.id === windowId)!.stage;
+    // Anyone can enter; a region lock alone doesn't make it a qualified round.
+    expect(stage('S42_ReloadCashCup_DuosZB_Event6Round1_NAC')).toBe('open');
+    expect(stage('S42_RankedCupSolo_Event8_NAC')).toBe('open');
+    expect(stage('S42_FNCSSolo_LastChanceQualifier_NAC')).toBe('open');
+    // A cup locked to players elsewhere (mobile cups) isn't a later round either.
+    expect(stage('S42_SlenderManMobileCup_AllNAC')).toBe('open');
+    // Qualified players only, and the session's rewards qualify players onward.
+    expect(stage('S42_FNCSSolo_HeatsStage_Heat1_NAC')).toBe('qualified');
+    expect(stage('S42_FNCSSolo_LastChanceLobby_NAC')).toBe('qualified');
+    // Qualified players only, with nothing after it.
+    expect(stage('S42_ReloadCashCup_DuosZB_Event6Round2_NAC')).toBe('final');
+    expect(stage('S42_FNCSSolo_Final_Day1_NAC')).toBe('final');
+    expect(stage('BOG_DAY1')).toBe('final');
+  });
+
   it('groups platforms', () => {
     expect(find('epicgames_S42_PurgeCup_EU').platforms).toEqual(['PC', 'CONSOLE', 'MOBILE', 'CLOUD']);
     const noMobile = byRegion.EU!.filter((e) => !e.platforms.includes('MOBILE'));

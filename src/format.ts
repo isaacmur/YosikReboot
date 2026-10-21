@@ -2,7 +2,7 @@
 // time zone from settings (Eastern by default).
 
 import { useEffect, useState } from 'react';
-import type { EventType, Mode, Region, TeamSize } from '../lib/types';
+import type { EventType, Mode, Region, Stage, TeamSize } from '../lib/types';
 
 export const REGION_LABEL: Record<Region, string> = {
   NAC: 'NA Central',
@@ -26,6 +26,7 @@ export const TYPE_LABEL: Record<EventType, string> = {
 };
 
 export const MODE_LABEL: Record<Mode, string> = { BR: 'Battle Royale', RELOAD: 'Reload', OTHER: 'Other' };
+export const STAGE_LABEL: Record<Stage, string> = { open: 'Open', qualified: 'Qualified', final: 'Final' };
 export const TEAM_LABEL: Record<TeamSize, string> = { 1: 'Solo', 2: 'Duos', 3: 'Trios', 4: 'Squads' };
 
 const fmtCache = new Map<string, Intl.DateTimeFormat>();

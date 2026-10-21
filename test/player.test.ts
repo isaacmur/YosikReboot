@@ -43,15 +43,15 @@ describe('prizes', () => {
     expect(prizeFor(5000, 10, quals).qualifies).toEqual([]);
     expect(prizeFor(1500, 10, quals).qualifies).toHaveLength(1);
     const teal = tiers('S42_ChampionTealKnightFNCSCup_ZB_NAW');
-    expect(prizeFor(500, 45, teal).items).toEqual(['Dance', 'Backpack']);
-    expect(prizeFor(500, 10, teal).items).toEqual(['Dance']);
+    expect(prizeFor(500, 45, teal).items).toEqual(['Emote', 'Back Bling']);
+    expect(prizeFor(500, 10, teal).items).toEqual(['Emote']);
   });
 
   it('works out percentile tiers only when the team count is known', () => {
     const diamond = tiers('epicgames_S42_RankedCupSolo_NAC_1_Diamond');
     expect(prizeFor(10, 50, diamond, 300).items).toContain('Pickaxe');
     expect(prizeFor(10, 50, diamond).items).toEqual([]);
-    expect(prizeFor(3, 50, diamond).items).toContain('Character');
+    expect(prizeFor(3, 50, diamond).items).toContain('Skin');
   });
 });
 
@@ -85,6 +85,7 @@ describe('cutoff history', () => {
     payoutDelayMin: 30,
     isTBD: false,
     requirements: [],
+    stage: 'open',
   });
 
   it('reads the page each rank line falls on, once, and remembers it', async () => {

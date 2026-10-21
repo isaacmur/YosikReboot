@@ -19,8 +19,9 @@ import { apiGetCached, useApi } from '../api';
 import { pageOfRank } from '../board';
 import { fileName, saveFile, toCsv } from '../csv';
 import { addFollow, removeFollow, useFollows } from '../follows';
-import { formatDay, formatTime, ordinal, plural, REGION_LABEL, TYPE_LABEL } from '../format';
+import { formatDay, ordinal, plural, REGION_LABEL, TYPE_LABEL } from '../format';
 import { eventPath } from '../links';
+import { isSetLobby } from '../matches';
 import { formatUsd, prizeFor, type Prize } from '../prizes';
 import {
   allScans,
@@ -35,6 +36,7 @@ import { useSettings } from '../settings';
 import { useEvents } from '../useEvents';
 import { LineChart, MatchChart } from './Charts';
 import { ChevronDown, ChevronRight, DownloadIcon, StarIcon } from './icons';
+import { GamesTable } from './MatchView';
 import { Art, Button, Chip, Empty, ErrorNote, LoadState, Panel, PillSelect, SectionHeader, Skeleton } from './ui';
 
 function Stat({ label, value }: { label: string; value: string }) {
@@ -137,31 +139,20 @@ function ResultDetail({ id, x, row }: { id: string; x: BoardScan; row: FoundRow 
             </p>
           )}
           {entry.sessions.length > 0 && <MatchChart sessions={entry.sessions} tz={timeZone} />}
-          <table className="nums w-full max-w-md text-xs">
-            <caption className="sr-only">Games</caption>
-            <thead className="text-faint">
-              <tr className="text-[10px] tracking-wider uppercase">
-                <th className="pb-1 text-left font-semibold">Game</th>
-                <th className="pb-1 text-right font-semibold">Place</th>
-                <th className="pb-1 text-right font-semibold">Elims</th>
-                <th className="pb-1 text-right font-semibold">Pts</th>
-                <th className="pb-1 text-right font-semibold">Ended</th>
-              </tr>
-            </thead>
-            <tbody>
-              {entry.sessions.map((s, i) => (
-                <tr key={`${s.endedAt}-${i}`} className="border-t border-line/70">
-                  <td className="py-1 text-muted">{i + 1}</td>
-                  <td className={`py-1 text-right ${s.victory ? 'font-bold text-accent-bright' : ''}`}>
-                    {s.place ? (s.victory ? 'Win' : `#${s.place}`) : '—'}
-                  </td>
-                  <td className="py-1 text-right">{s.elims}</td>
-                  <td className="py-1 text-right font-semibold">{s.points ?? '—'}</td>
-                  <td className="py-1 text-right text-muted">{s.endedAt ? formatTime(s.endedAt, timeZone) : '—'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <GamesTable
+            sessions={entry.sessions}
+            tz={timeZone}
+            gameHref={
+              isSetLobby(data.entries)
+                ? (game) =>
+                    eventPath(
+                      x.eventId,
+                      x.windowId,
+                      new URLSearchParams({ board: x.board, tab: 'matches', match: game }).toString(),
+                    )
+                : undefined
+            }
+          />
         </>
       )}
       <Link
@@ -180,6 +171,7 @@ function PrizeChips({ prize }: { prize?: Prize }) {
     <>
       {prize.usd > 0 && <Chip tone="accent">{formatUsd(prize.usd)}</Chip>}
       {prize.qualifies.length > 0 && <Chip tone="accent">Qualified</Chip>}
+      {prize.items.includes('Skin') && <Chip tone="accent">Skin</Chip>}
     </>
   );
 }
