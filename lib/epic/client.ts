@@ -1,7 +1,16 @@
 // The only way API routes talk to Epic: adds the token, spaces calls out,
 // retries once after a 401 with a fresh token, and logs every call for /api/health.
 
-import { EpicTokenManager, readJson, type EpicToken, type FetchLike, type TokenStatus } from '../auth/epicToken.js';
+import {
+  EpicTokenManager,
+  readJson,
+  requestToken,
+  toEpicToken,
+  type ClientCredentials,
+  type EpicToken,
+  type FetchLike,
+  type TokenStatus,
+} from '../auth/epicToken.js';
 import { epicConfig } from '../config.js';
 import { EpicHttpError, parseEpicError } from './errors.js';
 
@@ -84,12 +93,25 @@ export class EpicClient {
   }
 
   /** GET a JSON document. `auth: false` for public endpoints (the CMS). */
-  async getJson(url: string, label: string, o: { auth?: boolean } = {}): Promise<unknown> {
-    const auth = o.auth !== false;
-    let res = await this.attempt(url, label, auth);
+  getJson(url: string, label: string, o: { auth?: boolean } = {}): Promise<unknown> {
+    return this.request(url, label, o.auth !== false);
+  }
+
+  /** POST a JSON body and read the JSON answer (replay download links, D31). */
+  postJson(url: string, body: unknown, label: string): Promise<unknown> {
+    return this.request(url, label, true, { method: 'POST', body: JSON.stringify(body) });
+  }
+
+  private async request(
+    url: string,
+    label: string,
+    auth: boolean,
+    init?: { method: string; body: string },
+  ): Promise<unknown> {
+    let res = await this.attempt(url, label, auth, init);
     if (auth && res.status === 401) {
       this.opts.tokens.invalidate();
-      res = await this.attempt(url, `${label} (retry)`, auth);
+      res = await this.attempt(url, `${label} (retry)`, auth, init);
     }
     const body = await readJson(res);
     if (!res.ok) {
@@ -99,7 +121,12 @@ export class EpicClient {
     return body;
   }
 
-  private async attempt(url: string, label: string, auth: boolean): Promise<Response> {
+  private async attempt(
+    url: string,
+    label: string,
+    auth: boolean,
+    init?: { method: string; body: string },
+  ): Promise<Response> {
     // Reserve the next free slot, so concurrent callers queue up minGap apart.
     const now = Date.now();
     const slot = Math.max(now, this.nextSlot);
@@ -107,10 +134,11 @@ export class EpicClient {
     if (slot > now) await this.sleep(slot - now);
 
     const headers: Record<string, string> = { Accept: 'application/json' };
+    if (init) headers['Content-Type'] = 'application/json';
     if (auth) headers.Authorization = `bearer ${(await this.opts.tokens.get()).accessToken}`;
     const started = Date.now();
     try {
-      const res = await this.fetchImpl(url, { headers });
+      const res = await this.fetchImpl(url, { headers, ...init });
       const entry: CallLogEntry = {
         at: new Date(started).toISOString(),
         label,
@@ -139,4 +167,49 @@ let shared: EpicClient | undefined;
 export function epicClient(): EpicClient {
   shared ??= new EpicClient({ tokens: new EpicTokenManager(epicConfig()) });
   return shared;
+}
+
+/**
+ * An app token: client credentials (`token_type=eg1`), no account. Replay
+ * storage answers to it, as the open-source replay downloaders use (D31).
+ */
+export function appToken(client: ClientCredentials, fetchImpl?: FetchLike, now: () => number = Date.now): TokenSource {
+  const f: FetchLike = fetchImpl ?? ((input, init) => fetch(input, init));
+  let token: EpicToken | undefined;
+  let pending: Promise<EpicToken> | undefined;
+  const st: TokenStatus = { consecutiveFailures: 0 };
+  return {
+    async get() {
+      if (token && now() < token.expiresAt - 60_000) return token;
+      pending ??= requestToken(f, client, { grant_type: 'client_credentials', token_type: 'eg1' })
+        .then((raw) => {
+          token = toEpicToken(raw, client.id, now());
+          st.mintedAt = now();
+          st.expiresAt = token.expiresAt;
+          st.consecutiveFailures = 0;
+          return token;
+        })
+        .catch((err: unknown) => {
+          st.consecutiveFailures += 1;
+          st.lastError = err instanceof Error ? err.message : String(err);
+          throw err;
+        })
+        .finally(() => {
+          pending = undefined;
+        });
+      return pending;
+    },
+    invalidate: () => {
+      token = undefined;
+    },
+    status: () => ({ ...st }),
+  };
+}
+
+let sharedApp: EpicClient | undefined;
+
+/** One app-token client per warm instance, for replays (D31). */
+export function epicAppClient(): EpicClient {
+  sharedApp ??= new EpicClient({ tokens: appToken(epicConfig().client) });
+  return sharedApp;
 }

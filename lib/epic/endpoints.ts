@@ -6,6 +6,7 @@ export const HOSTS = {
   account: 'https://account-public-service-prod.ol.epicgames.com',
   events: 'https://events-public-service-live.ol.epicgames.com',
   cms: 'https://fortnitecontent-website-prod07.ol.epicgames.com',
+  datastorage: 'https://datastorage-public-service-live.ol.epicgames.com',
   web: 'https://www.epicgames.com',
 } as const;
 
@@ -73,12 +74,22 @@ export const endpoints = {
     `${HOSTS.events}/api/v1/events/${GAME_ID}/${seg(eventId)}/${seg(windowId)}/history`,
   playerWindowHistory: (eventId: string, windowId: string, accountId: string) =>
     `${HOSTS.events}/api/v1/events/${GAME_ID}/${seg(eventId)}/${seg(windowId)}/history/${seg(accountId)}`,
+  /** Every score an account has in one event, all sessions; only for the signed-in account (D30). */
+  playerEventHistory: (eventId: string, accountId: string, teamAccountIds?: string[]) =>
+    withQuery(`${HOSTS.events}/api/v1/events/${GAME_ID}/${seg(eventId)}/history/${seg(accountId)}`, {
+      teamAccountIds: teamAccountIds?.join(','),
+    }),
   playerTokens: (accountIds: string[]) =>
     withQuery(`${HOSTS.events}/api/v1/players/${GAME_ID}/tokens`, {
       teamAccountIds: accountIds.join(','),
     }),
 
   tournamentInfo: () => `${HOSTS.cms}/content/api/pages/fortnite-game/tournamentinformation`,
+
+  /** A tournament game's server replay (D31): its parts and events, by match ID (a game's `sessionId`). */
+  replayMetadata: (matchId: string) => `${HOSTS.datastorage}/api/v1/data/fnreplaysmetadata/public/${seg(matchId)}.json`,
+  /** POST { files: ["<part id>.bin", …] } for signed download links, good for 15 minutes. */
+  replayFiles: (matchId: string) => `${HOSTS.datastorage}/api/v1/access/fnreplays/public/${seg(matchId)}/`,
 };
 
 function withQueryRepeated(url: string, key: string, values: string[]): string {

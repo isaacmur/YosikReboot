@@ -2,14 +2,22 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { REGIONS, type EventInfo, type EventsResponse, type Region } from '../lib/types';
 import { apiGetCached, AuthError, useApi } from './api';
+import { rememberEvents } from './archive';
 import { useSettings } from './settings';
 
 const SCHEDULE_MAX_AGE_MS = 5 * 60_000;
 
-/** The schedule for a region (default: the one in settings). The server caches it 15 min; we reuse ours for 5. */
+/**
+ * The schedule for a region (default: the one in settings). The server caches it 15 min; we reuse ours for 5.
+ * Every schedule read is also kept, for after Epic stops listing its events (D32).
+ */
 export function useEvents(region?: Region) {
   const [settings] = useSettings();
-  return useApi<EventsResponse>(`/api/events?region=${region ?? settings.region}`, SCHEDULE_MAX_AGE_MS);
+  const state = useApi<EventsResponse>(`/api/events?region=${region ?? settings.region}`, SCHEDULE_MAX_AGE_MS);
+  useEffect(() => {
+    if (state.data) rememberEvents(state.data.events);
+  }, [state.data]);
+  return state;
 }
 
 /** Every region's events, each once (regions overlap, D11): first seen in REGIONS order wins. */
@@ -46,7 +54,9 @@ export function useAllEvents(enabled: boolean): { events: EventInfo[]; loading: 
         return;
       }
       const lists = results.flatMap((r) => (r.status === 'fulfilled' ? [r.value] : []));
-      setState({ events: mergeRegions(lists), loading: false, error: failed?.reason as Error | undefined });
+      const events = mergeRegions(lists);
+      rememberEvents(events);
+      setState({ events, loading: false, error: failed?.reason as Error | undefined });
     });
     return () => {
       cancelled = true;

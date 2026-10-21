@@ -2,6 +2,8 @@
 
 export const isEpicId = (v: string | null): v is string => !!v && /^[\w-]{1,120}$/.test(v);
 export const isAccountId = (v: string | null): v is string => !!v && /^[0-9a-f]{32}$/.test(v);
+/** Match IDs (a game's `sessionId`) are 32 hex characters too. */
+export const isMatchId = isAccountId;
 /** Epic display names are 3-16 characters; allow some slack, but no control characters. */
 export const isDisplayName = (v: string | null): v is string =>
   !!v && v.length <= 32 && [...v].every((c) => c.charCodeAt(0) >= 0x20);

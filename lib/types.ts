@@ -207,6 +207,8 @@ export interface Entry {
   sessions: MatchResult[];
   /** `lite` responses only: each game's points, oldest first; missing when a game's points are unknown (D29). */
   gamePoints?: number[];
+  /** Epic's split of `points`: placement, eliminations and anything else (from its point breakdown). */
+  pointSplit?: { placement: number; elims: number; other: number };
 }
 
 /** GET /api/leaderboard */
@@ -224,7 +226,7 @@ export interface LeaderboardPage {
 
 // --- Sync with Epic (D30): your own sign-in, for the minutes a sync takes ---
 
-/** A session to read your row from; `team` is your team's account IDs when Epic listed them. */
+/** A session to read your row from; `team` is your team's account IDs, from your history. */
 export interface SyncSession {
   eventId: string;
   windowId: string;
@@ -239,10 +241,20 @@ export interface SyncStart {
   intervalMs: number;
 }
 
-/** POST /api/sync?step=poll. `played` is null when Epic lists no sessions for you. */
+/** What your own schedule download held, for the sync's details. */
+export interface SyncEpicInfo {
+  /** Keys of its `player` part. */
+  playerKeys: string[];
+  /** Entries in `player.teams`, tokens you hold, and entries in `scores`. */
+  teams: number;
+  tokens: number;
+  scores: number;
+}
+
+/** POST /api/sync?step=poll. */
 export type SyncPoll =
   | { status: 'pending'; intervalMs: number }
-  | { status: 'ready'; accountId: string; displayName: string | null; played: SyncSession[] | null };
+  | { status: 'ready'; accountId: string; displayName: string | null; epic: SyncEpicInfo };
 
 export interface SyncRowResult {
   eventId: string;
@@ -251,12 +263,81 @@ export interface SyncRowResult {
   board?: Pick<BoardInfo, 'id' | 'label' | 'payouts'>;
   /** Your row, without names or games (`lite`). */
   entry?: Entry;
+  /** What Epic answered for each board tried. */
+  trace?: string[];
+  /** For an event Epic's schedule no longer lists (D32): the session's name from its ID, and your last game's end. */
+  label?: string;
+  endedAt?: string;
+}
+
+/**
+ * One event read from Epic's per-player history (D30), which lists a score for
+ * every board you have a row on, in every session, whatever team you played in.
+ */
+export interface SyncEventHistory {
+  eventId: string;
+  /** Epic's answer in one line when it didn't return your history; null when it did. */
+  error: string | null;
+  /** Sessions the history lists you in, final or not. */
+  played: string[];
+  /** Your row in each final session you played, on its scored board. */
+  results: SyncRowResult[];
+  /** Final sessions you played whose standing the history doesn't hold (a Ranked Cup's tiers): read them with `rows`. */
+  toRead: SyncSession[];
+  /** Scores that matched none of the event's boards. */
+  unmatched: number;
+}
+
+/** POST /api/sync?step=history: the events read, and what's left for the next request. */
+export interface SyncHistory {
+  events: SyncEventHistory[];
+  remaining: string[];
 }
 
 /** POST /api/sync?step=rows: what was read, and what's left for the next request. */
 export interface SyncRows {
   results: SyncRowResult[];
   remaining: SyncSession[];
+}
+
+// --- Replay stats (D31): a tournament game's server replay, by match ID ---
+
+/** One elimination or knock: account IDs, 'bot', or null when unreadable. */
+export interface ReplayElim {
+  /** Milliseconds into the game. */
+  at: number;
+  eliminated: string | null;
+  eliminator: string | null;
+  knocked: boolean;
+}
+
+/** Epic's per-player match stats (`AthenaMatchStats`). */
+export interface ReplayPlayerStats {
+  /** Whose they are, when the event names an account. */
+  player: string | null;
+  accuracy: number;
+  assists: number;
+  eliminations: number;
+  damageToPlayers: number;
+  damageTaken: number;
+  damageToStructures: number;
+  materialsGathered: number;
+  materialsUsed: number;
+  revives: number;
+  distance: number;
+}
+
+/** GET /api/replay?match= */
+export interface ReplaySummary {
+  matchId: string;
+  lengthMs: number;
+  live: boolean;
+  /** Each kind of event the replay held, with counts, for when stats are missing. */
+  events: Record<string, number>;
+  elims: ReplayElim[];
+  stats: ReplayPlayerStats[];
+  /** What couldn't be read. */
+  notes: string[];
 }
 
 /** GET /api/ics, signed in: the calendar feed's secret for the subscribe link; null while the feed is off. */

@@ -13,15 +13,19 @@ import {
   type EventType,
   type EventWindow,
   type LeaderboardPage,
+  type TeamSize,
   type WindowDetail,
 } from '../../lib/types';
 import { apiGetCached, useApi } from '../api';
+import { keptEvent } from '../archive';
 import { pageOfRank } from '../board';
+import { litePage } from '../boardIndex';
 import { fileName, saveFile, toCsv } from '../csv';
 import { addFollow, removeFollow, useFollows } from '../follows';
-import { formatDay, ordinal, plural, REGION_LABEL, TYPE_LABEL } from '../format';
+import { formatDay, ordinal, plural, REGION_LABEL, TEAM_LABEL, TYPE_LABEL } from '../format';
 import { eventPath } from '../links';
 import { isSetLobby } from '../matches';
+import { useRecentReplays } from '../replays';
 import { formatUsd, prizeFor, type Prize } from '../prizes';
 import {
   allScans,
@@ -38,6 +42,7 @@ import { useEvents } from '../useEvents';
 import { LineChart, MatchChart } from './Charts';
 import { ChevronDown, ChevronRight, DownloadIcon, StarIcon } from './icons';
 import { GamesTable } from './MatchView';
+import { ResultCard } from './ResultCard';
 import { SyncPanel } from './SyncPanel';
 import { Art, Button, Chip, Empty, ErrorNote, LoadState, Panel, PillSelect, SectionHeader, Skeleton } from './ui';
 
@@ -103,7 +108,28 @@ function useBackfillPayouts(results: Result[]) {
   }, [missing]);
 }
 
-/** This player's row on the board, fetched on demand, with points per game. */
+/**
+ * Teams on a board, from its last page, for Top %. A board Epic shows 100 pages of
+ * has at least 10,000 teams, so Top % is then an upper bound.
+ */
+function useTeamCount(x: BoardScan, totalPages?: number): { teams: number; atLeast: boolean } | undefined {
+  const [teams, setTeams] = useState<number>();
+  useEffect(() => {
+    if (!totalPages || totalPages >= 100) return;
+    let cancelled = false;
+    litePage({ event: x.eventId, window: x.windowId, board: x.board, page: totalPages - 1 }, { final: x.final }).then(
+      (p) => !cancelled && setTeams((totalPages - 1) * 100 + p.entries.length),
+      () => {},
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [x.eventId, x.windowId, x.board, x.final, totalPages]);
+  if (totalPages && totalPages >= 100) return { teams: 10_000, atLeast: true };
+  return teams ? { teams, atLeast: false } : undefined;
+}
+
+/** This player's row on the board, fetched on demand: the tournament card, points per game and each game. */
 function ResultDetail({ id, x, row }: { id: string; x: BoardScan; row: FoundRow }) {
   const [{ timeZone }] = useSettings();
   const q = new URLSearchParams({
@@ -117,6 +143,7 @@ function ResultDetail({ id, x, row }: { id: string; x: BoardScan; row: FoundRow 
     x.final ? 3_600_000 : 60_000,
   );
   const entry = data?.entries.find((e) => e.members.some((m) => m.id === id));
+  const teams = useTeamCount(x, data?.totalPages);
   return (
     <div className="space-y-3 border-t border-line bg-bg/50 px-3 py-3">
       {!data ? (
@@ -129,21 +156,7 @@ function ResultDetail({ id, x, row }: { id: string; x: BoardScan; row: FoundRow 
         <p className="text-xs text-muted">Not on that page any more: standings moved since the search.</p>
       ) : (
         <>
-          {entry.members.length > 1 && (
-            <p className="text-xs text-muted">
-              With{' '}
-              {entry.members
-                .filter((m) => m.id !== id)
-                .map((m, i) => (
-                  <span key={m.id}>
-                    {i > 0 && ', '}
-                    <Link to={`/players/${m.id}`} className="font-semibold text-ink hover:underline">
-                      {m.name ?? `${m.id.slice(0, 6)}…`}
-                    </Link>
-                  </span>
-                ))}
-            </p>
-          )}
+          <ResultCard entry={entry} me={id} teams={teams} boardLabel={x.boardLabel} />
           {entry.sessions.length > 0 && <MatchChart sessions={entry.sessions} tz={timeZone} />}
           <GamesTable
             sessions={entry.sessions}
@@ -217,10 +230,14 @@ export function PlayerView({ id, name, isMe }: { id: string; name: string; isMe?
       .flatMap((event) => event.windows.filter((w) => windowState(w, now) === 'final').map((w) => ({ event, w })))
       .sort((a, b) => b.w.end.localeCompare(a.w.end));
   }, [data, type]);
-  const artFor = (eventId: string) => data?.events.find((e) => e.id === eventId)?.art ?? NO_ART;
+  // Results can be from other regions, or from events Epic no longer lists (D32).
+  const artFor = (eventId: string) =>
+    data?.events.find((e) => e.id === eventId)?.art ?? keptEvent(eventId)?.art ?? NO_ART;
 
   const results = resultsFor(id);
   useBackfillPayouts(results);
+  // Your recent results' replays are read while Epic still has them (D31); a player page reads them when opened.
+  useRecentReplays(isMe ? results : [], id);
   const ranks = results.map((r) => r.row.rank);
   const prizeMoney = results.reduce((sum, r) => sum + (r.prize?.usd ?? 0), 0);
   const qualified = results.filter((r) => r.prize?.qualifies.length).length;
@@ -381,6 +398,7 @@ export function PlayerView({ id, name, isMe }: { id: string; name: string; isMe?
                       <span className="block truncate text-sm font-semibold">{x.title ?? x.windowId}</span>
                       <span className="nums block truncate text-xs text-muted">
                         {x.endedAt ? formatDay(x.endedAt, timeZone) : ''}
+                        {row.memberIds.length <= 4 ? ` · ${TEAM_LABEL[row.memberIds.length as TeamSize]}` : ''}
                         {x.boardLabel !== 'Overall' ? ` · ${x.boardLabel}` : ''} · {plural(row.matches, 'game')} ·{' '}
                         {plural(row.victories, 'win')}
                       </span>

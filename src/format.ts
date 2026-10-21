@@ -88,6 +88,19 @@ export function ordinal(n: number): string {
 /** "1 win", "3 wins" */
 export const plural = (n: number, word: string) => `${n.toLocaleString('en-US')} ${word}${n === 1 ? '' : 's'}`;
 
+/** "1h 52m", "14m", "45s" */
+export function formatDuration(seconds: number): string {
+  const m = Math.round(seconds / 60);
+  if (m < 1) return `${Math.round(seconds)}s`;
+  return m < 60 ? `${m}m` : `${Math.floor(m / 60)}h ${m % 60}m`;
+}
+
+/** "Top 3.2%": one decimal under 10%, whole numbers above. */
+export const topShare = (rank: number, teams: number) => {
+  const pct = (Math.min(rank, teams) / teams) * 100;
+  return `Top ${pct < 10 ? Math.max(0.1, Math.round(pct * 10) / 10) : Math.round(pct)}%`;
+};
+
 /** Calendar day number of an instant in a time zone, for "today" / "tomorrow" comparisons. */
 export function dayIndex(at: string | Date, tz: string): number {
   const parts = fmt(tz, { year: 'numeric', month: 'numeric', day: 'numeric' }).formatToParts(new Date(at));
