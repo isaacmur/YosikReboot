@@ -1,0 +1,8 @@
+{
+  "errorCode": "errors.com.epicgames.common.unauthorized",
+  "errorMessage": "",
+  "code": "errors.com.epicgames.common.unauthorized",
+  "message": "",
+  "status": 401,
+  "context": {}
+}

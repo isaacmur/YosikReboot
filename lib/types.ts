@@ -86,3 +86,95 @@ export interface HealthResponse {
     recent: { at: string; label: string; status: number; ms: number; errorCode?: string }[];
   };
 }
+
+// --- Leaderboards (Phase 2) -------------------------------------------------
+
+/** A window's boards: the main one, one per Ranked Cup tier, and FNCS cumulative. */
+export type BoardKind = 'main' | 'tier' | 'cumulative';
+
+/** Points by finishing place and by eliminations, worked out from Epic's rules. */
+export interface ScoringSummary {
+  /** Points for each place that scores, best place first. */
+  placement: { place: number; points: number }[];
+  /** Points for each elimination count that scores, 1 upward. */
+  elims: { elims: number; points: number }[];
+}
+
+export interface PayoutTier {
+  /** What `threshold` measures: a rank, a top fraction (0.05 = top 5%), or points reached. */
+  basis: 'rank' | 'percentile' | 'points';
+  threshold: number;
+  /** Plain-language rewards, e.g. "$600", "Qualifies for Event 5 Round 2", "Glider". */
+  rewards: string[];
+  /** True if any reward is a qualification token (a cutoff line, not just a prize). */
+  qualifies: boolean;
+}
+
+export interface BoardInfo {
+  /** Epic's leaderboard instance ID; pass back as `board=`. */
+  id: string;
+  kind: BoardKind;
+  label: string;
+  /** Cumulative boards are computed by the app, not fetched from Epic (D7). */
+  computed: boolean;
+  /** False for Ranked Cup main boards, which Epic scores with empty rules. */
+  hasPoints: boolean;
+  scoring: ScoringSummary | null;
+  payouts: PayoutTier[];
+}
+
+/** GET /api/window */
+export interface WindowDetail {
+  eventId: string;
+  windowId: string;
+  boards: BoardInfo[];
+  /** The board to show first: the main board if it scores, else the top tier. */
+  defaultBoard: string;
+}
+
+export interface MatchResult {
+  endedAt: string;
+  place: number | null;
+  elims: number;
+  points: number | null;
+  victory: boolean;
+}
+
+export interface EntryMember {
+  id: string;
+  /** Missing in `lite` responses. */
+  name?: string;
+}
+
+export interface Entry {
+  rank: number;
+  /** Member account IDs, sorted and joined by ':'. */
+  teamKey: string;
+  members: EntryMember[];
+  points: number;
+  matches: number;
+  victories: number;
+  elims: number;
+  avgPlace: number | null;
+  /** Oldest first. Empty in `lite` responses. */
+  sessions: MatchResult[];
+}
+
+/** GET /api/leaderboard */
+export interface LeaderboardPage {
+  eventId: string;
+  windowId: string;
+  board: string;
+  page: number;
+  totalPages: number;
+  fetchedAt: string;
+  /** Cumulative only: some sessions have more teams than were summed. */
+  approximate?: boolean;
+  entries: Entry[];
+}
+
+/** GET /api/player */
+export interface PlayerLookup {
+  id: string;
+  displayName: string;
+}

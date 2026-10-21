@@ -1,11 +1,13 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { makeEventsHandler, SCHEDULE_CACHE_S } from '../api/events';
 import { makeHealthHandler } from '../api/health';
 import { EpicTokenManager, type FetchLike } from '../lib/auth/epicToken';
 import { ConfigError } from '../lib/config';
+import { clearNameCache } from '../lib/epic/accounts';
 import { EpicClient } from '../lib/epic/client';
+import { clearScheduleCache } from '../lib/epic/schedule';
 import { cdnCacheHeaders } from '../lib/http';
 import type { EventsResponse, HealthResponse } from '../lib/types';
 
@@ -46,6 +48,11 @@ function epicFromFixtures(o: { tokenStatus?: number; eventsStatus?: number; cmsS
   });
   return { client, calls };
 }
+
+beforeEach(() => {
+  clearScheduleCache();
+  clearNameCache();
+});
 
 const get = (handler: (r: Request) => Promise<Response>, query: string) =>
   handler(new Request(`https://app.test/api/events${query}`));

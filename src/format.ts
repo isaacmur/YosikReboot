@@ -77,6 +77,19 @@ export function formatCountdown(ms: number): string {
   return `${m}m ${String(s % 60).padStart(2, '0')}s`;
 }
 
+/** "1st", "22nd", "113th", with thousands separators. */
+export function ordinal(n: number): string {
+  const suffixes: Record<number, string> = { 1: 'st', 2: 'nd', 3: 'rd' };
+  const teen = n % 100 >= 11 && n % 100 <= 13;
+  return `${n.toLocaleString('en-US')}${teen ? 'th' : (suffixes[n % 10] ?? 'th')}`;
+}
+
+/** "12 s ago" under a minute, else like formatAgo. */
+export function formatSecondsAgo(at: Date, now: Date): string {
+  const s = Math.max(0, Math.round((now.getTime() - at.getTime()) / 1000));
+  return s < 60 ? `${s} s ago` : formatAgo(at.toISOString(), now);
+}
+
 /** "just now", "4 min ago", "2 h ago" */
 export function formatAgo(iso: string, now: Date): string {
   const min = Math.round((now.getTime() - Date.parse(iso)) / 60_000);

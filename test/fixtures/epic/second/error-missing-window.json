@@ -1,0 +1,8 @@
+{
+  "errorCode": "com.epicgames.events.event_window_not_found",
+  "errorMessage": "Event window 'Fortnite:epicgames_S42_SlenderManCup_MobileAll_NAW:YosikReboot_Probe_DoesNotExist' not found",
+  "code": "com.epicgames.events.event_window_not_found",
+  "message": "Event window 'Fortnite:epicgames_S42_SlenderManCup_MobileAll_NAW:YosikReboot_Probe_DoesNotExist' not found",
+  "status": 404,
+  "context": {}
+}

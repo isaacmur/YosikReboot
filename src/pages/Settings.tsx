@@ -71,9 +71,14 @@ export default function Settings() {
         </label>
       </Card>
       <div className="mt-6 flex items-center justify-between">
-        <Link to="/health" className="text-sm font-medium text-blue-600 underline dark:text-blue-400">
-          API health
-        </Link>
+        <span className="flex gap-4">
+          <Link to="/follows" className="text-sm font-medium text-blue-600 underline dark:text-blue-400">
+            Follows
+          </Link>
+          <Link to="/health" className="text-sm font-medium text-blue-600 underline dark:text-blue-400">
+            API health
+          </Link>
+        </span>
         <button
           onClick={async () => {
             await logout();

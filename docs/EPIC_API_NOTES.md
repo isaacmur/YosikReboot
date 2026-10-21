@@ -1,6 +1,6 @@
 # Epic API notes (Phase 0)
 
-**Status: Phase 0 complete. First live capture done on 2026-10-21, label `first`.** Epic answered all 29 probe calls. The capture caught an upcoming window, a live one, one wrapping up, and finished ones, across 273 events and 1,189 windows. Eight follow-up calls were made by hand afterwards. Everything below comes from those responses unless it's marked otherwise.
+**Status: Phase 0 complete. Live captures on 2026-10-21: `first` (all regions) and `second` (NAC, with Ranked Cup tier boards), both anonymized in `test/fixtures/epic/`.** Epic answered all 29 probe calls. The capture caught an upcoming window, a live one, one wrapping up, and finished ones, across 273 events and 1,189 windows. Eight follow-up calls were made by hand afterwards. Everything below comes from those responses unless it's marked otherwise.
 
 The anonymized copy is committed as `test/fixtures/epic/first/`; the raw capture is not. See [Fixtures and privacy](#fixtures-and-privacy).
 
@@ -48,6 +48,9 @@ In a cloud session, prefix commands with `NODE_USE_ENV_PROXY=1`, so Node's fetch
 - [x] `payoutDelay` ranges from 10 to 32 and is consistent with minutes. A board 30 minutes past its end with `payoutDelay` 32 was still changing. Treat the unit as minutes.
 
 ### Scoring and payouts
+- [x] **Scoring semantics, verified in Phase 2.** Each `rewardTier` pays `pointsEarned` when the stat is at or better than `keyValue`: `<=` for `lte` (places), `>=` for `gte` (eliminations). Tiers add up, and `multiplicative` tiers pay `pointsEarned × stat`. Summing the board's rules over each match's `trackedStats` reproduces Epic's `pointsEarned` for every entry checked: 100 of 100 on a regular board, and 245 of 245 across three Ranked Cup tier boards.
+- [x] Use the **score location's** rule set (`scoreLocationScoringRuleSets`), not the window template's. They differ, as for the Slender Man Cup.
+- [x] Payout tables have `scoringType` `rank`, `percentile` (`threshold` 0.05 = top 5%) or `value` (points reached). Rewards are `ecomm` (cash; `value: "USD"`), `game` (cosmetics) or `token` (qualifies for the window named in `value`).
 - [x] A **score location** is `Fortnite:<group>:<instance>`. A window's own board is `Fortnite:<eventId>:<windowId>`.
 - [x] `window.scoreLocations[]` is a list of `{ leaderboardDefId, isMainWindowLeaderboard }`. A board's scoring and payouts are looked up in two steps:
   - `scoreLocationScoringRuleSets[location]` gives an ID into `scoringRuleSets`.
@@ -82,7 +85,11 @@ In a cloud session, prefix commands with `NODE_USE_ENV_PROXY=1`, so Node's fetch
 ### Cumulative and ranked tier boards
 - [x] Cumulative boards **are not windows**. FNCS windows list a second score location, `Fortnite:cumulative:<eventId>_cumulative`, with a `*_CumulativeLeaderboardDef`. Payout tables point at it through `scoreId`.
 - [x] The leaderboard endpoint does **not** serve them under any pairing tried (`cumulative/<eventId>_cumulative` and `<eventId>/<eventId>_cumulative` both return 404). **D7 resolved:** compute cumulative standings from the session boards.
-- [x] Ranked cups have per-tier score locations (`<windowId>_1_Bronze` … `_1_unreal`, with inconsistent capitalization) as well as the main board. `<windowId>_1_diamond` returns 404 `event_window_not_found`, so the main board is the one to use.
+- [x] **Corrected in Phase 2.** Ranked Cups have one score location per rank tier besides the main board, and the tier boards **are** fetchable.
+  - Use the exact instance ID listed in `resolvedWindowLocations` as the window ID, e.g. `S42_RankedCupSoloReload_Event8_NAC_2_diamond`. The number is the window's `round` (round 2 here), and capitalization varies (`_2_Bronze`, `_2_gold`).
+  - Phase 0's 404 came from guessing `_1_` for a round-2 window.
+  - The **main Ranked Cup board has no points.** It's scored with `EmptyScoringRules` (`pointsEarned` 0, `score` 1 for everyone), so the real standings are the tier boards, scored on tier-prefixed stats (`DIAMOND_PLACEMENT_STAT_INDEX`, …).
+  - Verified on all 8 tier boards of a live window: second capture, `test/fixtures/epic/second/`.
 
 ### Accounts
 - [x] Bulk lookup: `GET /account/api/public/account?accountId=…` (repeat the parameter) accepts **at most 100**. Sending 101 returns 400 `errors.com.epicgames.account.invalid_account_id_count`. Each entry is `{ id, displayName, externalAuths, links }`.

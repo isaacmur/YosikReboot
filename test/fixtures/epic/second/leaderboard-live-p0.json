@@ -1,0 +1,4684 @@
+{
+  "gameId": "Fortnite",
+  "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+  "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+  "page": 0,
+  "totalPages": 28,
+  "updatedTime": "2026-10-21T01:49:40.472Z",
+  "entries": [
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000000763"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 1,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000000763",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000706",
+          "endTime": "2026-10-21T01:23:29.928Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 6,
+            "TIME_ALIVE_STAT": 803,
+            "TEAM_ELIMS_STAT_INDEX": 13,
+            "DIAMOND_TIME_ALIVE_STAT": 803,
+            "PLACEMENT_TIEBREAKER_STAT": 34,
+            "DIAMOND_PLACEMENT_STAT_INDEX": 6,
+            "DIAMOND_TEAM_ELIMS_STAT_INDEX": 13,
+            "VICTORY_ROYALE_STAT": 0,
+            "DIAMOND_PLACEMENT_TIEBREAKER_STAT": 34,
+            "DIAMOND_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000522",
+          "endTime": "2026-10-21T01:38:23.228Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 10,
+            "TIME_ALIVE_STAT": 762,
+            "TEAM_ELIMS_STAT_INDEX": 6,
+            "DIAMOND_TIME_ALIVE_STAT": 762,
+            "PLACEMENT_TIEBREAKER_STAT": 30,
+            "DIAMOND_PLACEMENT_STAT_INDEX": 10,
+            "DIAMOND_TEAM_ELIMS_STAT_INDEX": 6,
+            "VICTORY_ROYALE_STAT": 0,
+            "DIAMOND_PLACEMENT_TIEBREAKER_STAT": 30,
+            "DIAMOND_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000763": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001317"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 2,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001317",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000722",
+          "endTime": "2026-10-21T01:25:43.198Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 36,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 128,
+            "SILVER_TIME_ALIVE_STAT": 128,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 4,
+            "SILVER_PLACEMENT_STAT_INDEX": 36,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 4,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 2,
+            "TEAM_ELIMS_STAT_INDEX": 2
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000000961"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 3,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000000961",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000556",
+          "endTime": "2026-10-21T01:16:22.728Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 6,
+            "TIME_ALIVE_STAT": 704,
+            "GOLD_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "GOLD_PLACEMENT_TIEBREAKER_STAT": 34,
+            "PLACEMENT_TIEBREAKER_STAT": 34,
+            "GOLD_TIME_ALIVE_STAT": 704,
+            "VICTORY_ROYALE_STAT": 0,
+            "GOLD_TEAM_ELIMS_STAT_INDEX": 8,
+            "GOLD_PLACEMENT_STAT_INDEX": 6,
+            "TEAM_ELIMS_STAT_INDEX": 8
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000569",
+          "endTime": "2026-10-21T01:34:20.090Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 2,
+            "TIME_ALIVE_STAT": 920,
+            "GOLD_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "GOLD_PLACEMENT_TIEBREAKER_STAT": 38,
+            "PLACEMENT_TIEBREAKER_STAT": 38,
+            "GOLD_TIME_ALIVE_STAT": 920,
+            "VICTORY_ROYALE_STAT": 0,
+            "GOLD_TEAM_ELIMS_STAT_INDEX": 7,
+            "GOLD_PLACEMENT_STAT_INDEX": 2,
+            "TEAM_ELIMS_STAT_INDEX": 7
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000001179",
+          "endTime": "2026-10-21T01:45:58.522Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 17,
+            "TIME_ALIVE_STAT": 497,
+            "GOLD_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "GOLD_PLACEMENT_TIEBREAKER_STAT": 23,
+            "PLACEMENT_TIEBREAKER_STAT": 23,
+            "GOLD_TIME_ALIVE_STAT": 497,
+            "VICTORY_ROYALE_STAT": 0,
+            "GOLD_TEAM_ELIMS_STAT_INDEX": 7,
+            "GOLD_PLACEMENT_STAT_INDEX": 17,
+            "TEAM_ELIMS_STAT_INDEX": 7
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000961": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001318"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 4,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001318",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000575",
+          "endTime": "2026-10-21T01:36:23.621Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 28,
+            "PLACEMENT_STAT_INDEX": 28,
+            "TIME_ALIVE_STAT": 288,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 288,
+            "PLACEMENT_TIEBREAKER_STAT": 12,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 12,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001319"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 5,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001319",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000582",
+          "endTime": "2026-10-21T01:15:12.060Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 22,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 400,
+            "SILVER_TIME_ALIVE_STAT": 400,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 18,
+            "SILVER_PLACEMENT_STAT_INDEX": 22,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 18,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 2,
+            "TEAM_ELIMS_STAT_INDEX": 2
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000645",
+          "endTime": "2026-10-21T01:31:11.951Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 8,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 836,
+            "SILVER_TIME_ALIVE_STAT": 836,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 32,
+            "SILVER_PLACEMENT_STAT_INDEX": 8,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 32,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 5,
+            "TEAM_ELIMS_STAT_INDEX": 5
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001320"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 6,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001320",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000531",
+          "endTime": "2026-10-21T01:42:32.497Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 12,
+            "PLACEMENT_STAT_INDEX": 12,
+            "TIME_ALIVE_STAT": 567,
+            "TEAM_ELIMS_STAT_INDEX": 4,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 567,
+            "PLACEMENT_TIEBREAKER_STAT": 28,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 28,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 4,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001321"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 7,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001321",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000494",
+          "endTime": "2026-10-21T01:25:50.673Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 26,
+            "PLACEMENT_STAT_INDEX": 26,
+            "TIME_ALIVE_STAT": 399,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 399,
+            "PLACEMENT_TIEBREAKER_STAT": 14,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 14,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001321": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000000520"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 8,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000000520",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000521",
+          "endTime": "2026-10-21T01:23:41.675Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 4,
+            "PLACEMENT_STAT_INDEX": 4,
+            "TIME_ALIVE_STAT": 699,
+            "TEAM_ELIMS_STAT_INDEX": 6,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 699,
+            "PLACEMENT_TIEBREAKER_STAT": 36,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 36,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 6,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000522",
+          "endTime": "2026-10-21T01:42:23.959Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 1,
+            "PLACEMENT_STAT_INDEX": 1,
+            "TIME_ALIVE_STAT": 1006,
+            "TEAM_ELIMS_STAT_INDEX": 9,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 1006,
+            "PLACEMENT_TIEBREAKER_STAT": 39,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 39,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 9,
+            "VICTORY_ROYALE_STAT": 1,
+            "BRONZE_VICTORY_ROYALE_STAT": 1
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001322"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 9,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001322",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000494",
+          "endTime": "2026-10-21T01:32:48.640Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 8,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 32,
+            "PLATINUM_TIME_ALIVE_STAT": 807,
+            "VICTORY_ROYALE_STAT": 0,
+            "PLATINUM_PLACEMENT_TIEBREAKER_STAT": 32,
+            "PLATINUM_TEAM_ELIMS_STAT_INDEX": 1,
+            "PLATINUM_PLACEMENT_STAT_INDEX": 8,
+            "TIME_ALIVE_STAT": 807,
+            "PLATINUM_VICTORY_ROYALE_STAT": 0,
+            "TEAM_ELIMS_STAT_INDEX": 1
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001322": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001323"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 10,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001323",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000771",
+          "endTime": "2026-10-21T01:25:19.916Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 17,
+            "PLACEMENT_STAT_INDEX": 17,
+            "TIME_ALIVE_STAT": 461,
+            "TEAM_ELIMS_STAT_INDEX": 2,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 461,
+            "PLACEMENT_TIEBREAKER_STAT": 23,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 23,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 2,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001323": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001324"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 11,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001324",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000494",
+          "endTime": "2026-10-21T01:34:03.489Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 5,
+            "PLACEMENT_STAT_INDEX": 5,
+            "TIME_ALIVE_STAT": 891,
+            "TEAM_ELIMS_STAT_INDEX": 3,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 891,
+            "PLACEMENT_TIEBREAKER_STAT": 35,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 35,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 3,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000537",
+          "endTime": "2026-10-21T01:48:14.265Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 18,
+            "PLACEMENT_STAT_INDEX": 18,
+            "TIME_ALIVE_STAT": 710,
+            "TEAM_ELIMS_STAT_INDEX": 4,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 710,
+            "PLACEMENT_TIEBREAKER_STAT": 22,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 22,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 4,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001324": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001325"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 12,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001325",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000792",
+          "endTime": "2026-10-21T01:39:17.184Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 31,
+            "TIME_ALIVE_STAT": 198,
+            "TEAM_ELIMS_STAT_INDEX": 1,
+            "DIAMOND_TIME_ALIVE_STAT": 198,
+            "PLACEMENT_TIEBREAKER_STAT": 9,
+            "DIAMOND_PLACEMENT_STAT_INDEX": 31,
+            "DIAMOND_TEAM_ELIMS_STAT_INDEX": 1,
+            "VICTORY_ROYALE_STAT": 0,
+            "DIAMOND_PLACEMENT_TIEBREAKER_STAT": 9,
+            "DIAMOND_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001325": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001326"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 13,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001326",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000571",
+          "endTime": "2026-10-21T01:08:57.777Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 27,
+            "PLACEMENT_STAT_INDEX": 27,
+            "TIME_ALIVE_STAT": 322,
+            "TEAM_ELIMS_STAT_INDEX": 3,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 322,
+            "PLACEMENT_TIEBREAKER_STAT": 13,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 13,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 3,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000521",
+          "endTime": "2026-10-21T01:19:48.376Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 13,
+            "PLACEMENT_STAT_INDEX": 13,
+            "TIME_ALIVE_STAT": 451,
+            "TEAM_ELIMS_STAT_INDEX": 4,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 451,
+            "PLACEMENT_TIEBREAKER_STAT": 27,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 27,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 4,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001326": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001327"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 14,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001327",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000515",
+          "endTime": "2026-10-21T01:27:40.984Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 13,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 529,
+            "SILVER_TIME_ALIVE_STAT": 529,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 27,
+            "SILVER_PLACEMENT_STAT_INDEX": 13,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 27,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 1,
+            "TEAM_ELIMS_STAT_INDEX": 1
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001327": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001328"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 15,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001328",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000606",
+          "endTime": "2026-10-21T01:30:55.436Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 23,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 17,
+            "PLATINUM_TIME_ALIVE_STAT": 390,
+            "VICTORY_ROYALE_STAT": 0,
+            "PLATINUM_PLACEMENT_TIEBREAKER_STAT": 17,
+            "PLATINUM_TEAM_ELIMS_STAT_INDEX": 1,
+            "PLATINUM_PLACEMENT_STAT_INDEX": 23,
+            "TIME_ALIVE_STAT": 390,
+            "PLATINUM_VICTORY_ROYALE_STAT": 0,
+            "TEAM_ELIMS_STAT_INDEX": 1
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000780",
+          "endTime": "2026-10-21T01:44:28.618Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 16,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 24,
+            "PLATINUM_TIME_ALIVE_STAT": 665,
+            "VICTORY_ROYALE_STAT": 0,
+            "PLATINUM_PLACEMENT_TIEBREAKER_STAT": 24,
+            "PLATINUM_TEAM_ELIMS_STAT_INDEX": 3,
+            "PLATINUM_PLACEMENT_STAT_INDEX": 16,
+            "TIME_ALIVE_STAT": 665,
+            "PLATINUM_VICTORY_ROYALE_STAT": 0,
+            "TEAM_ELIMS_STAT_INDEX": 3
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001328": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001329"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 16,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001329",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000738",
+          "endTime": "2026-10-21T01:20:10.046Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 26,
+            "TIME_ALIVE_STAT": 334,
+            "TEAM_ELIMS_STAT_INDEX": 3,
+            "DIAMOND_TIME_ALIVE_STAT": 334,
+            "PLACEMENT_TIEBREAKER_STAT": 14,
+            "DIAMOND_PLACEMENT_STAT_INDEX": 26,
+            "DIAMOND_TEAM_ELIMS_STAT_INDEX": 3,
+            "VICTORY_ROYALE_STAT": 0,
+            "DIAMOND_PLACEMENT_TIEBREAKER_STAT": 14,
+            "DIAMOND_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001329": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001394"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 17,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001394",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000777",
+          "endTime": "2026-10-21T01:48:52.700Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 9,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 31,
+            "PLATINUM_TIME_ALIVE_STAT": 683,
+            "VICTORY_ROYALE_STAT": 0,
+            "PLATINUM_PLACEMENT_TIEBREAKER_STAT": 31,
+            "PLATINUM_TEAM_ELIMS_STAT_INDEX": 1,
+            "PLATINUM_PLACEMENT_STAT_INDEX": 9,
+            "TIME_ALIVE_STAT": 683,
+            "PLATINUM_VICTORY_ROYALE_STAT": 0,
+            "TEAM_ELIMS_STAT_INDEX": 1
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001330"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 18,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001330",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000504",
+          "endTime": "2026-10-21T01:24:34.082Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 16,
+            "PLACEMENT_STAT_INDEX": 16,
+            "TIME_ALIVE_STAT": 628,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 628,
+            "PLACEMENT_TIEBREAKER_STAT": 24,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 24,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000550",
+          "endTime": "2026-10-21T01:39:33.067Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 12,
+            "PLACEMENT_STAT_INDEX": 12,
+            "TIME_ALIVE_STAT": 685,
+            "TEAM_ELIMS_STAT_INDEX": 1,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 685,
+            "PLACEMENT_TIEBREAKER_STAT": 28,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 28,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 1,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001330": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001331"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 19,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001331",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000796",
+          "endTime": "2026-10-21T01:34:11.638Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 36,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 176,
+            "SILVER_TIME_ALIVE_STAT": 176,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 4,
+            "SILVER_PLACEMENT_STAT_INDEX": 36,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 4,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 1,
+            "TEAM_ELIMS_STAT_INDEX": 1
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001331": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001332"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 20,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001332",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000507",
+          "endTime": "2026-10-21T01:35:49.742Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 2,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 898,
+            "SILVER_TIME_ALIVE_STAT": 898,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 38,
+            "SILVER_PLACEMENT_STAT_INDEX": 2,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 38,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 1,
+            "TEAM_ELIMS_STAT_INDEX": 1
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001332": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001333"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 21,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001333",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000528",
+          "endTime": "2026-10-21T01:33:06.430Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 11,
+            "PLACEMENT_STAT_INDEX": 11,
+            "TIME_ALIVE_STAT": 667,
+            "TEAM_ELIMS_STAT_INDEX": 2,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 667,
+            "PLACEMENT_TIEBREAKER_STAT": 29,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 29,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 2,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001395"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 22,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001395",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000650",
+          "endTime": "2026-10-21T01:48:38.398Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 24,
+            "PLACEMENT_STAT_INDEX": 24,
+            "TIME_ALIVE_STAT": 370,
+            "TEAM_ELIMS_STAT_INDEX": 2,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 370,
+            "PLACEMENT_TIEBREAKER_STAT": 16,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 16,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 2,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001395": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001008"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 23,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001008",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000754",
+          "endTime": "2026-10-21T01:20:53.960Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 5,
+            "TIME_ALIVE_STAT": 832,
+            "GOLD_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "GOLD_PLACEMENT_TIEBREAKER_STAT": 35,
+            "PLACEMENT_TIEBREAKER_STAT": 35,
+            "GOLD_TIME_ALIVE_STAT": 832,
+            "VICTORY_ROYALE_STAT": 0,
+            "GOLD_TEAM_ELIMS_STAT_INDEX": 3,
+            "GOLD_PLACEMENT_STAT_INDEX": 5,
+            "TEAM_ELIMS_STAT_INDEX": 3
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000677",
+          "endTime": "2026-10-21T01:26:19.757Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 31,
+            "TIME_ALIVE_STAT": 180,
+            "GOLD_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "GOLD_PLACEMENT_TIEBREAKER_STAT": 9,
+            "PLACEMENT_TIEBREAKER_STAT": 9,
+            "GOLD_TIME_ALIVE_STAT": 180,
+            "VICTORY_ROYALE_STAT": 0,
+            "GOLD_TEAM_ELIMS_STAT_INDEX": 1,
+            "GOLD_PLACEMENT_STAT_INDEX": 31,
+            "TEAM_ELIMS_STAT_INDEX": 1
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001334"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 24,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001334",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000512",
+          "endTime": "2026-10-21T01:21:16.357Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 7,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 740,
+            "SILVER_TIME_ALIVE_STAT": 740,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 33,
+            "SILVER_PLACEMENT_STAT_INDEX": 7,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 33,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 5,
+            "TEAM_ELIMS_STAT_INDEX": 5
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001335"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 25,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001335",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000588",
+          "endTime": "2026-10-21T01:42:24.726Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 22,
+            "PLACEMENT_STAT_INDEX": 22,
+            "TIME_ALIVE_STAT": 442,
+            "TEAM_ELIMS_STAT_INDEX": 3,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 442,
+            "PLACEMENT_TIEBREAKER_STAT": 18,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 18,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 3,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001335": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001336"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 26,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001336",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000001073",
+          "endTime": "2026-10-21T01:44:28.418Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 24,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 424,
+            "SILVER_TIME_ALIVE_STAT": 424,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 16,
+            "SILVER_PLACEMENT_STAT_INDEX": 24,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 16,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 2,
+            "TEAM_ELIMS_STAT_INDEX": 2
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001336": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000000853"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 27,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000000853",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000746",
+          "endTime": "2026-10-21T01:40:44.093Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 13,
+            "TIME_ALIVE_STAT": 689,
+            "TEAM_ELIMS_STAT_INDEX": 8,
+            "DIAMOND_TIME_ALIVE_STAT": 689,
+            "PLACEMENT_TIEBREAKER_STAT": 27,
+            "DIAMOND_PLACEMENT_STAT_INDEX": 13,
+            "DIAMOND_TEAM_ELIMS_STAT_INDEX": 8,
+            "VICTORY_ROYALE_STAT": 0,
+            "DIAMOND_PLACEMENT_TIEBREAKER_STAT": 27,
+            "DIAMOND_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000853": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001337"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 28,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001337",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000564",
+          "endTime": "2026-10-21T01:32:42.783Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 9,
+            "PLACEMENT_STAT_INDEX": 9,
+            "TIME_ALIVE_STAT": 829,
+            "TEAM_ELIMS_STAT_INDEX": 1,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 829,
+            "PLACEMENT_TIEBREAKER_STAT": 31,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 31,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 1,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001337": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001338"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 29,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001338",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000497",
+          "endTime": "2026-10-21T01:12:33.047Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 11,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 554,
+            "SILVER_TIME_ALIVE_STAT": 554,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 29,
+            "SILVER_PLACEMENT_STAT_INDEX": 11,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 29,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 4,
+            "TEAM_ELIMS_STAT_INDEX": 4
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001338": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001339"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 30,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001339",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000549",
+          "endTime": "2026-10-21T01:18:49.909Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 18,
+            "PLACEMENT_STAT_INDEX": 18,
+            "TIME_ALIVE_STAT": 480,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 480,
+            "PLACEMENT_TIEBREAKER_STAT": 22,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 22,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001340"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 31,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001340",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000677",
+          "endTime": "2026-10-21T01:30:51.554Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 19,
+            "PLACEMENT_STAT_INDEX": 19,
+            "TIME_ALIVE_STAT": 470,
+            "TEAM_ELIMS_STAT_INDEX": 1,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 470,
+            "PLACEMENT_TIEBREAKER_STAT": 21,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 21,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 1,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000573",
+          "endTime": "2026-10-21T01:44:52.567Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 12,
+            "PLACEMENT_STAT_INDEX": 12,
+            "TIME_ALIVE_STAT": 693,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 693,
+            "PLACEMENT_TIEBREAKER_STAT": 28,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 28,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001340": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000000862"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 32,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000000862",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000605",
+          "endTime": "2026-10-21T01:16:57.847Z",
+          "trackedStats": {
+            "ELITE_VICTORY_ROYALE_STAT": 0,
+            "PLACEMENT_STAT_INDEX": 4,
+            "TIME_ALIVE_STAT": 880,
+            "ELITE_TIME_ALIVE_STAT": 880,
+            "TEAM_ELIMS_STAT_INDEX": 3,
+            "MATCH_PLAYED_STAT": 1,
+            "ELITE_TEAM_ELIMS_STAT_INDEX": 3,
+            "ELITE_PLACEMENT_TIEBREAKER_STAT": 36,
+            "VICTORY_ROYALE_STAT": 0,
+            "PLACEMENT_TIEBREAKER_STAT": 36,
+            "ELITE_PLACEMENT_STAT_INDEX": 4
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000718",
+          "endTime": "2026-10-21T01:27:50.734Z",
+          "trackedStats": {
+            "ELITE_VICTORY_ROYALE_STAT": 0,
+            "PLACEMENT_STAT_INDEX": 15,
+            "TIME_ALIVE_STAT": 527,
+            "ELITE_TIME_ALIVE_STAT": 527,
+            "TEAM_ELIMS_STAT_INDEX": 4,
+            "MATCH_PLAYED_STAT": 1,
+            "ELITE_TEAM_ELIMS_STAT_INDEX": 4,
+            "ELITE_PLACEMENT_TIEBREAKER_STAT": 25,
+            "VICTORY_ROYALE_STAT": 0,
+            "PLACEMENT_TIEBREAKER_STAT": 25,
+            "ELITE_PLACEMENT_STAT_INDEX": 15
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000692",
+          "endTime": "2026-10-21T01:44:13.533Z",
+          "trackedStats": {
+            "ELITE_VICTORY_ROYALE_STAT": 0,
+            "PLACEMENT_STAT_INDEX": 4,
+            "TIME_ALIVE_STAT": 845,
+            "ELITE_TIME_ALIVE_STAT": 845,
+            "TEAM_ELIMS_STAT_INDEX": 4,
+            "MATCH_PLAYED_STAT": 1,
+            "ELITE_TEAM_ELIMS_STAT_INDEX": 4,
+            "ELITE_PLACEMENT_TIEBREAKER_STAT": 36,
+            "VICTORY_ROYALE_STAT": 0,
+            "PLACEMENT_TIEBREAKER_STAT": 36,
+            "ELITE_PLACEMENT_STAT_INDEX": 4
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001341"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 33,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001341",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000674",
+          "endTime": "2026-10-21T01:28:08.251Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 27,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 344,
+            "SILVER_TIME_ALIVE_STAT": 344,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 13,
+            "SILVER_PLACEMENT_STAT_INDEX": 27,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 13,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 0,
+            "TEAM_ELIMS_STAT_INDEX": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000000643"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 34,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000000643",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000549",
+          "endTime": "2026-10-21T01:22:46.311Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 8,
+            "PLACEMENT_STAT_INDEX": 8,
+            "TIME_ALIVE_STAT": 721,
+            "TEAM_ELIMS_STAT_INDEX": 6,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 721,
+            "PLACEMENT_TIEBREAKER_STAT": 32,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 32,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 6,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000550",
+          "endTime": "2026-10-21T01:37:54.634Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 14,
+            "PLACEMENT_STAT_INDEX": 14,
+            "TIME_ALIVE_STAT": 585,
+            "TEAM_ELIMS_STAT_INDEX": 6,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 585,
+            "PLACEMENT_TIEBREAKER_STAT": 26,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 26,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 6,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001342"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 35,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001342",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000615",
+          "endTime": "2026-10-21T01:18:11.510Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 19,
+            "PLACEMENT_STAT_INDEX": 19,
+            "TIME_ALIVE_STAT": 341,
+            "TEAM_ELIMS_STAT_INDEX": 4,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 341,
+            "PLACEMENT_TIEBREAKER_STAT": 21,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 21,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 4,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000741",
+          "endTime": "2026-10-21T01:24:12.054Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 30,
+            "PLACEMENT_STAT_INDEX": 30,
+            "TIME_ALIVE_STAT": 195,
+            "TEAM_ELIMS_STAT_INDEX": 2,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 195,
+            "PLACEMENT_TIEBREAKER_STAT": 10,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 10,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 2,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000583",
+          "endTime": "2026-10-21T01:36:43.138Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 12,
+            "PLACEMENT_STAT_INDEX": 12,
+            "TIME_ALIVE_STAT": 649,
+            "TEAM_ELIMS_STAT_INDEX": 3,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 649,
+            "PLACEMENT_TIEBREAKER_STAT": 28,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 28,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 3,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000684",
+          "endTime": "2026-10-21T01:43:48.420Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 34,
+            "PLACEMENT_STAT_INDEX": 34,
+            "TIME_ALIVE_STAT": 291,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 291,
+            "PLACEMENT_TIEBREAKER_STAT": 6,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 6,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000000798"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 36,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000000798",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000713",
+          "endTime": "2026-10-21T01:26:55.983Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 5,
+            "TIME_ALIVE_STAT": 794,
+            "TEAM_ELIMS_STAT_INDEX": 5,
+            "DIAMOND_TIME_ALIVE_STAT": 794,
+            "PLACEMENT_TIEBREAKER_STAT": 35,
+            "DIAMOND_PLACEMENT_STAT_INDEX": 5,
+            "DIAMOND_TEAM_ELIMS_STAT_INDEX": 5,
+            "VICTORY_ROYALE_STAT": 0,
+            "DIAMOND_PLACEMENT_TIEBREAKER_STAT": 35,
+            "DIAMOND_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000746",
+          "endTime": "2026-10-21T01:36:25.823Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 17,
+            "TIME_ALIVE_STAT": 415,
+            "TEAM_ELIMS_STAT_INDEX": 2,
+            "DIAMOND_TIME_ALIVE_STAT": 415,
+            "PLACEMENT_TIEBREAKER_STAT": 23,
+            "DIAMOND_PLACEMENT_STAT_INDEX": 17,
+            "DIAMOND_TEAM_ELIMS_STAT_INDEX": 2,
+            "VICTORY_ROYALE_STAT": 0,
+            "DIAMOND_PLACEMENT_TIEBREAKER_STAT": 23,
+            "DIAMOND_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000799",
+          "endTime": "2026-10-21T01:47:27.394Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 19,
+            "TIME_ALIVE_STAT": 527,
+            "TEAM_ELIMS_STAT_INDEX": 3,
+            "DIAMOND_TIME_ALIVE_STAT": 527,
+            "PLACEMENT_TIEBREAKER_STAT": 21,
+            "DIAMOND_PLACEMENT_STAT_INDEX": 19,
+            "DIAMOND_TEAM_ELIMS_STAT_INDEX": 3,
+            "VICTORY_ROYALE_STAT": 0,
+            "DIAMOND_PLACEMENT_TIEBREAKER_STAT": 21,
+            "DIAMOND_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000798": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001344"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 37,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001344",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000583",
+          "endTime": "2026-10-21T01:33:59.673Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 19,
+            "TIME_ALIVE_STAT": 495,
+            "GOLD_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "GOLD_PLACEMENT_TIEBREAKER_STAT": 21,
+            "PLACEMENT_TIEBREAKER_STAT": 21,
+            "GOLD_TIME_ALIVE_STAT": 495,
+            "VICTORY_ROYALE_STAT": 0,
+            "GOLD_TEAM_ELIMS_STAT_INDEX": 2,
+            "GOLD_PLACEMENT_STAT_INDEX": 19,
+            "TEAM_ELIMS_STAT_INDEX": 2
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000537",
+          "endTime": "2026-10-21T01:44:34.304Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 30,
+            "TIME_ALIVE_STAT": 481,
+            "GOLD_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "GOLD_PLACEMENT_TIEBREAKER_STAT": 10,
+            "PLACEMENT_TIEBREAKER_STAT": 10,
+            "GOLD_TIME_ALIVE_STAT": 481,
+            "VICTORY_ROYALE_STAT": 0,
+            "GOLD_TEAM_ELIMS_STAT_INDEX": 2,
+            "GOLD_PLACEMENT_STAT_INDEX": 30,
+            "TEAM_ELIMS_STAT_INDEX": 2
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001345"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 38,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001345",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000497",
+          "endTime": "2026-10-21T01:06:06.927Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 26,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 182,
+            "SILVER_TIME_ALIVE_STAT": 182,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 14,
+            "SILVER_PLACEMENT_STAT_INDEX": 26,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 14,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 2,
+            "TEAM_ELIMS_STAT_INDEX": 2
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000500",
+          "endTime": "2026-10-21T01:22:10.136Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 4,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 776,
+            "SILVER_TIME_ALIVE_STAT": 776,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 36,
+            "SILVER_PLACEMENT_STAT_INDEX": 4,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 36,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 3,
+            "TEAM_ELIMS_STAT_INDEX": 3
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000592",
+          "endTime": "2026-10-21T01:27:24.004Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 36,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 157,
+            "SILVER_TIME_ALIVE_STAT": 157,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 4,
+            "SILVER_PLACEMENT_STAT_INDEX": 36,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 4,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 1,
+            "TEAM_ELIMS_STAT_INDEX": 1
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000794",
+          "endTime": "2026-10-21T01:39:26.119Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 22,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 387,
+            "SILVER_TIME_ALIVE_STAT": 387,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 18,
+            "SILVER_PLACEMENT_STAT_INDEX": 22,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 18,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 1,
+            "TEAM_ELIMS_STAT_INDEX": 1
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000650",
+          "endTime": "2026-10-21T01:49:29.871Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 21,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 421,
+            "SILVER_TIME_ALIVE_STAT": 421,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 19,
+            "SILVER_PLACEMENT_STAT_INDEX": 21,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 19,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 2,
+            "TEAM_ELIMS_STAT_INDEX": 2
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001345": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001346"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 39,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001346",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000530",
+          "endTime": "2026-10-21T01:21:49.568Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 27,
+            "PLACEMENT_STAT_INDEX": 27,
+            "TIME_ALIVE_STAT": 256,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 256,
+            "PLACEMENT_TIEBREAKER_STAT": 13,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 13,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001347"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 40,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001347",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000503",
+          "endTime": "2026-10-21T01:15:06.913Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 9,
+            "PLACEMENT_STAT_INDEX": 9,
+            "TIME_ALIVE_STAT": 705,
+            "TEAM_ELIMS_STAT_INDEX": 6,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 705,
+            "PLACEMENT_TIEBREAKER_STAT": 31,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 31,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 6,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001348"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 41,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001348",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000572",
+          "endTime": "2026-10-21T01:25:52.880Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 27,
+            "TIME_ALIVE_STAT": 310,
+            "GOLD_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "GOLD_PLACEMENT_TIEBREAKER_STAT": 13,
+            "PLACEMENT_TIEBREAKER_STAT": 13,
+            "GOLD_TIME_ALIVE_STAT": 310,
+            "VICTORY_ROYALE_STAT": 0,
+            "GOLD_TEAM_ELIMS_STAT_INDEX": 1,
+            "GOLD_PLACEMENT_STAT_INDEX": 27,
+            "TEAM_ELIMS_STAT_INDEX": 1
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001348": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000000852"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 42,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000000852",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000521",
+          "endTime": "2026-10-21T01:21:52.500Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 7,
+            "TIME_ALIVE_STAT": 596,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "DIAMOND_TIME_ALIVE_STAT": 596,
+            "PLACEMENT_TIEBREAKER_STAT": 33,
+            "DIAMOND_PLACEMENT_STAT_INDEX": 7,
+            "DIAMOND_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0,
+            "DIAMOND_PLACEMENT_TIEBREAKER_STAT": 33,
+            "DIAMOND_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000722",
+          "endTime": "2026-10-21T01:26:42.755Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 32,
+            "TIME_ALIVE_STAT": 191,
+            "TEAM_ELIMS_STAT_INDEX": 1,
+            "DIAMOND_TIME_ALIVE_STAT": 191,
+            "PLACEMENT_TIEBREAKER_STAT": 8,
+            "DIAMOND_PLACEMENT_STAT_INDEX": 32,
+            "DIAMOND_TEAM_ELIMS_STAT_INDEX": 1,
+            "VICTORY_ROYALE_STAT": 0,
+            "DIAMOND_PLACEMENT_TIEBREAKER_STAT": 8,
+            "DIAMOND_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000697",
+          "endTime": "2026-10-21T01:35:08.322Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 31,
+            "TIME_ALIVE_STAT": 208,
+            "TEAM_ELIMS_STAT_INDEX": 2,
+            "DIAMOND_TIME_ALIVE_STAT": 208,
+            "PLACEMENT_TIEBREAKER_STAT": 9,
+            "DIAMOND_PLACEMENT_STAT_INDEX": 31,
+            "DIAMOND_TEAM_ELIMS_STAT_INDEX": 2,
+            "VICTORY_ROYALE_STAT": 0,
+            "DIAMOND_PLACEMENT_TIEBREAKER_STAT": 9,
+            "DIAMOND_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001349"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 43,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001349",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000757",
+          "endTime": "2026-10-21T01:14:52.095Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 28,
+            "TIME_ALIVE_STAT": 241,
+            "GOLD_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "GOLD_PLACEMENT_TIEBREAKER_STAT": 12,
+            "PLACEMENT_TIEBREAKER_STAT": 12,
+            "GOLD_TIME_ALIVE_STAT": 241,
+            "VICTORY_ROYALE_STAT": 0,
+            "GOLD_TEAM_ELIMS_STAT_INDEX": 0,
+            "GOLD_PLACEMENT_STAT_INDEX": 28,
+            "TEAM_ELIMS_STAT_INDEX": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000680",
+          "endTime": "2026-10-21T01:21:29.182Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 32,
+            "TIME_ALIVE_STAT": 232,
+            "GOLD_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "GOLD_PLACEMENT_TIEBREAKER_STAT": 8,
+            "PLACEMENT_TIEBREAKER_STAT": 8,
+            "GOLD_TIME_ALIVE_STAT": 232,
+            "VICTORY_ROYALE_STAT": 0,
+            "GOLD_TEAM_ELIMS_STAT_INDEX": 0,
+            "GOLD_PLACEMENT_STAT_INDEX": 32,
+            "TEAM_ELIMS_STAT_INDEX": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000590",
+          "endTime": "2026-10-21T01:28:09.589Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 36,
+            "TIME_ALIVE_STAT": 129,
+            "GOLD_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "GOLD_PLACEMENT_TIEBREAKER_STAT": 4,
+            "PLACEMENT_TIEBREAKER_STAT": 4,
+            "GOLD_TIME_ALIVE_STAT": 129,
+            "VICTORY_ROYALE_STAT": 0,
+            "GOLD_TEAM_ELIMS_STAT_INDEX": 0,
+            "GOLD_PLACEMENT_STAT_INDEX": 36,
+            "TEAM_ELIMS_STAT_INDEX": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000585",
+          "endTime": "2026-10-21T01:47:53.614Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 3,
+            "TIME_ALIVE_STAT": 877,
+            "GOLD_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "GOLD_PLACEMENT_TIEBREAKER_STAT": 37,
+            "PLACEMENT_TIEBREAKER_STAT": 37,
+            "GOLD_TIME_ALIVE_STAT": 877,
+            "VICTORY_ROYALE_STAT": 0,
+            "GOLD_TEAM_ELIMS_STAT_INDEX": 2,
+            "GOLD_PLACEMENT_STAT_INDEX": 3,
+            "TEAM_ELIMS_STAT_INDEX": 2
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001349": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001350"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 44,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001350",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000761",
+          "endTime": "2026-10-21T01:37:43.671Z",
+          "trackedStats": {
+            "ELITE_VICTORY_ROYALE_STAT": 0,
+            "PLACEMENT_STAT_INDEX": 23,
+            "TIME_ALIVE_STAT": 376,
+            "ELITE_TIME_ALIVE_STAT": 376,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "ELITE_TEAM_ELIMS_STAT_INDEX": 0,
+            "ELITE_PLACEMENT_TIEBREAKER_STAT": 17,
+            "VICTORY_ROYALE_STAT": 0,
+            "PLACEMENT_TIEBREAKER_STAT": 17,
+            "ELITE_PLACEMENT_STAT_INDEX": 23
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001350": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000000976"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 45,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000000976",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000757",
+          "endTime": "2026-10-21T01:16:40.232Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 22,
+            "TIME_ALIVE_STAT": 361,
+            "GOLD_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "GOLD_PLACEMENT_TIEBREAKER_STAT": 18,
+            "PLACEMENT_TIEBREAKER_STAT": 18,
+            "GOLD_TIME_ALIVE_STAT": 361,
+            "VICTORY_ROYALE_STAT": 0,
+            "GOLD_TEAM_ELIMS_STAT_INDEX": 3,
+            "GOLD_PLACEMENT_STAT_INDEX": 22,
+            "TEAM_ELIMS_STAT_INDEX": 3
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000658",
+          "endTime": "2026-10-21T01:34:55.474Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 1,
+            "TIME_ALIVE_STAT": 944,
+            "GOLD_VICTORY_ROYALE_STAT": 1,
+            "MATCH_PLAYED_STAT": 1,
+            "GOLD_PLACEMENT_TIEBREAKER_STAT": 39,
+            "PLACEMENT_TIEBREAKER_STAT": 39,
+            "GOLD_TIME_ALIVE_STAT": 944,
+            "VICTORY_ROYALE_STAT": 1,
+            "GOLD_TEAM_ELIMS_STAT_INDEX": 8,
+            "GOLD_PLACEMENT_STAT_INDEX": 1,
+            "TEAM_ELIMS_STAT_INDEX": 8
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001351"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 46,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001351",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000497",
+          "endTime": "2026-10-21T01:08:42.094Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 19,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 335,
+            "SILVER_TIME_ALIVE_STAT": 335,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 21,
+            "SILVER_PLACEMENT_STAT_INDEX": 19,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 21,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 0,
+            "TEAM_ELIMS_STAT_INDEX": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001351": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001352"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 47,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001352",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000533",
+          "endTime": "2026-10-21T01:18:53.660Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 22,
+            "PLACEMENT_STAT_INDEX": 22,
+            "TIME_ALIVE_STAT": 410,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 410,
+            "PLACEMENT_TIEBREAKER_STAT": 18,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 18,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001352": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001353"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 48,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001353",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000713",
+          "endTime": "2026-10-21T01:23:25.395Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 12,
+            "TIME_ALIVE_STAT": 581,
+            "GOLD_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "GOLD_PLACEMENT_TIEBREAKER_STAT": 28,
+            "PLACEMENT_TIEBREAKER_STAT": 28,
+            "GOLD_TIME_ALIVE_STAT": 581,
+            "VICTORY_ROYALE_STAT": 0,
+            "GOLD_TEAM_ELIMS_STAT_INDEX": 1,
+            "GOLD_PLACEMENT_STAT_INDEX": 12,
+            "TEAM_ELIMS_STAT_INDEX": 1
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001353": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001354"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 49,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001354",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000524",
+          "endTime": "2026-10-21T01:08:47.343Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 33,
+            "PLACEMENT_STAT_INDEX": 33,
+            "TIME_ALIVE_STAT": 65,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 65,
+            "PLACEMENT_TIEBREAKER_STAT": 7,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 7,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000518",
+          "endTime": "2026-10-21T01:19:10.534Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 21,
+            "PLACEMENT_STAT_INDEX": 21,
+            "TIME_ALIVE_STAT": 425,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 425,
+            "PLACEMENT_TIEBREAKER_STAT": 19,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 19,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001355"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 50,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001355",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000553",
+          "endTime": "2026-10-21T01:14:34.932Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 19,
+            "PLACEMENT_STAT_INDEX": 19,
+            "TIME_ALIVE_STAT": 446,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 446,
+            "PLACEMENT_TIEBREAKER_STAT": 21,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 21,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001355": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001038"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 51,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001038",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000521",
+          "endTime": "2026-10-21T01:19:28.828Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 14,
+            "TIME_ALIVE_STAT": 435,
+            "GOLD_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "GOLD_PLACEMENT_TIEBREAKER_STAT": 26,
+            "PLACEMENT_TIEBREAKER_STAT": 26,
+            "GOLD_TIME_ALIVE_STAT": 435,
+            "VICTORY_ROYALE_STAT": 0,
+            "GOLD_TEAM_ELIMS_STAT_INDEX": 7,
+            "GOLD_PLACEMENT_STAT_INDEX": 14,
+            "TEAM_ELIMS_STAT_INDEX": 7
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001038": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001356"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 52,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001356",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000564",
+          "endTime": "2026-10-21T01:23:13.338Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 31,
+            "PLACEMENT_STAT_INDEX": 31,
+            "TIME_ALIVE_STAT": 258,
+            "TEAM_ELIMS_STAT_INDEX": 1,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 258,
+            "PLACEMENT_TIEBREAKER_STAT": 9,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 9,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 1,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000525",
+          "endTime": "2026-10-21T01:29:59.507Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 26,
+            "PLACEMENT_STAT_INDEX": 26,
+            "TIME_ALIVE_STAT": 263,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 263,
+            "PLACEMENT_TIEBREAKER_STAT": 14,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 14,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001005"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 53,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001005",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000524",
+          "endTime": "2026-10-21T01:21:31.984Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 5,
+            "TIME_ALIVE_STAT": 831,
+            "GOLD_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "GOLD_PLACEMENT_TIEBREAKER_STAT": 35,
+            "PLACEMENT_TIEBREAKER_STAT": 35,
+            "GOLD_TIME_ALIVE_STAT": 831,
+            "VICTORY_ROYALE_STAT": 0,
+            "GOLD_TEAM_ELIMS_STAT_INDEX": 4,
+            "GOLD_PLACEMENT_STAT_INDEX": 5,
+            "TEAM_ELIMS_STAT_INDEX": 4
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001005": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001190"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 54,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001190",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000540",
+          "endTime": "2026-10-21T01:27:25.888Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 7,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 803,
+            "SILVER_TIME_ALIVE_STAT": 803,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 33,
+            "SILVER_PLACEMENT_STAT_INDEX": 7,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 33,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 7,
+            "TEAM_ELIMS_STAT_INDEX": 7
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000541",
+          "endTime": "2026-10-21T01:44:50.216Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 4,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 886,
+            "SILVER_TIME_ALIVE_STAT": 886,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 36,
+            "SILVER_PLACEMENT_STAT_INDEX": 4,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 36,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 4,
+            "TEAM_ELIMS_STAT_INDEX": 4
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001190": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001357"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 55,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001357",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000796",
+          "endTime": "2026-10-21T01:34:34.737Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 34,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 202,
+            "SILVER_TIME_ALIVE_STAT": 202,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 6,
+            "SILVER_PLACEMENT_STAT_INDEX": 34,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 6,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 1,
+            "TEAM_ELIMS_STAT_INDEX": 1
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001357": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001358"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 56,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001358",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000718",
+          "endTime": "2026-10-21T01:25:55.701Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 24,
+            "TIME_ALIVE_STAT": 424,
+            "TEAM_ELIMS_STAT_INDEX": 3,
+            "DIAMOND_TIME_ALIVE_STAT": 424,
+            "PLACEMENT_TIEBREAKER_STAT": 16,
+            "DIAMOND_PLACEMENT_STAT_INDEX": 24,
+            "DIAMOND_TEAM_ELIMS_STAT_INDEX": 3,
+            "VICTORY_ROYALE_STAT": 0,
+            "DIAMOND_PLACEMENT_TIEBREAKER_STAT": 16,
+            "DIAMOND_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000766",
+          "endTime": "2026-10-21T01:36:54.640Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 16,
+            "TIME_ALIVE_STAT": 506,
+            "TEAM_ELIMS_STAT_INDEX": 6,
+            "DIAMOND_TIME_ALIVE_STAT": 506,
+            "PLACEMENT_TIEBREAKER_STAT": 24,
+            "DIAMOND_PLACEMENT_STAT_INDEX": 16,
+            "DIAMOND_TEAM_ELIMS_STAT_INDEX": 6,
+            "VICTORY_ROYALE_STAT": 0,
+            "DIAMOND_PLACEMENT_TIEBREAKER_STAT": 24,
+            "DIAMOND_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001359"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 57,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001359",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000001360",
+          "endTime": "2026-10-21T01:44:25.338Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 33,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 149,
+            "SILVER_TIME_ALIVE_STAT": 149,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 7,
+            "SILVER_PLACEMENT_STAT_INDEX": 33,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 7,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 0,
+            "TEAM_ELIMS_STAT_INDEX": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001359": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001361"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 58,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001361",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000512",
+          "endTime": "2026-10-21T01:16:04.386Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 21,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 421,
+            "SILVER_TIME_ALIVE_STAT": 421,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 19,
+            "SILVER_PLACEMENT_STAT_INDEX": 21,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 19,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 3,
+            "TEAM_ELIMS_STAT_INDEX": 3
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001361": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001362"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 59,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001362",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000546",
+          "endTime": "2026-10-21T01:37:09.904Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 15,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 546,
+            "SILVER_TIME_ALIVE_STAT": 546,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 25,
+            "SILVER_PLACEMENT_STAT_INDEX": 15,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 25,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 0,
+            "TEAM_ELIMS_STAT_INDEX": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000001363",
+          "endTime": "2026-10-21T01:44:34.331Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 32,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 170,
+            "SILVER_TIME_ALIVE_STAT": 170,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 8,
+            "SILVER_PLACEMENT_STAT_INDEX": 32,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 8,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 1,
+            "TEAM_ELIMS_STAT_INDEX": 1
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001364"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 60,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001364",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000001207",
+          "endTime": "2026-10-21T01:45:04.763Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 22,
+            "TIME_ALIVE_STAT": 442,
+            "GOLD_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "GOLD_PLACEMENT_TIEBREAKER_STAT": 18,
+            "PLACEMENT_TIEBREAKER_STAT": 18,
+            "GOLD_TIME_ALIVE_STAT": 442,
+            "VICTORY_ROYALE_STAT": 0,
+            "GOLD_TEAM_ELIMS_STAT_INDEX": 3,
+            "GOLD_PLACEMENT_STAT_INDEX": 22,
+            "TEAM_ELIMS_STAT_INDEX": 3
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001365"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 61,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001365",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000742",
+          "endTime": "2026-10-21T01:42:47.869Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 19,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 21,
+            "PLATINUM_TIME_ALIVE_STAT": 406,
+            "VICTORY_ROYALE_STAT": 0,
+            "PLATINUM_PLACEMENT_TIEBREAKER_STAT": 21,
+            "PLATINUM_TEAM_ELIMS_STAT_INDEX": 5,
+            "PLATINUM_PLACEMENT_STAT_INDEX": 19,
+            "TIME_ALIVE_STAT": 406,
+            "PLATINUM_VICTORY_ROYALE_STAT": 0,
+            "TEAM_ELIMS_STAT_INDEX": 5
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001365": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001366"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 62,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001366",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000541",
+          "endTime": "2026-10-21T01:45:22.855Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 3,
+            "PLACEMENT_STAT_INDEX": 3,
+            "TIME_ALIVE_STAT": 940,
+            "TEAM_ELIMS_STAT_INDEX": 4,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 940,
+            "PLACEMENT_TIEBREAKER_STAT": 37,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 37,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 4,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001366": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001367"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 63,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001367",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000794",
+          "endTime": "2026-10-21T01:41:44.541Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 17,
+            "PLACEMENT_STAT_INDEX": 17,
+            "TIME_ALIVE_STAT": 518,
+            "TEAM_ELIMS_STAT_INDEX": 2,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 518,
+            "PLACEMENT_TIEBREAKER_STAT": 23,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 23,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 2,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001367": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000000842"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 64,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000000842",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000658",
+          "endTime": "2026-10-21T01:33:14.708Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 5,
+            "TIME_ALIVE_STAT": 840,
+            "TEAM_ELIMS_STAT_INDEX": 4,
+            "DIAMOND_TIME_ALIVE_STAT": 840,
+            "PLACEMENT_TIEBREAKER_STAT": 35,
+            "DIAMOND_PLACEMENT_STAT_INDEX": 5,
+            "DIAMOND_TEAM_ELIMS_STAT_INDEX": 4,
+            "VICTORY_ROYALE_STAT": 0,
+            "DIAMOND_PLACEMENT_TIEBREAKER_STAT": 35,
+            "DIAMOND_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000842": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001368"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 65,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001368",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000518",
+          "endTime": "2026-10-21T01:18:31.992Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 23,
+            "PLACEMENT_STAT_INDEX": 23,
+            "TIME_ALIVE_STAT": 387,
+            "TEAM_ELIMS_STAT_INDEX": 1,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 387,
+            "PLACEMENT_TIEBREAKER_STAT": 17,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 17,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 1,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000528",
+          "endTime": "2026-10-21T01:31:42.100Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 13,
+            "PLACEMENT_STAT_INDEX": 13,
+            "TIME_ALIVE_STAT": 590,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 590,
+            "PLACEMENT_TIEBREAKER_STAT": 27,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 27,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000001204",
+          "endTime": "2026-10-21T01:46:17.480Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 10,
+            "PLACEMENT_STAT_INDEX": 10,
+            "TIME_ALIVE_STAT": 691,
+            "TEAM_ELIMS_STAT_INDEX": 1,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 691,
+            "PLACEMENT_TIEBREAKER_STAT": 30,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 30,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 1,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001368": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001061"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 66,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001061",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000571",
+          "endTime": "2026-10-21T01:07:51.642Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 32,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 8,
+            "PLATINUM_TIME_ALIVE_STAT": 264,
+            "VICTORY_ROYALE_STAT": 0,
+            "PLATINUM_PLACEMENT_TIEBREAKER_STAT": 8,
+            "PLATINUM_TEAM_ELIMS_STAT_INDEX": 4,
+            "PLATINUM_PLACEMENT_STAT_INDEX": 32,
+            "TIME_ALIVE_STAT": 264,
+            "PLATINUM_VICTORY_ROYALE_STAT": 0,
+            "TEAM_ELIMS_STAT_INDEX": 4
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000533",
+          "endTime": "2026-10-21T01:26:35.411Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 3,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 37,
+            "PLATINUM_TIME_ALIVE_STAT": 875,
+            "VICTORY_ROYALE_STAT": 0,
+            "PLATINUM_PLACEMENT_TIEBREAKER_STAT": 37,
+            "PLATINUM_TEAM_ELIMS_STAT_INDEX": 8,
+            "PLATINUM_PLACEMENT_STAT_INDEX": 3,
+            "TIME_ALIVE_STAT": 875,
+            "PLATINUM_VICTORY_ROYALE_STAT": 0,
+            "TEAM_ELIMS_STAT_INDEX": 8
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000519",
+          "endTime": "2026-10-21T01:45:33.660Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 1,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 39,
+            "PLATINUM_TIME_ALIVE_STAT": 948,
+            "VICTORY_ROYALE_STAT": 1,
+            "PLATINUM_PLACEMENT_TIEBREAKER_STAT": 39,
+            "PLATINUM_TEAM_ELIMS_STAT_INDEX": 10,
+            "PLATINUM_PLACEMENT_STAT_INDEX": 1,
+            "TIME_ALIVE_STAT": 948,
+            "PLATINUM_VICTORY_ROYALE_STAT": 1,
+            "TEAM_ELIMS_STAT_INDEX": 10
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001061": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001237"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 67,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001237",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000619",
+          "endTime": "2026-10-21T01:46:35.374Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 4,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 899,
+            "SILVER_TIME_ALIVE_STAT": 899,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 36,
+            "SILVER_PLACEMENT_STAT_INDEX": 4,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 36,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 11,
+            "TEAM_ELIMS_STAT_INDEX": 11
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001237": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001370"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 68,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001370",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000616",
+          "endTime": "2026-10-21T01:33:00.909Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 19,
+            "TIME_ALIVE_STAT": 616,
+            "GOLD_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "GOLD_PLACEMENT_TIEBREAKER_STAT": 21,
+            "PLACEMENT_TIEBREAKER_STAT": 21,
+            "GOLD_TIME_ALIVE_STAT": 616,
+            "VICTORY_ROYALE_STAT": 0,
+            "GOLD_TEAM_ELIMS_STAT_INDEX": 1,
+            "GOLD_PLACEMENT_STAT_INDEX": 19,
+            "TEAM_ELIMS_STAT_INDEX": 1
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000537",
+          "endTime": "2026-10-21T01:46:30.262Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 23,
+            "TIME_ALIVE_STAT": 600,
+            "GOLD_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "GOLD_PLACEMENT_TIEBREAKER_STAT": 17,
+            "PLACEMENT_TIEBREAKER_STAT": 17,
+            "GOLD_TIME_ALIVE_STAT": 600,
+            "VICTORY_ROYALE_STAT": 0,
+            "GOLD_TEAM_ELIMS_STAT_INDEX": 1,
+            "GOLD_PLACEMENT_STAT_INDEX": 23,
+            "TEAM_ELIMS_STAT_INDEX": 1
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001370": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000000638"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 69,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000000638",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000491",
+          "endTime": "2026-10-21T01:35:52.341Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 6,
+            "PLACEMENT_STAT_INDEX": 6,
+            "TIME_ALIVE_STAT": 749,
+            "TEAM_ELIMS_STAT_INDEX": 11,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 749,
+            "PLACEMENT_TIEBREAKER_STAT": 34,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 34,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 11,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000639",
+          "endTime": "2026-10-21T01:44:32.232Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 28,
+            "PLACEMENT_STAT_INDEX": 28,
+            "TIME_ALIVE_STAT": 322,
+            "TEAM_ELIMS_STAT_INDEX": 6,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 322,
+            "PLACEMENT_TIEBREAKER_STAT": 12,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 12,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 6,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000638": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001371"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 70,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001371",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000530",
+          "endTime": "2026-10-21T01:30:53.260Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 5,
+            "PLACEMENT_STAT_INDEX": 5,
+            "TIME_ALIVE_STAT": 801,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 801,
+            "PLACEMENT_TIEBREAKER_STAT": 35,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 35,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001371": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000000968"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 71,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000000968",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000686",
+          "endTime": "2026-10-21T01:22:20.002Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 6,
+            "TIME_ALIVE_STAT": 786,
+            "GOLD_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "GOLD_PLACEMENT_TIEBREAKER_STAT": 34,
+            "PLACEMENT_TIEBREAKER_STAT": 34,
+            "GOLD_TIME_ALIVE_STAT": 786,
+            "VICTORY_ROYALE_STAT": 0,
+            "GOLD_TEAM_ELIMS_STAT_INDEX": 3,
+            "GOLD_PLACEMENT_STAT_INDEX": 6,
+            "TEAM_ELIMS_STAT_INDEX": 3
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000592",
+          "endTime": "2026-10-21T01:39:15.850Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 4,
+            "TIME_ALIVE_STAT": 888,
+            "GOLD_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "GOLD_PLACEMENT_TIEBREAKER_STAT": 36,
+            "PLACEMENT_TIEBREAKER_STAT": 36,
+            "GOLD_TIME_ALIVE_STAT": 888,
+            "VICTORY_ROYALE_STAT": 0,
+            "GOLD_TEAM_ELIMS_STAT_INDEX": 2,
+            "GOLD_PLACEMENT_STAT_INDEX": 4,
+            "TEAM_ELIMS_STAT_INDEX": 2
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000650",
+          "endTime": "2026-10-21T01:46:10.537Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 27,
+            "TIME_ALIVE_STAT": 223,
+            "GOLD_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "GOLD_PLACEMENT_TIEBREAKER_STAT": 13,
+            "PLACEMENT_TIEBREAKER_STAT": 13,
+            "GOLD_TIME_ALIVE_STAT": 223,
+            "VICTORY_ROYALE_STAT": 0,
+            "GOLD_TEAM_ELIMS_STAT_INDEX": 0,
+            "GOLD_PLACEMENT_STAT_INDEX": 27,
+            "TEAM_ELIMS_STAT_INDEX": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001372"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 72,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001372",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000493",
+          "endTime": "2026-10-21T01:06:11.623Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 32,
+            "PLACEMENT_STAT_INDEX": 32,
+            "TIME_ALIVE_STAT": 159,
+            "TEAM_ELIMS_STAT_INDEX": 1,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 159,
+            "PLACEMENT_TIEBREAKER_STAT": 8,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 8,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 1,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000512",
+          "endTime": "2026-10-21T01:18:46.742Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 14,
+            "PLACEMENT_STAT_INDEX": 14,
+            "TIME_ALIVE_STAT": 572,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 572,
+            "PLACEMENT_TIEBREAKER_STAT": 26,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 26,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000528",
+          "endTime": "2026-10-21T01:25:37.792Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 28,
+            "PLACEMENT_STAT_INDEX": 28,
+            "TIME_ALIVE_STAT": 207,
+            "TEAM_ELIMS_STAT_INDEX": 1,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 207,
+            "PLACEMENT_TIEBREAKER_STAT": 12,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 12,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 1,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000546",
+          "endTime": "2026-10-21T01:31:01.300Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 34,
+            "PLACEMENT_STAT_INDEX": 34,
+            "TIME_ALIVE_STAT": 160,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 160,
+            "PLACEMENT_TIEBREAKER_STAT": 6,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 6,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000585",
+          "endTime": "2026-10-21T01:39:25.186Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 21,
+            "PLACEMENT_STAT_INDEX": 21,
+            "TIME_ALIVE_STAT": 354,
+            "TEAM_ELIMS_STAT_INDEX": 1,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 354,
+            "PLACEMENT_TIEBREAKER_STAT": 19,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 19,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 1,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001372": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000000897"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 73,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000000897",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000717",
+          "endTime": "2026-10-21T01:17:23.306Z",
+          "trackedStats": {
+            "ELITE_VICTORY_ROYALE_STAT": 0,
+            "PLACEMENT_STAT_INDEX": 7,
+            "TIME_ALIVE_STAT": 750,
+            "ELITE_TIME_ALIVE_STAT": 750,
+            "TEAM_ELIMS_STAT_INDEX": 11,
+            "MATCH_PLAYED_STAT": 1,
+            "ELITE_TEAM_ELIMS_STAT_INDEX": 11,
+            "ELITE_PLACEMENT_TIEBREAKER_STAT": 33,
+            "VICTORY_ROYALE_STAT": 0,
+            "PLACEMENT_TIEBREAKER_STAT": 33,
+            "ELITE_PLACEMENT_STAT_INDEX": 7
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001373"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 74,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001373",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000507",
+          "endTime": "2026-10-21T01:25:35.614Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 27,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 254,
+            "SILVER_TIME_ALIVE_STAT": 254,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 13,
+            "SILVER_PLACEMENT_STAT_INDEX": 27,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 13,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 2,
+            "TEAM_ELIMS_STAT_INDEX": 2
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001373": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001128"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 75,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001128",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000662",
+          "endTime": "2026-10-21T01:14:22.636Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 21,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 19,
+            "PLATINUM_TIME_ALIVE_STAT": 357,
+            "VICTORY_ROYALE_STAT": 0,
+            "PLATINUM_PLACEMENT_TIEBREAKER_STAT": 19,
+            "PLATINUM_TEAM_ELIMS_STAT_INDEX": 0,
+            "PLATINUM_PLACEMENT_STAT_INDEX": 21,
+            "TIME_ALIVE_STAT": 357,
+            "PLATINUM_VICTORY_ROYALE_STAT": 0,
+            "TEAM_ELIMS_STAT_INDEX": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000645",
+          "endTime": "2026-10-21T01:33:05.310Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 3,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 37,
+            "PLATINUM_TIME_ALIVE_STAT": 935,
+            "VICTORY_ROYALE_STAT": 0,
+            "PLATINUM_PLACEMENT_TIEBREAKER_STAT": 37,
+            "PLATINUM_TEAM_ELIMS_STAT_INDEX": 3,
+            "PLATINUM_PLACEMENT_STAT_INDEX": 3,
+            "TIME_ALIVE_STAT": 935,
+            "PLATINUM_VICTORY_ROYALE_STAT": 0,
+            "TEAM_ELIMS_STAT_INDEX": 3
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001128": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001374"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 76,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001374",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000648",
+          "endTime": "2026-10-21T01:42:30.319Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 25,
+            "PLACEMENT_STAT_INDEX": 25,
+            "TIME_ALIVE_STAT": 372,
+            "TEAM_ELIMS_STAT_INDEX": 2,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 372,
+            "PLACEMENT_TIEBREAKER_STAT": 15,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 15,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 2,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001375"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 77,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001375",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000615",
+          "endTime": "2026-10-21T01:19:14.008Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 17,
+            "PLACEMENT_STAT_INDEX": 17,
+            "TIME_ALIVE_STAT": 392,
+            "TEAM_ELIMS_STAT_INDEX": 2,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 392,
+            "PLACEMENT_TIEBREAKER_STAT": 23,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 23,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 2,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000624",
+          "endTime": "2026-10-21T01:27:33.441Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 27,
+            "PLACEMENT_STAT_INDEX": 27,
+            "TIME_ALIVE_STAT": 302,
+            "TEAM_ELIMS_STAT_INDEX": 2,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 302,
+            "PLACEMENT_TIEBREAKER_STAT": 13,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 13,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 2,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001375": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001085"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 78,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001085",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000490",
+          "endTime": "2026-10-21T01:20:37.389Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 2,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 38,
+            "PLATINUM_TIME_ALIVE_STAT": 902,
+            "VICTORY_ROYALE_STAT": 0,
+            "PLATINUM_PLACEMENT_TIEBREAKER_STAT": 38,
+            "PLATINUM_TEAM_ELIMS_STAT_INDEX": 1,
+            "PLATINUM_PLACEMENT_STAT_INDEX": 2,
+            "TIME_ALIVE_STAT": 902,
+            "PLATINUM_VICTORY_ROYALE_STAT": 0,
+            "TEAM_ELIMS_STAT_INDEX": 1
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000554",
+          "endTime": "2026-10-21T01:38:38.081Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 3,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 37,
+            "PLATINUM_TIME_ALIVE_STAT": 864,
+            "VICTORY_ROYALE_STAT": 0,
+            "PLATINUM_PLACEMENT_TIEBREAKER_STAT": 37,
+            "PLATINUM_TEAM_ELIMS_STAT_INDEX": 0,
+            "PLATINUM_PLACEMENT_STAT_INDEX": 3,
+            "TIME_ALIVE_STAT": 864,
+            "PLATINUM_VICTORY_ROYALE_STAT": 0,
+            "TEAM_ELIMS_STAT_INDEX": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001085": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001376"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 79,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001376",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000706",
+          "endTime": "2026-10-21T01:18:46.472Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 12,
+            "TIME_ALIVE_STAT": 520,
+            "TEAM_ELIMS_STAT_INDEX": 6,
+            "DIAMOND_TIME_ALIVE_STAT": 520,
+            "PLACEMENT_TIEBREAKER_STAT": 28,
+            "DIAMOND_PLACEMENT_STAT_INDEX": 12,
+            "DIAMOND_TEAM_ELIMS_STAT_INDEX": 6,
+            "VICTORY_ROYALE_STAT": 0,
+            "DIAMOND_PLACEMENT_TIEBREAKER_STAT": 28,
+            "DIAMOND_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001377"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 80,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001377",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000687",
+          "endTime": "2026-10-21T01:24:38.511Z",
+          "trackedStats": {
+            "ELITE_VICTORY_ROYALE_STAT": 0,
+            "PLACEMENT_STAT_INDEX": 23,
+            "TIME_ALIVE_STAT": 294,
+            "ELITE_TIME_ALIVE_STAT": 294,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "ELITE_TEAM_ELIMS_STAT_INDEX": 0,
+            "ELITE_PLACEMENT_TIEBREAKER_STAT": 17,
+            "VICTORY_ROYALE_STAT": 0,
+            "PLACEMENT_TIEBREAKER_STAT": 17,
+            "ELITE_PLACEMENT_STAT_INDEX": 23
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001070"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 81,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001070",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000657",
+          "endTime": "2026-10-21T01:10:52.711Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 28,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 12,
+            "PLATINUM_TIME_ALIVE_STAT": 316,
+            "VICTORY_ROYALE_STAT": 0,
+            "PLATINUM_PLACEMENT_TIEBREAKER_STAT": 12,
+            "PLATINUM_TEAM_ELIMS_STAT_INDEX": 2,
+            "PLATINUM_PLACEMENT_STAT_INDEX": 28,
+            "TIME_ALIVE_STAT": 316,
+            "PLATINUM_VICTORY_ROYALE_STAT": 0,
+            "TEAM_ELIMS_STAT_INDEX": 2
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000713",
+          "endTime": "2026-10-21T01:26:05.606Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 6,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 34,
+            "PLATINUM_TIME_ALIVE_STAT": 738,
+            "VICTORY_ROYALE_STAT": 0,
+            "PLATINUM_PLACEMENT_TIEBREAKER_STAT": 34,
+            "PLATINUM_TEAM_ELIMS_STAT_INDEX": 9,
+            "PLATINUM_PLACEMENT_STAT_INDEX": 6,
+            "TIME_ALIVE_STAT": 738,
+            "PLATINUM_VICTORY_ROYALE_STAT": 0,
+            "TEAM_ELIMS_STAT_INDEX": 9
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000766",
+          "endTime": "2026-10-21T01:42:43.949Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 6,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 34,
+            "PLATINUM_TIME_ALIVE_STAT": 859,
+            "VICTORY_ROYALE_STAT": 0,
+            "PLATINUM_PLACEMENT_TIEBREAKER_STAT": 34,
+            "PLATINUM_TEAM_ELIMS_STAT_INDEX": 9,
+            "PLATINUM_PLACEMENT_STAT_INDEX": 6,
+            "TIME_ALIVE_STAT": 859,
+            "PLATINUM_VICTORY_ROYALE_STAT": 0,
+            "TEAM_ELIMS_STAT_INDEX": 9
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001070": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001378"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 82,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001378",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000600",
+          "endTime": "2026-10-21T01:40:54.314Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 37,
+            "PLACEMENT_STAT_INDEX": 37,
+            "TIME_ALIVE_STAT": 52,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 52,
+            "PLACEMENT_TIEBREAKER_STAT": 3,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 3,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001378": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001262"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 83,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001262",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000562",
+          "endTime": "2026-10-21T01:28:20.366Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 11,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 646,
+            "SILVER_TIME_ALIVE_STAT": 646,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 29,
+            "SILVER_PLACEMENT_STAT_INDEX": 11,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 29,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 12,
+            "TEAM_ELIMS_STAT_INDEX": 12
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000780",
+          "endTime": "2026-10-21T01:36:20.581Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 30,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 201,
+            "SILVER_TIME_ALIVE_STAT": 201,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 10,
+            "SILVER_PLACEMENT_STAT_INDEX": 30,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 10,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 3,
+            "TEAM_ELIMS_STAT_INDEX": 3
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001262": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001379"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 84,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001379",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000761",
+          "endTime": "2026-10-21T01:32:53.416Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 38,
+            "PLACEMENT_STAT_INDEX": 38,
+            "TIME_ALIVE_STAT": 79,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 79,
+            "PLACEMENT_TIEBREAKER_STAT": 2,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 2,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000792",
+          "endTime": "2026-10-21T01:42:40.128Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 23,
+            "PLACEMENT_STAT_INDEX": 23,
+            "TIME_ALIVE_STAT": 406,
+            "TEAM_ELIMS_STAT_INDEX": 2,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 406,
+            "PLACEMENT_TIEBREAKER_STAT": 17,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 17,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 2,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001379": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001094"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 85,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001094",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000543",
+          "endTime": "2026-10-21T01:27:25.153Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 7,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 33,
+            "PLATINUM_TIME_ALIVE_STAT": 799,
+            "VICTORY_ROYALE_STAT": 0,
+            "PLATINUM_PLACEMENT_TIEBREAKER_STAT": 33,
+            "PLATINUM_TEAM_ELIMS_STAT_INDEX": 6,
+            "PLATINUM_PLACEMENT_STAT_INDEX": 7,
+            "TIME_ALIVE_STAT": 799,
+            "PLATINUM_VICTORY_ROYALE_STAT": 0,
+            "TEAM_ELIMS_STAT_INDEX": 6
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000575",
+          "endTime": "2026-10-21T01:43:54.685Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 11,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 29,
+            "PLATINUM_TIME_ALIVE_STAT": 756,
+            "VICTORY_ROYALE_STAT": 0,
+            "PLATINUM_PLACEMENT_TIEBREAKER_STAT": 29,
+            "PLATINUM_TEAM_ELIMS_STAT_INDEX": 2,
+            "PLATINUM_PLACEMENT_STAT_INDEX": 11,
+            "TIME_ALIVE_STAT": 756,
+            "PLATINUM_VICTORY_ROYALE_STAT": 0,
+            "TEAM_ELIMS_STAT_INDEX": 2
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001380"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 86,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001380",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000746",
+          "endTime": "2026-10-21T01:31:43.816Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 33,
+            "TIME_ALIVE_STAT": 148,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "DIAMOND_TIME_ALIVE_STAT": 148,
+            "PLACEMENT_TIEBREAKER_STAT": 7,
+            "DIAMOND_PLACEMENT_STAT_INDEX": 33,
+            "DIAMOND_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0,
+            "DIAMOND_PLACEMENT_TIEBREAKER_STAT": 7,
+            "DIAMOND_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001380": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001381"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 87,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001381",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000658",
+          "endTime": "2026-10-21T01:20:26.061Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 37,
+            "TIME_ALIVE_STAT": 72,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "DIAMOND_TIME_ALIVE_STAT": 72,
+            "PLACEMENT_TIEBREAKER_STAT": 3,
+            "DIAMOND_PLACEMENT_STAT_INDEX": 37,
+            "DIAMOND_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0,
+            "DIAMOND_PLACEMENT_TIEBREAKER_STAT": 3,
+            "DIAMOND_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001381": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001382"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 88,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001382",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000984",
+          "endTime": "2026-10-21T01:40:17.468Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 9,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 747,
+            "SILVER_TIME_ALIVE_STAT": 747,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 31,
+            "SILVER_PLACEMENT_STAT_INDEX": 9,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 31,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 8,
+            "TEAM_ELIMS_STAT_INDEX": 8
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001382": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001383"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 89,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001383",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000543",
+          "endTime": "2026-10-21T01:16:04.849Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 35,
+            "PLACEMENT_STAT_INDEX": 35,
+            "TIME_ALIVE_STAT": 128,
+            "TEAM_ELIMS_STAT_INDEX": 1,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 128,
+            "PLACEMENT_TIEBREAKER_STAT": 5,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 5,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 1,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000564",
+          "endTime": "2026-10-21T01:26:52.180Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 22,
+            "PLACEMENT_STAT_INDEX": 22,
+            "TIME_ALIVE_STAT": 482,
+            "TEAM_ELIMS_STAT_INDEX": 2,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 482,
+            "PLACEMENT_TIEBREAKER_STAT": 18,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 18,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 2,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000516",
+          "endTime": "2026-10-21T01:42:50.676Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 7,
+            "PLACEMENT_STAT_INDEX": 7,
+            "TIME_ALIVE_STAT": 785,
+            "TEAM_ELIMS_STAT_INDEX": 3,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 785,
+            "PLACEMENT_TIEBREAKER_STAT": 33,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 33,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 3,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001383": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001384"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 90,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001384",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000515",
+          "endTime": "2026-10-21T01:24:22.967Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 20,
+            "PLACEMENT_STAT_INDEX": 20,
+            "TIME_ALIVE_STAT": 323,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 323,
+            "PLACEMENT_TIEBREAKER_STAT": 20,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 20,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001385"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 91,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001385",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000594",
+          "endTime": "2026-10-21T01:13:45.761Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 20,
+            "TIME_ALIVE_STAT": 416,
+            "TEAM_ELIMS_STAT_INDEX": 4,
+            "DIAMOND_TIME_ALIVE_STAT": 416,
+            "PLACEMENT_TIEBREAKER_STAT": 20,
+            "DIAMOND_PLACEMENT_STAT_INDEX": 20,
+            "DIAMOND_TEAM_ELIMS_STAT_INDEX": 4,
+            "VICTORY_ROYALE_STAT": 0,
+            "DIAMOND_PLACEMENT_TIEBREAKER_STAT": 20,
+            "DIAMOND_VICTORY_ROYALE_STAT": 0,
+            "MATCH_PLAYED_STAT": 1
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001385": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001386"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 92,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001386",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000543",
+          "endTime": "2026-10-21T01:26:38.339Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 10,
+            "PLACEMENT_STAT_INDEX": 10,
+            "TIME_ALIVE_STAT": 761,
+            "TEAM_ELIMS_STAT_INDEX": 7,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 761,
+            "PLACEMENT_TIEBREAKER_STAT": 30,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 30,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 7,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001386": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001387"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 93,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001387",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000513",
+          "endTime": "2026-10-21T01:41:59.587Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 4,
+            "PLACEMENT_STAT_INDEX": 4,
+            "TIME_ALIVE_STAT": 930,
+            "TEAM_ELIMS_STAT_INDEX": 6,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 930,
+            "PLACEMENT_TIEBREAKER_STAT": 36,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 36,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 6,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001387": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001388"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 94,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001388",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000696",
+          "endTime": "2026-10-21T01:22:29.388Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 22,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 352,
+            "SILVER_TIME_ALIVE_STAT": 352,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 18,
+            "SILVER_PLACEMENT_STAT_INDEX": 22,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 18,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 2,
+            "TEAM_ELIMS_STAT_INDEX": 2
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001388": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001389"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 95,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001389",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000662",
+          "endTime": "2026-10-21T01:09:04.049Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 34,
+            "SILVER_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 49,
+            "SILVER_TIME_ALIVE_STAT": 49,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 6,
+            "SILVER_PLACEMENT_STAT_INDEX": 34,
+            "SILVER_PLACEMENT_TIEBREAKER_STAT": 6,
+            "VICTORY_ROYALE_STAT": 0,
+            "SILVER_TEAM_ELIMS_STAT_INDEX": 0,
+            "TEAM_ELIMS_STAT_INDEX": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001389": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001390"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 96,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001390",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000662",
+          "endTime": "2026-10-21T01:17:40.641Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 16,
+            "PLACEMENT_STAT_INDEX": 16,
+            "TIME_ALIVE_STAT": 550,
+            "TEAM_ELIMS_STAT_INDEX": 1,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 550,
+            "PLACEMENT_TIEBREAKER_STAT": 24,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 24,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 1,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000687",
+          "endTime": "2026-10-21T01:28:05.440Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 18,
+            "PLACEMENT_STAT_INDEX": 18,
+            "TIME_ALIVE_STAT": 506,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 506,
+            "PLACEMENT_TIEBREAKER_STAT": 22,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 22,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001390": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001278"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 97,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001278",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000605",
+          "endTime": "2026-10-21T01:06:32.893Z",
+          "trackedStats": {
+            "UNREAL_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 255,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 7,
+            "UNREAL_TIME_ALIVE_STAT": 255,
+            "VICTORY_ROYALE_STAT": 0,
+            "UNREAL_PLACEMENT_TIEBREAKER_STAT": 7,
+            "PLACEMENT_STAT_INDEX": 33,
+            "UNREAL_TEAM_ELIMS_STAT_INDEX": 3,
+            "UNREAL_PLACEMENT_STAT_INDEX": 33,
+            "TEAM_ELIMS_STAT_INDEX": 3
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000686",
+          "endTime": "2026-10-21T01:24:22.681Z",
+          "trackedStats": {
+            "UNREAL_VICTORY_ROYALE_STAT": 1,
+            "TIME_ALIVE_STAT": 924,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 39,
+            "UNREAL_TIME_ALIVE_STAT": 924,
+            "VICTORY_ROYALE_STAT": 1,
+            "UNREAL_PLACEMENT_TIEBREAKER_STAT": 39,
+            "PLACEMENT_STAT_INDEX": 1,
+            "UNREAL_TEAM_ELIMS_STAT_INDEX": 13,
+            "UNREAL_PLACEMENT_STAT_INDEX": 1,
+            "TEAM_ELIMS_STAT_INDEX": 13
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000702",
+          "endTime": "2026-10-21T01:42:18.200Z",
+          "trackedStats": {
+            "UNREAL_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 889,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 37,
+            "UNREAL_TIME_ALIVE_STAT": 889,
+            "VICTORY_ROYALE_STAT": 0,
+            "UNREAL_PLACEMENT_TIEBREAKER_STAT": 37,
+            "PLACEMENT_STAT_INDEX": 3,
+            "UNREAL_TEAM_ELIMS_STAT_INDEX": 12,
+            "UNREAL_PLACEMENT_STAT_INDEX": 3,
+            "TEAM_ELIMS_STAT_INDEX": 12
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001391"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 98,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001391",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000794",
+          "endTime": "2026-10-21T01:38:22.972Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 29,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 11,
+            "PLATINUM_TIME_ALIVE_STAT": 324,
+            "VICTORY_ROYALE_STAT": 0,
+            "PLATINUM_PLACEMENT_TIEBREAKER_STAT": 11,
+            "PLATINUM_TEAM_ELIMS_STAT_INDEX": 2,
+            "PLATINUM_PLACEMENT_STAT_INDEX": 29,
+            "TIME_ALIVE_STAT": 324,
+            "PLATINUM_VICTORY_ROYALE_STAT": 0,
+            "TEAM_ELIMS_STAT_INDEX": 2
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000567",
+          "endTime": "2026-10-21T01:47:19.887Z",
+          "trackedStats": {
+            "PLACEMENT_STAT_INDEX": 21,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 19,
+            "PLATINUM_TIME_ALIVE_STAT": 423,
+            "VICTORY_ROYALE_STAT": 0,
+            "PLATINUM_PLACEMENT_TIEBREAKER_STAT": 19,
+            "PLATINUM_TEAM_ELIMS_STAT_INDEX": 5,
+            "PLATINUM_PLACEMENT_STAT_INDEX": 21,
+            "TIME_ALIVE_STAT": 423,
+            "PLATINUM_VICTORY_ROYALE_STAT": 0,
+            "TEAM_ELIMS_STAT_INDEX": 5
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001391": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001392"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 99,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001392",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000001131",
+          "endTime": "2026-10-21T01:44:10.238Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 21,
+            "PLACEMENT_STAT_INDEX": 21,
+            "TIME_ALIVE_STAT": 571,
+            "TEAM_ELIMS_STAT_INDEX": 2,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 571,
+            "PLACEMENT_TIEBREAKER_STAT": 19,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 19,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 2,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001392": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW",
+      "teamAccountIds": [
+        "f0000000000000000000000000001393"
+      ],
+      "pointsEarned": 0,
+      "score": 1,
+      "rank": 100,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000001393",
+      "pointBreakdown": {},
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000619",
+          "endTime": "2026-10-21T01:38:37.667Z",
+          "trackedStats": {
+            "BRONZE_PLACEMENT_STAT_INDEX": 25,
+            "PLACEMENT_STAT_INDEX": 25,
+            "TIME_ALIVE_STAT": 401,
+            "TEAM_ELIMS_STAT_INDEX": 1,
+            "MATCH_PLAYED_STAT": 1,
+            "BRONZE_TIME_ALIVE_STAT": 401,
+            "PLACEMENT_TIEBREAKER_STAT": 15,
+            "BRONZE_PLACEMENT_TIEBREAKER_STAT": 15,
+            "BRONZE_TEAM_ELIMS_STAT_INDEX": 1,
+            "VICTORY_ROYALE_STAT": 0,
+            "BRONZE_VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000001393": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    }
+  ],
+  "liveSessions": {}
+}

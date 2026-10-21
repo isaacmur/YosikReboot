@@ -1,0 +1,3748 @@
+{
+  "gameId": "Fortnite",
+  "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+  "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+  "page": 0,
+  "totalPages": 1,
+  "updatedTime": "2026-10-21T01:48:23.204Z",
+  "entries": [
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000675"
+      ],
+      "pointsEarned": 70,
+      "score": 308258944386479,
+      "rank": 1,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000000675",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:7": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:14": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:1": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:5": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:11": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:2": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:10": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:4": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:13": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:12": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:8": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 36,
+          "pointsEarned": 36
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:3": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:9": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:6": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000521",
+          "endTime": "2026-10-21T01:24:37.213Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 39,
+            "PLACEMENT_STAT_INDEX": 1,
+            "CHAMPION_VICTORY_ROYALE_STAT": 1,
+            "TIME_ALIVE_STAT": 759,
+            "CHAMPION_TIME_ALIVE_STAT": 759,
+            "TEAM_ELIMS_STAT_INDEX": 21,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 39,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 1,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 21,
+            "VICTORY_ROYALE_STAT": 1
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000513",
+          "endTime": "2026-10-21T01:38:13Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 33,
+            "PLACEMENT_STAT_INDEX": 7,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 695,
+            "CHAMPION_TIME_ALIVE_STAT": 695,
+            "TEAM_ELIMS_STAT_INDEX": 15,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 33,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 7,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 15,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000675": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000676"
+      ],
+      "pointsEarned": 50,
+      "score": 219959382632106,
+      "rank": 2,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000000676",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:7": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:14": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:5": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 17,
+          "pointsEarned": 17
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:11": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:10": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:4": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:13": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:12": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:8": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:9": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:6": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000657",
+          "endTime": "2026-10-21T01:20:03.882Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 35,
+            "PLACEMENT_STAT_INDEX": 5,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 885,
+            "CHAMPION_TIME_ALIVE_STAT": 885,
+            "TEAM_ELIMS_STAT_INDEX": 8,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 35,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 5,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 8,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000677",
+          "endTime": "2026-10-21T01:36:36.208Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 36,
+            "PLACEMENT_STAT_INDEX": 4,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 821,
+            "CHAMPION_TIME_ALIVE_STAT": 821,
+            "TEAM_ELIMS_STAT_INDEX": 9,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 36,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 4,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 9,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000676": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000678"
+      ],
+      "pointsEarned": 50,
+      "score": 219933677409587,
+      "rank": 3,
+      "percentile": 0,
+      "teamId": "f0000000000000000000000000000678",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:7": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:14": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:5": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:11": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:2": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:10": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:4": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:13": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:12": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:8": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 14,
+          "pointsEarned": 14
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:3": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:9": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:6": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000679",
+          "endTime": "2026-10-21T01:15:51.669Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 36,
+            "PLACEMENT_STAT_INDEX": 4,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 848,
+            "CHAMPION_TIME_ALIVE_STAT": 848,
+            "TEAM_ELIMS_STAT_INDEX": 6,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 36,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 4,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 6,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000680",
+          "endTime": "2026-10-21T01:32:42.029Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 38,
+            "PLACEMENT_STAT_INDEX": 2,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 901,
+            "CHAMPION_TIME_ALIVE_STAT": 901,
+            "TEAM_ELIMS_STAT_INDEX": 6,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 38,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 2,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 6,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000681",
+          "endTime": "2026-10-21T01:41:10.035Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 14,
+            "PLACEMENT_STAT_INDEX": 26,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 247,
+            "CHAMPION_TIME_ALIVE_STAT": 247,
+            "TEAM_ELIMS_STAT_INDEX": 2,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 14,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 26,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 2,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000682"
+      ],
+      "pointsEarned": 49,
+      "score": 215549052401090,
+      "rank": 4,
+      "percentile": 0.1,
+      "teamId": "f0000000000000000000000000000682",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 3,
+          "pointsEarned": 3
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:7": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:14": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:5": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:11": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:10": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:4": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:13": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:12": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 3,
+          "pointsEarned": 3
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:8": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 20,
+          "pointsEarned": 20
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:3": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:9": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:6": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000594",
+          "endTime": "2026-10-21T01:19:13.405Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 28,
+            "PLACEMENT_STAT_INDEX": 12,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 743,
+            "CHAMPION_TIME_ALIVE_STAT": 743,
+            "TEAM_ELIMS_STAT_INDEX": 8,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 28,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 12,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 8,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000683",
+          "endTime": "2026-10-21T01:36:39.409Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 37,
+            "PLACEMENT_STAT_INDEX": 3,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 909,
+            "CHAMPION_TIME_ALIVE_STAT": 909,
+            "TEAM_ELIMS_STAT_INDEX": 10,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 37,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 3,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 10,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000684",
+          "endTime": "2026-10-21T01:48:15.237Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 21,
+            "PLACEMENT_STAT_INDEX": 19,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 560,
+            "CHAMPION_TIME_ALIVE_STAT": 560,
+            "TEAM_ELIMS_STAT_INDEX": 2,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 21,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 19,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 2,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000682": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000685"
+      ],
+      "pointsEarned": 44,
+      "score": 193540902188432,
+      "rank": 5,
+      "percentile": 0.1,
+      "teamId": "f0000000000000000000000000000685",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 3,
+          "pointsEarned": 3
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 3,
+          "pointsEarned": 3
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:7": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:14": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 3,
+          "pointsEarned": 3
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 12,
+          "pointsEarned": 12
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 3,
+          "pointsEarned": 3
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:11": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:9": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 3,
+          "pointsEarned": 3
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:10": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:13": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:12": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 3,
+          "pointsEarned": 3
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:8": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000686",
+          "endTime": "2026-10-21T01:17:56.749Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 25,
+            "PLACEMENT_STAT_INDEX": 15,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 539,
+            "CHAMPION_TIME_ALIVE_STAT": 539,
+            "TEAM_ELIMS_STAT_INDEX": 4,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 25,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 15,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 4,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000687",
+          "endTime": "2026-10-21T01:32:48.445Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 33,
+            "PLACEMENT_STAT_INDEX": 7,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 792,
+            "CHAMPION_TIME_ALIVE_STAT": 792,
+            "TEAM_ELIMS_STAT_INDEX": 4,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 33,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 7,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 4,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000646",
+          "endTime": "2026-10-21T01:48:04.724Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 31,
+            "PLACEMENT_STAT_INDEX": 9,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 804,
+            "CHAMPION_TIME_ALIVE_STAT": 804,
+            "TEAM_ELIMS_STAT_INDEX": 4,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 31,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 9,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 4,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000685": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000688"
+      ],
+      "pointsEarned": 42,
+      "score": 184785074619647,
+      "rank": 6,
+      "percentile": 0.1,
+      "teamId": "f0000000000000000000000000000688",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:7": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:14": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:5": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:11": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:2": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:10": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:4": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:13": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:12": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:8": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 20,
+          "pointsEarned": 20
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:3": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:9": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:6": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000521",
+          "endTime": "2026-10-21T01:17:33.590Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 22,
+            "PLACEMENT_STAT_INDEX": 18,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 328,
+            "CHAMPION_TIME_ALIVE_STAT": 328,
+            "TEAM_ELIMS_STAT_INDEX": 4,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 22,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 18,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 4,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000572",
+          "endTime": "2026-10-21T01:36:21.233Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 38,
+            "PLACEMENT_STAT_INDEX": 2,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 949,
+            "CHAMPION_TIME_ALIVE_STAT": 949,
+            "TEAM_ELIMS_STAT_INDEX": 16,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 38,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 2,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 16,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000688": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000689"
+      ],
+      "pointsEarned": 39,
+      "score": 171584223995233,
+      "rank": 7,
+      "percentile": 0.1,
+      "teamId": "f0000000000000000000000000000689",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:14": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 18,
+          "pointsEarned": 18
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:11": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:10": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:13": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:12": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000686",
+          "endTime": "2026-10-21T01:20:51.617Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 30,
+            "PLACEMENT_STAT_INDEX": 10,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 719,
+            "CHAMPION_TIME_ALIVE_STAT": 719,
+            "TEAM_ELIMS_STAT_INDEX": 12,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 30,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 10,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 12,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000677",
+          "endTime": "2026-10-21T01:34:09.465Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 29,
+            "PLACEMENT_STAT_INDEX": 11,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 656,
+            "CHAMPION_TIME_ALIVE_STAT": 656,
+            "TEAM_ELIMS_STAT_INDEX": 6,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 29,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 11,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 6,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000689": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000690"
+      ],
+      "pointsEarned": 37,
+      "score": 162868663862758,
+      "rank": 8,
+      "percentile": 0.2,
+      "teamId": "f0000000000000000000000000000690",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:7": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:14": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:5": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 21,
+          "pointsEarned": 21
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:11": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:10": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:13": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:12": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:8": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:9": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:6": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000606",
+          "endTime": "2026-10-21T01:36:56.523Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 35,
+            "PLACEMENT_STAT_INDEX": 5,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 755,
+            "CHAMPION_TIME_ALIVE_STAT": 755,
+            "TEAM_ELIMS_STAT_INDEX": 21,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 35,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 5,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 21,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000690": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000691"
+      ],
+      "pointsEarned": 34,
+      "score": 149573858985289,
+      "rank": 9,
+      "percentile": 0.2,
+      "teamId": "f0000000000000000000000000000691",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:7": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:14": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:5": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:11": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:10": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:4": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:13": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:12": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:8": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 12,
+          "pointsEarned": 12
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:3": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:9": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:6": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000687",
+          "endTime": "2026-10-21T01:28:12.820Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 23,
+            "PLACEMENT_STAT_INDEX": 17,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 502,
+            "CHAMPION_TIME_ALIVE_STAT": 502,
+            "TEAM_ELIMS_STAT_INDEX": 5,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 23,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 17,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 5,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000692",
+          "endTime": "2026-10-21T01:44:21.804Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 37,
+            "PLACEMENT_STAT_INDEX": 3,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 849,
+            "CHAMPION_TIME_ALIVE_STAT": 849,
+            "TEAM_ELIMS_STAT_INDEX": 7,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 37,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 3,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 7,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000691": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000693"
+      ],
+      "pointsEarned": 31,
+      "score": 136383074075924,
+      "rank": 10,
+      "percentile": 0.2,
+      "teamId": "f0000000000000000000000000000693",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:14": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 13,
+          "pointsEarned": 13
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:11": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:13": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:12": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000686",
+          "endTime": "2026-10-21T01:20:33.624Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 29,
+            "PLACEMENT_STAT_INDEX": 11,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 682,
+            "CHAMPION_TIME_ALIVE_STAT": 682,
+            "TEAM_ELIMS_STAT_INDEX": 6,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 29,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 11,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 6,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000694",
+          "endTime": "2026-10-21T01:32:55.978Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 27,
+            "PLACEMENT_STAT_INDEX": 13,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 618,
+            "CHAMPION_TIME_ALIVE_STAT": 618,
+            "TEAM_ELIMS_STAT_INDEX": 7,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 27,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 13,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 7,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000695"
+      ],
+      "pointsEarned": 31,
+      "score": 136368507630501,
+      "rank": 11,
+      "percentile": 0.2,
+      "teamId": "f0000000000000000000000000000695",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:7": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:14": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 13,
+          "pointsEarned": 13
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:11": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:9": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:10": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:13": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:12": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:8": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000696",
+          "endTime": "2026-10-21T01:29:59.160Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 33,
+            "PLACEMENT_STAT_INDEX": 7,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 808,
+            "CHAMPION_TIME_ALIVE_STAT": 808,
+            "TEAM_ELIMS_STAT_INDEX": 7,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 33,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 7,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 7,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000697",
+          "endTime": "2026-10-21T01:41:04.132Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 23,
+            "PLACEMENT_STAT_INDEX": 17,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 541,
+            "CHAMPION_TIME_ALIVE_STAT": 541,
+            "TEAM_ELIMS_STAT_INDEX": 6,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 23,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 17,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 6,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000698",
+          "endTime": "2026-10-21T01:44:14.217Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 0,
+            "PLACEMENT_STAT_INDEX": 40,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 48,
+            "CHAMPION_TIME_ALIVE_STAT": 48,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 0,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 40,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000695": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000699"
+      ],
+      "pointsEarned": 30,
+      "score": 131958185453005,
+      "rank": 12,
+      "percentile": 0.3,
+      "teamId": "f0000000000000000000000000000699",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:7": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:14": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:5": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:11": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:10": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:4": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:13": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:12": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:8": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 5,
+          "pointsEarned": 5
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:3": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:9": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:6": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000662",
+          "endTime": "2026-10-21T01:22:56.180Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 37,
+            "PLACEMENT_STAT_INDEX": 3,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 867,
+            "CHAMPION_TIME_ALIVE_STAT": 867,
+            "TEAM_ELIMS_STAT_INDEX": 5,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 37,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 3,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 5,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000595",
+          "endTime": "2026-10-21T01:35:58.321Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 26,
+            "PLACEMENT_STAT_INDEX": 14,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 617,
+            "CHAMPION_TIME_ALIVE_STAT": 617,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 26,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 14,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000699": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000700"
+      ],
+      "pointsEarned": 29,
+      "score": 127576913904925,
+      "rank": 13,
+      "percentile": 0.3,
+      "teamId": "f0000000000000000000000000000700",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:7": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:14": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:5": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:11": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:2": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:10": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:4": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:13": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:12": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:8": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 10,
+          "pointsEarned": 10
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:3": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:9": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:6": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000686",
+          "endTime": "2026-10-21T01:24:22.678Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 38,
+            "PLACEMENT_STAT_INDEX": 2,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 932,
+            "CHAMPION_TIME_ALIVE_STAT": 932,
+            "TEAM_ELIMS_STAT_INDEX": 6,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 38,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 2,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 6,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000583",
+          "endTime": "2026-10-21T01:32:13.849Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 14,
+            "PLACEMENT_STAT_INDEX": 26,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 375,
+            "CHAMPION_TIME_ALIVE_STAT": 375,
+            "TEAM_ELIMS_STAT_INDEX": 4,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 14,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 26,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 4,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000700": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000701"
+      ],
+      "pointsEarned": 28,
+      "score": 123205715855162,
+      "rank": 14,
+      "percentile": 0.3,
+      "teamId": "f0000000000000000000000000000701",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:7": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:14": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:5": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:11": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:2": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:10": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:4": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:13": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:12": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:8": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 9,
+          "pointsEarned": 9
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:3": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:9": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:6": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000702",
+          "endTime": "2026-10-21T01:42:46.689Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 38,
+            "PLACEMENT_STAT_INDEX": 2,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 925,
+            "CHAMPION_TIME_ALIVE_STAT": 925,
+            "TEAM_ELIMS_STAT_INDEX": 9,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 38,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 2,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 9,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000701": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000703"
+      ],
+      "pointsEarned": 27,
+      "score": 119045632255089,
+      "rank": 15,
+      "percentile": 0.3,
+      "teamId": "f0000000000000000000000000000703",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:7": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:14": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:1": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:5": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:11": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:2": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:10": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:4": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:13": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:12": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:8": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 7,
+          "pointsEarned": 7
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:3": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:9": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:6": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000677",
+          "endTime": "2026-10-21T01:37:46.184Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 39,
+            "PLACEMENT_STAT_INDEX": 1,
+            "CHAMPION_VICTORY_ROYALE_STAT": 1,
+            "TIME_ALIVE_STAT": 895,
+            "CHAMPION_TIME_ALIVE_STAT": 895,
+            "TEAM_ELIMS_STAT_INDEX": 7,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 39,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 1,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 7,
+            "VICTORY_ROYALE_STAT": 1
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000704",
+          "endTime": "2026-10-21T01:44:23.181Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 12,
+            "PLACEMENT_STAT_INDEX": 28,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 240,
+            "CHAMPION_TIME_ALIVE_STAT": 240,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 12,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 28,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000705"
+      ],
+      "pointsEarned": 27,
+      "score": 118800958457610,
+      "rank": 16,
+      "percentile": 0.4,
+      "teamId": "f0000000000000000000000000000705",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:7": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:14": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:5": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:11": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:2": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:10": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:4": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:13": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:12": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:8": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 8,
+          "pointsEarned": 8
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:3": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:9": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:6": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000706",
+          "endTime": "2026-10-21T01:25:16.741Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 38,
+            "PLACEMENT_STAT_INDEX": 2,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 901,
+            "CHAMPION_TIME_ALIVE_STAT": 901,
+            "TEAM_ELIMS_STAT_INDEX": 8,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 38,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 2,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 8,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000705": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000707"
+      ],
+      "pointsEarned": 27,
+      "score": 118757334828468,
+      "rank": 17,
+      "percentile": 0.4,
+      "teamId": "f0000000000000000000000000000707",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:7": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:14": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 3,
+          "pointsEarned": 3
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:11": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:9": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:10": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:13": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:12": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:8": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000632",
+          "endTime": "2026-10-21T01:28:09.556Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 29,
+            "PLACEMENT_STAT_INDEX": 11,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 632,
+            "CHAMPION_TIME_ALIVE_STAT": 632,
+            "TEAM_ELIMS_STAT_INDEX": 2,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 29,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 11,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 2,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000692",
+          "endTime": "2026-10-21T01:43:53.180Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 33,
+            "PLACEMENT_STAT_INDEX": 7,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 827,
+            "CHAMPION_TIME_ALIVE_STAT": 827,
+            "TEAM_ELIMS_STAT_INDEX": 1,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 33,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 7,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 1,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000707": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000708"
+      ],
+      "pointsEarned": 26,
+      "score": 114396201060120,
+      "rank": 18,
+      "percentile": 0.4,
+      "teamId": "f0000000000000000000000000000708",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:7": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:14": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:5": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:11": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:2": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:10": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:4": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:13": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:12": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:8": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 7,
+          "pointsEarned": 7
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:3": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:9": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:6": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000692",
+          "endTime": "2026-10-21T01:45:15.167Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 38,
+            "PLACEMENT_STAT_INDEX": 2,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 908,
+            "CHAMPION_TIME_ALIVE_STAT": 908,
+            "TEAM_ELIMS_STAT_INDEX": 7,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 38,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 2,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 7,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000708": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000709"
+      ],
+      "pointsEarned": 23,
+      "score": 101185278780561,
+      "rank": 19,
+      "percentile": 0.4,
+      "teamId": "f0000000000000000000000000000709",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:7": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:14": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 9,
+          "pointsEarned": 9
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:11": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:9": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:10": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:13": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:12": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:8": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000645",
+          "endTime": "2026-10-21T01:31:22.802Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 33,
+            "PLACEMENT_STAT_INDEX": 7,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 838,
+            "CHAMPION_TIME_ALIVE_STAT": 838,
+            "TEAM_ELIMS_STAT_INDEX": 7,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 33,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 7,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 7,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000573",
+          "endTime": "2026-10-21T01:39:00.596Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 16,
+            "PLACEMENT_STAT_INDEX": 24,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 330,
+            "CHAMPION_TIME_ALIVE_STAT": 330,
+            "TEAM_ELIMS_STAT_INDEX": 2,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 16,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 24,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 2,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000709": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000710"
+      ],
+      "pointsEarned": 22,
+      "score": 96797302900371,
+      "rank": 20,
+      "percentile": 0.5,
+      "teamId": "f0000000000000000000000000000710",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:7": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:14": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:5": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 6,
+          "pointsEarned": 6
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:11": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:10": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:13": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:12": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:8": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:9": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:6": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000692",
+          "endTime": "2026-10-21T01:44:11.824Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 35,
+            "PLACEMENT_STAT_INDEX": 5,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 841,
+            "CHAMPION_TIME_ALIVE_STAT": 841,
+            "TEAM_ELIMS_STAT_INDEX": 6,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 35,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 5,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 6,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000710": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000711"
+      ],
+      "pointsEarned": 20,
+      "score": 87987784008654,
+      "rank": 21,
+      "percentile": 0.5,
+      "teamId": "f0000000000000000000000000000711",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:14": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 8,
+          "pointsEarned": 8
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:11": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:10": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:13": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:12": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000712",
+          "endTime": "2026-10-21T01:09:50.428Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 20,
+            "PLACEMENT_STAT_INDEX": 20,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 345,
+            "CHAMPION_TIME_ALIVE_STAT": 345,
+            "TEAM_ELIMS_STAT_INDEX": 4,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 20,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 20,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 4,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000713",
+          "endTime": "2026-10-21T01:24:10.675Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 30,
+            "PLACEMENT_STAT_INDEX": 10,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 628,
+            "CHAMPION_TIME_ALIVE_STAT": 628,
+            "TEAM_ELIMS_STAT_INDEX": 4,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 30,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 10,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 4,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000711": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000714"
+      ],
+      "pointsEarned": 18,
+      "score": 79180480938682,
+      "rank": 22,
+      "percentile": 0.5,
+      "teamId": "f0000000000000000000000000000714",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:14": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 7,
+          "pointsEarned": 7
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:11": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:10": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:13": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:12": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000677",
+          "endTime": "2026-10-21T01:34:14.810Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 30,
+            "PLACEMENT_STAT_INDEX": 10,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 660,
+            "CHAMPION_TIME_ALIVE_STAT": 660,
+            "TEAM_ELIMS_STAT_INDEX": 5,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 30,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 10,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 5,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000681",
+          "endTime": "2026-10-21T01:42:01.249Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 16,
+            "PLACEMENT_STAT_INDEX": 24,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 300,
+            "CHAMPION_TIME_ALIVE_STAT": 300,
+            "TEAM_ELIMS_STAT_INDEX": 1,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 16,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 24,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 1,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000715",
+          "endTime": "2026-10-21T01:45:53.502Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 8,
+            "PLACEMENT_STAT_INDEX": 32,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 88,
+            "CHAMPION_TIME_ALIVE_STAT": 88,
+            "TEAM_ELIMS_STAT_INDEX": 1,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 8,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 32,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 1,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000714": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000716"
+      ],
+      "pointsEarned": 14,
+      "score": 61589434516203,
+      "rank": 23,
+      "percentile": 0.5,
+      "teamId": "f0000000000000000000000000000716",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:14": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 5,
+          "pointsEarned": 5
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:13": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:12": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000717",
+          "endTime": "2026-10-21T01:16:28.848Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 28,
+            "PLACEMENT_STAT_INDEX": 12,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 684,
+            "CHAMPION_TIME_ALIVE_STAT": 684,
+            "TEAM_ELIMS_STAT_INDEX": 5,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 28,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 12,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 5,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000718",
+          "endTime": "2026-10-21T01:20:01.737Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 2,
+            "PLACEMENT_STAT_INDEX": 38,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 61,
+            "CHAMPION_TIME_ALIVE_STAT": 61,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 2,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 38,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000716": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000719"
+      ],
+      "pointsEarned": 12,
+      "score": 52816833692969,
+      "rank": 24,
+      "percentile": 0.6,
+      "teamId": "f0000000000000000000000000000719",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 6,
+          "pointsEarned": 6
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000646",
+          "endTime": "2026-10-21T01:45:41.003Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 25,
+            "PLACEMENT_STAT_INDEX": 15,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 660,
+            "CHAMPION_TIME_ALIVE_STAT": 660,
+            "TEAM_ELIMS_STAT_INDEX": 6,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 25,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 15,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 6,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000719": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000720"
+      ],
+      "pointsEarned": 12,
+      "score": 52789991785712,
+      "rank": 25,
+      "percentile": 0.6,
+      "teamId": "f0000000000000000000000000000720",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:14": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:11": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:13": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:12": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000713",
+          "endTime": "2026-10-21T01:24:10.481Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 29,
+            "PLACEMENT_STAT_INDEX": 11,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 632,
+            "CHAMPION_TIME_ALIVE_STAT": 632,
+            "TEAM_ELIMS_STAT_INDEX": 2,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 29,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 11,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 2,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000720": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000721"
+      ],
+      "pointsEarned": 11,
+      "score": 48398650016410,
+      "rank": 26,
+      "percentile": 0.6,
+      "teamId": "f0000000000000000000000000000721",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 9,
+          "pointsEarned": 9
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000679",
+          "endTime": "2026-10-21T01:04:52.362Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 6,
+            "PLACEMENT_STAT_INDEX": 34,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 200,
+            "CHAMPION_TIME_ALIVE_STAT": 200,
+            "TEAM_ELIMS_STAT_INDEX": 1,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 6,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 34,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 1,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000713",
+          "endTime": "2026-10-21T01:21:23.421Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 21,
+            "PLACEMENT_STAT_INDEX": 19,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 469,
+            "CHAMPION_TIME_ALIVE_STAT": 469,
+            "TEAM_ELIMS_STAT_INDEX": 5,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 21,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 19,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 5,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000722",
+          "endTime": "2026-10-21T01:29:02.918Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 15,
+            "PLACEMENT_STAT_INDEX": 25,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 330,
+            "CHAMPION_TIME_ALIVE_STAT": 330,
+            "TEAM_ELIMS_STAT_INDEX": 3,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 15,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 25,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 3,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000721": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000723"
+      ],
+      "pointsEarned": 9,
+      "score": 39595851023407,
+      "rank": 27,
+      "percentile": 0.6,
+      "teamId": "f0000000000000000000000000000723",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:15": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:14": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000702",
+          "endTime": "2026-10-21T01:36:19.528Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 26,
+            "PLACEMENT_STAT_INDEX": 14,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 535,
+            "CHAMPION_TIME_ALIVE_STAT": 535,
+            "TEAM_ELIMS_STAT_INDEX": 2,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 26,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 14,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 2,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000723": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000724"
+      ],
+      "pointsEarned": 7,
+      "score": 30799757182005,
+      "rank": 28,
+      "percentile": 0.7,
+      "teamId": "f0000000000000000000000000000724",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:17": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:16": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000594",
+          "endTime": "2026-10-21T01:15:53.265Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 24,
+            "PLACEMENT_STAT_INDEX": 16,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 538,
+            "CHAMPION_TIME_ALIVE_STAT": 538,
+            "TEAM_ELIMS_STAT_INDEX": 2,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 24,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 16,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 2,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000724": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000725"
+      ],
+      "pointsEarned": 6,
+      "score": 26405062632064,
+      "rank": 29,
+      "percentile": 0.7,
+      "teamId": "f0000000000000000000000000000725",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 5,
+          "pointsEarned": 5
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000718",
+          "endTime": "2026-10-21T01:22:59.315Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 11,
+            "PLACEMENT_STAT_INDEX": 29,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 240,
+            "CHAMPION_TIME_ALIVE_STAT": 240,
+            "TEAM_ELIMS_STAT_INDEX": 2,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 11,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 29,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 2,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000595",
+          "endTime": "2026-10-21T01:32:20.213Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 20,
+            "PLACEMENT_STAT_INDEX": 20,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 399,
+            "CHAMPION_TIME_ALIVE_STAT": 399,
+            "TEAM_ELIMS_STAT_INDEX": 3,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 20,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 20,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 3,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000725": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000726"
+      ],
+      "pointsEarned": 5,
+      "score": 21996951839792,
+      "rank": 30,
+      "percentile": 0.7,
+      "teamId": "f0000000000000000000000000000726",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:18": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000713",
+          "endTime": "2026-10-21T01:21:06.902Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 19,
+            "PLACEMENT_STAT_INDEX": 21,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 456,
+            "CHAMPION_TIME_ALIVE_STAT": 456,
+            "TEAM_ELIMS_STAT_INDEX": 1,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 19,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 21,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 1,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        },
+        {
+          "sessionId": "f0000000000000000000000000000722",
+          "endTime": "2026-10-21T01:33:46.691Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 22,
+            "PLACEMENT_STAT_INDEX": 18,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 615,
+            "CHAMPION_TIME_ALIVE_STAT": 615,
+            "TEAM_ELIMS_STAT_INDEX": 1,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 22,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 18,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 1,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000726": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000727"
+      ],
+      "pointsEarned": 4,
+      "score": 17605616419723,
+      "rank": 31,
+      "percentile": 0.7,
+      "teamId": "f0000000000000000000000000000727",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000683",
+          "endTime": "2026-10-21T01:29:02.108Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 21,
+            "PLACEMENT_STAT_INDEX": 19,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 453,
+            "CHAMPION_TIME_ALIVE_STAT": 453,
+            "TEAM_ELIMS_STAT_INDEX": 2,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 21,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 19,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 2,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000727": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000728"
+      ],
+      "pointsEarned": 3,
+      "score": 13214275879396,
+      "rank": 32,
+      "percentile": 0.8,
+      "teamId": "f0000000000000000000000000000728",
+      "pointBreakdown": {
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 3,
+          "pointsEarned": 3
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000573",
+          "endTime": "2026-10-21T01:37:38.217Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 9,
+            "PLACEMENT_STAT_INDEX": 31,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 242,
+            "CHAMPION_TIME_ALIVE_STAT": 242,
+            "TEAM_ELIMS_STAT_INDEX": 3,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 9,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 31,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 3,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000728": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000729"
+      ],
+      "pointsEarned": 2,
+      "score": 8809522578158,
+      "rank": 33,
+      "percentile": 0.8,
+      "teamId": "f0000000000000000000000000000729",
+      "pointBreakdown": {
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000730",
+          "endTime": "2026-10-21T01:46:16.512Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 19,
+            "PLACEMENT_STAT_INDEX": 21,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 375,
+            "CHAMPION_TIME_ALIVE_STAT": 375,
+            "TEAM_ELIMS_STAT_INDEX": 2,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 19,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 21,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 2,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000729": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000731"
+      ],
+      "pointsEarned": 2,
+      "score": 8809521758836,
+      "rank": 34,
+      "percentile": 0.8,
+      "teamId": "f0000000000000000000000000000731",
+      "pointBreakdown": {
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 2,
+          "pointsEarned": 2
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000662",
+          "endTime": "2026-10-21T01:13:40.238Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 17,
+            "PLACEMENT_STAT_INDEX": 23,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 314,
+            "CHAMPION_TIME_ALIVE_STAT": 314,
+            "TEAM_ELIMS_STAT_INDEX": 2,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 17,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 23,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 2,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000731": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000732"
+      ],
+      "pointsEarned": 2,
+      "score": 8796101624981,
+      "rank": 35,
+      "percentile": 0.8,
+      "teamId": "f0000000000000000000000000000732",
+      "pointBreakdown": {
+        "CHAMPION_PLACEMENT_STAT_INDEX:19": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        },
+        "CHAMPION_PLACEMENT_STAT_INDEX:20": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000646",
+          "endTime": "2026-10-21T01:44:30.449Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 21,
+            "PLACEMENT_STAT_INDEX": 19,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 586,
+            "CHAMPION_TIME_ALIVE_STAT": 586,
+            "TEAM_ELIMS_STAT_INDEX": 0,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 21,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 19,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 0,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000732": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000733"
+      ],
+      "pointsEarned": 1,
+      "score": 4404764361740,
+      "rank": 36,
+      "percentile": 0.9,
+      "teamId": "f0000000000000000000000000000733",
+      "pointBreakdown": {
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000679",
+          "endTime": "2026-10-21T01:10:08.889Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 17,
+            "PLACEMENT_STAT_INDEX": 23,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 518,
+            "CHAMPION_TIME_ALIVE_STAT": 518,
+            "TEAM_ELIMS_STAT_INDEX": 1,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 17,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 23,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 1,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000733": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000734"
+      ],
+      "pointsEarned": 1,
+      "score": 4404763542305,
+      "rank": 37,
+      "percentile": 0.9,
+      "teamId": "f0000000000000000000000000000734",
+      "pointBreakdown": {
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000674",
+          "endTime": "2026-10-21T01:29:11.799Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 15,
+            "PLACEMENT_STAT_INDEX": 25,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 400,
+            "CHAMPION_TIME_ALIVE_STAT": 400,
+            "TEAM_ELIMS_STAT_INDEX": 1,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 15,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 25,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 1,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000734": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000735"
+      ],
+      "pointsEarned": 1,
+      "score": 4404760674782,
+      "rank": 38,
+      "percentile": 0.9,
+      "teamId": "f0000000000000000000000000000735",
+      "pointBreakdown": {
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000692",
+          "endTime": "2026-10-21T01:34:19.805Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 8,
+            "PLACEMENT_STAT_INDEX": 32,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 239,
+            "CHAMPION_TIME_ALIVE_STAT": 239,
+            "TEAM_ELIMS_STAT_INDEX": 1,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 8,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 32,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 1,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000736"
+      ],
+      "pointsEarned": 1,
+      "score": 4404760674560,
+      "rank": 39,
+      "percentile": 0.9,
+      "teamId": "f0000000000000000000000000000736",
+      "pointBreakdown": {
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000645",
+          "endTime": "2026-10-21T01:19:33.718Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 8,
+            "PLACEMENT_STAT_INDEX": 32,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 128,
+            "CHAMPION_TIME_ALIVE_STAT": 128,
+            "TEAM_ELIMS_STAT_INDEX": 1,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 8,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 32,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 1,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {},
+      "unscoredSessions": []
+    },
+    {
+      "gameId": "Fortnite",
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAW",
+      "eventWindowId": "S42_RankedCupSoloReload_Event8_NAW_2_champion",
+      "teamAccountIds": [
+        "f0000000000000000000000000000737"
+      ],
+      "pointsEarned": 1,
+      "score": 4404759855469,
+      "rank": 40,
+      "percentile": 1,
+      "teamId": "f0000000000000000000000000000737",
+      "pointBreakdown": {
+        "CHAMPION_TEAM_ELIMS_STAT_INDEX:1": {
+          "timesAchieved": 1,
+          "pointsEarned": 1
+        }
+      },
+      "sessionHistory": [
+        {
+          "sessionId": "f0000000000000000000000000000738",
+          "endTime": "2026-10-21T01:17:39.277Z",
+          "trackedStats": {
+            "CHAMPION_PLACEMENT_TIEBREAKER_STAT": 6,
+            "PLACEMENT_STAT_INDEX": 34,
+            "CHAMPION_VICTORY_ROYALE_STAT": 0,
+            "TIME_ALIVE_STAT": 182,
+            "CHAMPION_TIME_ALIVE_STAT": 182,
+            "TEAM_ELIMS_STAT_INDEX": 1,
+            "MATCH_PLAYED_STAT": 1,
+            "PLACEMENT_TIEBREAKER_STAT": 6,
+            "CHAMPION_PLACEMENT_STAT_INDEX": 34,
+            "CHAMPION_TEAM_ELIMS_STAT_INDEX": 1,
+            "VICTORY_ROYALE_STAT": 0
+          }
+        }
+      ],
+      "playerFlagTokens": {
+        "f0000000000000000000000000000737": "GroupIdentity_GeoIdentity_[redacted]"
+      },
+      "unscoredSessions": []
+    }
+  ],
+  "liveSessions": {}
+}

@@ -1,19 +1,13 @@
 import { Link, useParams } from 'react-router';
 import { eventState, windowState } from '../../lib/status';
-import { REGIONS, isRegion, type EventInfo, type EventWindow, type Region } from '../../lib/types';
+import type { EventInfo, EventWindow } from '../../lib/types';
 import { eventTags } from '../components/EventCard';
 import { Card, Countdown, LoadState, Pill, SectionTitle, StateBadge, TAG } from '../components/ui';
 import { formatRange, REGION_LABEL, useNow } from '../format';
 import { useSettings } from '../settings';
-import { useEvents } from '../useEvents';
+import { useEvent } from '../useEvent';
 
 const PLATFORM_LABEL = { PC: 'PC', CONSOLE: 'Console', MOBILE: 'Mobile', CLOUD: 'Cloud' } as const;
-
-/** Region from the ID suffix, used when the event isn't visible in the selected region. */
-function suffixRegion(id: string): Region | undefined {
-  const r = new RegExp(`_(${REGIONS.join('|')})$`).exec(id)?.[1];
-  return isRegion(r) ? r : undefined;
-}
 
 function SessionRow({ w, now, showRules }: { w: EventWindow; now: Date; showRules: boolean }) {
   const [{ timeZone }] = useSettings();
@@ -32,6 +26,14 @@ function SessionRow({ w, now, showRules }: { w: EventWindow; now: Date; showRule
           <StateBadge state={state} />
           {state === 'upcoming' && <Countdown to={w.begin} now={now} />}
           {state === 'live' && <Countdown to={w.end} now={now} prefix="ends in" />}
+          {state !== 'upcoming' && (
+            <Link
+              to={`/events/${encodeURIComponent(w.eventId)}/${encodeURIComponent(w.id)}`}
+              className="font-medium text-blue-600 underline dark:text-blue-400"
+            >
+              Leaderboard
+            </Link>
+          )}
         </div>
       </div>
       {showRules && w.requirements.length > 0 && (
@@ -121,19 +123,10 @@ function Detail({ event, now }: { event: EventInfo; now: Date }) {
 
 export default function EventDetail() {
   const eventId = decodeURIComponent(useParams().eventId ?? '');
-  const [{ region }] = useSettings();
   const now = useNow();
-  const here = useEvents();
-  const inHere = here.data?.events.find((e) => e.id === eventId);
-  // Not visible in the selected region: look in the event's own region.
-  const home = suffixRegion(eventId);
-  const fallback = useEvents(home && home !== region ? home : region);
-  const event = inHere ?? fallback.data?.events.find((e) => e.id === eventId);
-
+  const { event, loading, error, reload } = useEvent(eventId);
   if (event) return <Detail event={event} now={now} />;
-  if (here.loading || fallback.loading || here.error) {
-    return <LoadState loading={here.loading || fallback.loading} error={here.error} onRetry={here.reload} />;
-  }
+  if (loading || error) return <LoadState loading={loading} error={error} onRetry={reload} />;
   return (
     <Card className="p-4 text-sm">
       <p>This event isn't in this season's schedule anymore.</p>
