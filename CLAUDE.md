@@ -11,7 +11,7 @@ Vite + React + TypeScript + Tailwind (`src/`), Vercel Functions (`api/`), shared
 
 ## Commands
 - `npm test`: Vitest. `npm run typecheck`: tsc.
-- `npm run epic:device-auth`, `npm run epic:probe` and `npm run epic:analyze`: Phase 0 tools; see `docs/EPIC_API_NOTES.md`.
+- `npm run epic:device-auth`, `epic:probe`, `epic:anonymize` and `epic:analyze`: Epic capture tools; see `docs/EPIC_API_NOTES.md`.
 
 ## Rules
 - Only `api/` + `lib/` talk to Epic. The browser never sees Epic's raw format or any credential.
@@ -20,4 +20,5 @@ Vite + React + TypeScript + Tailwind (`src/`), Vercel Functions (`api/`), shared
 - Errors are `Cache-Control: no-store`.
 - Times are UTC ISO on the wire; format in the browser with the user's time zone setting.
 - Key players and teams by account ID, never display name.
-- Parser changes need a fixture-based test. `test/fixtures/epic/` holds real captures only; synthetic test data lives in `test/helpers/`.
+- Parser changes need a fixture-based test. `test/fixtures/epic/` holds anonymized real captures only; synthetic test data lives in `test/helpers/`.
+- The repo is public. Raw captures stay in git-ignored `captures/`; never commit them or anything copied from them without `epic:anonymize`.

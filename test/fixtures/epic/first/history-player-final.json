@@ -1,0 +1,8 @@
+{
+  "errorCode": "errors.com.epicgames.common.forbidden",
+  "errorMessage": "Sorry your login does not posses the permissions 'Fortnite:profile:f0000000000000000000000000000102:commands READ' needed to perform the requested operation",
+  "code": "errors.com.epicgames.common.forbidden",
+  "message": "Sorry your login does not posses the permissions 'Fortnite:profile:f0000000000000000000000000000102:commands READ' needed to perform the requested operation",
+  "status": 403,
+  "context": {}
+}

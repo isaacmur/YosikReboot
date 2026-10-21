@@ -1,7 +1,9 @@
 // Usage: npm run epic:probe -- [--label NAME] [--regions NAE,EU] [--rate-test N] [--no-auth]
 //
 // Hits every Epic endpoint the app plans to use and saves scrubbed responses to
-// test/fixtures/epic/<label>/, then writes analysis.md next to them.
+// captures/epic/<label>/ (git-ignored: they hold other players' data), then
+// writes analysis.md next to them. `npm run epic:anonymize` makes a
+// publishable copy under test/fixtures/epic/.
 
 import { writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -10,12 +12,12 @@ import { analyze, loadRun, renderAnalysis } from './probe/analyze';
 import { argValue, parseLabel, parseRateTest, parseRegions } from './probe/args';
 import { runProbe, type ProbeConfig } from './probe/run';
 
-const FIXTURE_ROOT = 'test/fixtures/epic';
+const CAPTURE_ROOT = 'captures/epic';
 
 async function main() {
   loadLocalEnv();
   const args = process.argv.slice(2);
-  const outDir = join(FIXTURE_ROOT, parseLabel(argValue(args, '--label'), new Date()));
+  const outDir = join(CAPTURE_ROOT, parseLabel(argValue(args, '--label'), new Date()));
   const regions = parseRegions(argValue(args, '--regions'));
   const rateTest = parseRateTest(argValue(args, '--rate-test'));
 

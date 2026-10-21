@@ -1,0 +1,428 @@
+{
+  "startedAt": "2026-10-21T00:30:04.363Z",
+  "authenticated": true,
+  "samples": {
+    "upcoming": {
+      "eventId": "epicgames_S42_FNCSSolo_LastChanceQualifier_NAW",
+      "windowId": "S42_FNCSSolo_LastChanceLobby_NAW",
+      "begin": "2026-10-21T01:00:00Z",
+      "end": "2026-10-21T03:10:00Z",
+      "payoutDelayMin": 32,
+      "templateId": "EventTemplate_S42_FNCSSolo_LastChanceLobby",
+      "playlistId": "Playlist_ShowdownTournament_FN_Solo"
+    },
+    "live": {
+      "eventId": "epicgames_S42_RankedCupSoloReload_NAC",
+      "windowId": "S42_RankedCupSoloReload_Event8_NAC",
+      "begin": "2026-10-20T23:00:00Z",
+      "end": "2026-10-21T02:00:00Z",
+      "payoutDelayMin": 32,
+      "templateId": "EventTemplate_RankedCupSoloReload_v5",
+      "playlistId": "Playlist_ShowdownTournament_RE_SourSpawnSolo_RC"
+    },
+    "wrapping": {
+      "eventId": "epicgames_S42_RankedCupSoloReload_BR",
+      "windowId": "S42_RankedCupSoloReload_Event8_BR",
+      "begin": "2026-10-20T21:00:00Z",
+      "end": "2026-10-21T00:00:00Z",
+      "payoutDelayMin": 32,
+      "templateId": "EventTemplate_RankedCupSoloReload_v5",
+      "playlistId": "Playlist_ShowdownTournament_RE_SourSpawnSolo_RC"
+    },
+    "final": {
+      "eventId": "epicgames_S42_SlenderManCup_ZB_BR",
+      "windowId": "S42_SlenderManCup_ZB_BR",
+      "begin": "2026-10-20T21:00:00Z",
+      "end": "2026-10-20T23:30:00Z",
+      "payoutDelayMin": 31,
+      "templateId": "EventTemplate_S42_SlenderManCup_ZB",
+      "playlistId": "Playlist_ShowdownTournament_SourSpawnNoBuildDuos_PBM"
+    },
+    "duos": {
+      "eventId": "epicgames_S42_SlenderManCup_ZB_BR",
+      "windowId": "S42_SlenderManCup_ZB_BR",
+      "begin": "2026-10-20T21:00:00Z",
+      "end": "2026-10-20T23:30:00Z",
+      "payoutDelayMin": 31,
+      "templateId": "EventTemplate_S42_SlenderManCup_ZB",
+      "playlistId": "Playlist_ShowdownTournament_SourSpawnNoBuildDuos_PBM"
+    }
+  },
+  "calls": [
+    {
+      "step": "cms.tournamentinformation",
+      "method": "GET",
+      "url": "https://fortnitecontent-website-prod07.ol.epicgames.com/content/api/pages/fortnite-game/tournamentinformation",
+      "status": 200,
+      "ms": 617,
+      "bytes": 773159,
+      "headers": {
+        "age": "9",
+        "cache-control": "no-cache=\"set-cookie\"",
+        "content-type": "application/json; charset=utf-8",
+        "etag": "W/\"bcc27-CQBZ5gum2eMe6v4pKdQqOREpwic\""
+      },
+      "file": "cms-tournamentinformation.json"
+    },
+    {
+      "step": "events.download.noauth",
+      "method": "GET",
+      "url": "https://events-public-service-live.ol.epicgames.com/api/v1/events/Fortnite/download/f0000000000000000000000000000001?region=NAC&platform=Windows",
+      "status": 401,
+      "ms": 472,
+      "bytes": 163,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "errorCode": "errors.com.epicgames.common.unauthorized",
+      "file": "error-noauth-events.json"
+    },
+    {
+      "step": "oauth.device_auth",
+      "method": "POST",
+      "url": "https://account-public-service-prod.ol.epicgames.com/account/api/oauth/token",
+      "status": 200,
+      "ms": 745,
+      "headers": {
+        "cache-control": "no-cache, no-store, no-transform",
+        "content-type": "application/json"
+      }
+    },
+    {
+      "step": "events.download.NAC",
+      "method": "GET",
+      "url": "https://events-public-service-live.ol.epicgames.com/api/v1/events/Fortnite/download/f0000000000000000000000000000001?region=NAC&platform=Windows&teamAccountIds=f0000000000000000000000000000001",
+      "status": 200,
+      "ms": 173,
+      "bytes": 1226183,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "file": "events-download-NAC.json"
+    },
+    {
+      "step": "events.download.NAE",
+      "method": "GET",
+      "url": "https://events-public-service-live.ol.epicgames.com/api/v1/events/Fortnite/download/f0000000000000000000000000000001?region=NAE&platform=Windows&teamAccountIds=f0000000000000000000000000000001",
+      "status": 200,
+      "ms": 153,
+      "bytes": 822408,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "file": "events-download-NAE.json"
+    },
+    {
+      "step": "events.download.NAW",
+      "method": "GET",
+      "url": "https://events-public-service-live.ol.epicgames.com/api/v1/events/Fortnite/download/f0000000000000000000000000000001?region=NAW&platform=Windows&teamAccountIds=f0000000000000000000000000000001",
+      "status": 200,
+      "ms": 496,
+      "bytes": 1225275,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "file": "events-download-NAW.json"
+    },
+    {
+      "step": "events.download.EU",
+      "method": "GET",
+      "url": "https://events-public-service-live.ol.epicgames.com/api/v1/events/Fortnite/download/f0000000000000000000000000000001?region=EU&platform=Windows&teamAccountIds=f0000000000000000000000000000001",
+      "status": 200,
+      "ms": 142,
+      "bytes": 780627,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "file": "events-download-EU.json"
+    },
+    {
+      "step": "events.download.BR",
+      "method": "GET",
+      "url": "https://events-public-service-live.ol.epicgames.com/api/v1/events/Fortnite/download/f0000000000000000000000000000001?region=BR&platform=Windows&teamAccountIds=f0000000000000000000000000000001",
+      "status": 200,
+      "ms": 133,
+      "bytes": 758335,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "file": "events-download-BR.json"
+    },
+    {
+      "step": "events.download.OCE",
+      "method": "GET",
+      "url": "https://events-public-service-live.ol.epicgames.com/api/v1/events/Fortnite/download/f0000000000000000000000000000001?region=OCE&platform=Windows&teamAccountIds=f0000000000000000000000000000001",
+      "status": 200,
+      "ms": 163,
+      "bytes": 764515,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "file": "events-download-OCE.json"
+    },
+    {
+      "step": "events.download.ME",
+      "method": "GET",
+      "url": "https://events-public-service-live.ol.epicgames.com/api/v1/events/Fortnite/download/f0000000000000000000000000000001?region=ME&platform=Windows&teamAccountIds=f0000000000000000000000000000001",
+      "status": 200,
+      "ms": 135,
+      "bytes": 756022,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "file": "events-download-ME.json"
+    },
+    {
+      "step": "events.download.ASIA",
+      "method": "GET",
+      "url": "https://events-public-service-live.ol.epicgames.com/api/v1/events/Fortnite/download/f0000000000000000000000000000001?region=ASIA&platform=Windows&teamAccountIds=f0000000000000000000000000000001",
+      "status": 200,
+      "ms": 138,
+      "bytes": 768791,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "file": "events-download-ASIA.json"
+    },
+    {
+      "step": "events.download.noregion",
+      "method": "GET",
+      "url": "https://events-public-service-live.ol.epicgames.com/api/v1/events/Fortnite/download/f0000000000000000000000000000001?platform=Windows&teamAccountIds=f0000000000000000000000000000001",
+      "status": 400,
+      "ms": 100,
+      "bytes": 253,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "errorCode": "errors.com.epicgames.common.rejection.MissingQueryParamRejection",
+      "file": "events-download-noregion.json"
+    },
+    {
+      "step": "events.data.NAC",
+      "method": "GET",
+      "url": "https://events-public-service-live.ol.epicgames.com/api/v1/events/Fortnite/data/f0000000000000000000000000000001?region=NAC&platform=Windows&showPastEvents=true",
+      "status": 200,
+      "ms": 157,
+      "bytes": 1347628,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "file": "events-data-NAC.json"
+    },
+    {
+      "step": "leaderboard.upcoming.p0",
+      "method": "GET",
+      "url": "https://events-public-service-live.ol.epicgames.com/api/v1/leaderboards/Fortnite/epicgames_S42_FNCSSolo_LastChanceQualifier_NAW/S42_FNCSSolo_LastChanceLobby_NAW/f0000000000000000000000000000001?page=0&rank=0&teamAccountIds=&appId=Fortnite&showLiveSessions=false",
+      "status": 200,
+      "ms": 87,
+      "bytes": 227,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "file": "leaderboard-upcoming-p0.json"
+    },
+    {
+      "step": "leaderboard.live.p0",
+      "method": "GET",
+      "url": "https://events-public-service-live.ol.epicgames.com/api/v1/leaderboards/Fortnite/epicgames_S42_RankedCupSoloReload_NAC/S42_RankedCupSoloReload_Event8_NAC/f0000000000000000000000000000001?page=0&rank=0&teamAccountIds=&appId=Fortnite&showLiveSessions=false",
+      "status": 200,
+      "ms": 90,
+      "bytes": 132427,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "file": "leaderboard-live-p0.json"
+    },
+    {
+      "step": "leaderboard.live.p0.liveSessions",
+      "method": "GET",
+      "url": "https://events-public-service-live.ol.epicgames.com/api/v1/leaderboards/Fortnite/epicgames_S42_RankedCupSoloReload_NAC/S42_RankedCupSoloReload_Event8_NAC/f0000000000000000000000000000001?page=0&rank=0&teamAccountIds=&appId=Fortnite&showLiveSessions=true",
+      "status": 200,
+      "ms": 103,
+      "bytes": 136141,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "file": "leaderboard-live-p0-liveSessions.json"
+    },
+    {
+      "step": "leaderboard.wrapping.p0",
+      "method": "GET",
+      "url": "https://events-public-service-live.ol.epicgames.com/api/v1/leaderboards/Fortnite/epicgames_S42_RankedCupSoloReload_BR/S42_RankedCupSoloReload_Event8_BR/f0000000000000000000000000000001?page=0&rank=0&teamAccountIds=&appId=Fortnite&showLiveSessions=false",
+      "status": 200,
+      "ms": 102,
+      "bytes": 168336,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "file": "leaderboard-wrapping-p0.json"
+    },
+    {
+      "step": "leaderboard.duos.p0",
+      "method": "GET",
+      "url": "https://events-public-service-live.ol.epicgames.com/api/v1/leaderboards/Fortnite/epicgames_S42_SlenderManCup_ZB_BR/S42_SlenderManCup_ZB_BR/f0000000000000000000000000000001?page=0&rank=0&teamAccountIds=&appId=Fortnite&showLiveSessions=false",
+      "status": 200,
+      "ms": 133,
+      "bytes": 493792,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "file": "leaderboard-duos-p0.json"
+    },
+    {
+      "step": "leaderboard.final.p0",
+      "method": "GET",
+      "url": "https://events-public-service-live.ol.epicgames.com/api/v1/leaderboards/Fortnite/epicgames_S42_SlenderManCup_ZB_BR/S42_SlenderManCup_ZB_BR/f0000000000000000000000000000001?page=0&rank=0&teamAccountIds=&appId=Fortnite&showLiveSessions=false",
+      "status": 200,
+      "ms": 134,
+      "bytes": 493792,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "file": "leaderboard-final-p0.json"
+    },
+    {
+      "step": "leaderboard.final.p1",
+      "method": "GET",
+      "url": "https://events-public-service-live.ol.epicgames.com/api/v1/leaderboards/Fortnite/epicgames_S42_SlenderManCup_ZB_BR/S42_SlenderManCup_ZB_BR/f0000000000000000000000000000001?page=1&rank=0&teamAccountIds=&appId=Fortnite&showLiveSessions=false",
+      "status": 200,
+      "ms": 152,
+      "bytes": 495738,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "file": "leaderboard-final-p1.json"
+    },
+    {
+      "step": "leaderboard.final.last",
+      "method": "GET",
+      "url": "https://events-public-service-live.ol.epicgames.com/api/v1/leaderboards/Fortnite/epicgames_S42_SlenderManCup_ZB_BR/S42_SlenderManCup_ZB_BR/f0000000000000000000000000000001?page=99&rank=0&teamAccountIds=&appId=Fortnite&showLiveSessions=false",
+      "status": 200,
+      "ms": 125,
+      "bytes": 258197,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "file": "leaderboard-final-last.json"
+    },
+    {
+      "step": "leaderboard.final.filtered",
+      "method": "GET",
+      "url": "https://events-public-service-live.ol.epicgames.com/api/v1/leaderboards/Fortnite/epicgames_S42_SlenderManCup_ZB_BR/S42_SlenderManCup_ZB_BR/f0000000000000000000000000000001?page=0&rank=0&teamAccountIds=f0000000000000000000000000000102%2Cf0000000000000000000000000000428&appId=Fortnite&showLiveSessions…",
+      "status": 400,
+      "ms": 60,
+      "bytes": 421,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "errorCode": "com.epicgames.api.malformed_data",
+      "file": "leaderboard-final-filtered.json"
+    },
+    {
+      "step": "history.window.final",
+      "method": "GET",
+      "url": "https://events-public-service-live.ol.epicgames.com/api/v1/events/Fortnite/epicgames_S42_SlenderManCup_ZB_BR/S42_SlenderManCup_ZB_BR/history",
+      "status": 404,
+      "ms": 97,
+      "bytes": 157,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "errorCode": "errors.com.epicgames.common.not_found",
+      "file": "history-window-final.json"
+    },
+    {
+      "step": "history.player.final",
+      "method": "GET",
+      "url": "https://events-public-service-live.ol.epicgames.com/api/v1/events/Fortnite/epicgames_S42_SlenderManCup_ZB_BR/S42_SlenderManCup_ZB_BR/history/f0000000000000000000000000000102",
+      "status": 403,
+      "ms": 82,
+      "bytes": 469,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "errorCode": "errors.com.epicgames.common.forbidden",
+      "file": "history-player-final.json"
+    },
+    {
+      "step": "leaderboard.missing",
+      "method": "GET",
+      "url": "https://events-public-service-live.ol.epicgames.com/api/v1/leaderboards/Fortnite/epicgames_S42_SlenderManCup_ZB_BR/YosikReboot_Probe_DoesNotExist/f0000000000000000000000000000001?page=0&rank=0&teamAccountIds=&appId=Fortnite&showLiveSessions=false",
+      "status": 404,
+      "ms": 68,
+      "bytes": 365,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "errorCode": "com.epicgames.events.event_window_not_found",
+      "file": "error-missing-window.json"
+    },
+    {
+      "step": "accounts.bulk.100",
+      "method": "GET",
+      "url": "https://account-public-service-prod.ol.epicgames.com/account/api/public/account?accountId=f0000000000000000000000000000006&accountId=f0000000000000000000000000000002&accountId=f0000000000000000000000000000101&accountId=f0000000000000000000000000000056&accountId=f0000000000000000000000000000028&accou…",
+      "status": 200,
+      "ms": 393,
+      "bytes": 44342,
+      "headers": {
+        "cache-control": "no-cache, no-store, no-transform",
+        "content-type": "application/json"
+      },
+      "file": "accounts-bulk.json"
+    },
+    {
+      "step": "accounts.bulk.101",
+      "method": "GET",
+      "url": "https://account-public-service-prod.ol.epicgames.com/account/api/public/account?accountId=f0000000000000000000000000000006&accountId=f0000000000000000000000000000002&accountId=f0000000000000000000000000000101&accountId=f0000000000000000000000000000056&accountId=f0000000000000000000000000000028&accou…",
+      "status": 400,
+      "ms": 48,
+      "bytes": 279,
+      "headers": {
+        "cache-control": "no-cache, no-store, no-transform",
+        "content-type": "application/json;charset=utf-8"
+      },
+      "errorCode": "errors.com.epicgames.account.invalid_account_id_count",
+      "file": "accounts-bulk-over-limit.json"
+    },
+    {
+      "step": "accounts.byName",
+      "method": "GET",
+      "url": "https://account-public-service-prod.ol.epicgames.com/account/api/public/account/displayName/Player00001",
+      "status": 200,
+      "ms": 51,
+      "bytes": 759,
+      "headers": {
+        "cache-control": "no-cache, no-store, no-transform",
+        "content-type": "application/json"
+      },
+      "file": "account-by-name.json"
+    },
+    {
+      "step": "players.tokens",
+      "method": "GET",
+      "url": "https://events-public-service-live.ol.epicgames.com/api/v1/players/Fortnite/tokens?teamAccountIds=f0000000000000000000000000000001",
+      "status": 200,
+      "ms": 67,
+      "bytes": 75,
+      "headers": {
+        "content-type": "application/json"
+      },
+      "file": "player-tokens.json"
+    }
+  ],
+  "notes": [],
+  "serviceAccountId": "f0000000000000000000000000000001",
+  "token": {
+    "clientId": "3f69e56c7649492c8cc29f1af08a8a12",
+    "exchanged": false,
+    "expiresIn": 7200,
+    "expiresAt": "2026-10-21T02:30:07.288Z",
+    "tokenType": "bearer",
+    "hasRefreshToken": true
+  },
+  "filteredTarget": [
+    "f0000000000000000000000000000102",
+    "f0000000000000000000000000000428"
+  ],
+  "finishedAt": "2026-10-21T00:30:32.451Z"
+}

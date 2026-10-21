@@ -4,6 +4,6 @@ dist/
 .env*
 !.env.example
 
-# Live Epic captures hold other players' account IDs and country flags; keep
-# them local while the repo is public (see docs/EPIC_API_NOTES.md).
-test/fixtures/epic/*/
+# Raw Epic captures hold other players' account IDs and country flags. Only
+# anonymized copies (npm run epic:anonymize) go in test/fixtures/epic/.
+captures/

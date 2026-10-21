@@ -1,8 +1,8 @@
 # Epic API notes (Phase 0)
 
-**Status: first live capture done on 2026-10-21, label `first`.** Epic answered all 29 probe calls. The capture caught an upcoming window, a live one, one wrapping up, and finished ones, across 273 events and 1,189 windows. Eight follow-up calls were made by hand afterwards. Everything below comes from those responses unless it's marked otherwise.
+**Status: Phase 0 complete. First live capture done on 2026-10-21, label `first`.** Epic answered all 29 probe calls. The capture caught an upcoming window, a live one, one wrapping up, and finished ones, across 273 events and 1,189 windows. Eight follow-up calls were made by hand afterwards. Everything below comes from those responses unless it's marked otherwise.
 
-The raw capture is **not committed**: the repo is public and the capture contains other players' data. See [Fixtures and privacy](#fixtures-and-privacy).
+The anonymized copy is committed as `test/fixtures/epic/first/`; the raw capture is not. See [Fixtures and privacy](#fixtures-and-privacy).
 
 ## Runbook
 
@@ -14,7 +14,8 @@ The raw capture is **not committed**: the repo is public and the capture contain
    - It saves `EPIC_ACCOUNT_ID`, `EPIC_DEVICE_ID` and `EPIC_DEVICE_SECRET` to `.env.local`, and confirms that a token can be minted from them.
    - Fallback without `--link`: run `npm run epic:device-auth` for the authorization-code steps.
 4. **Capture.** Run `npm run epic:probe -- --label <name>`. Add `--regions NAE` to keep a run small.
-   - It writes scrubbed responses to `test/fixtures/epic/<name>/`, plus `probe-report.json` and `analysis.md`.
+   - It writes scrubbed responses to `captures/epic/<name>/` (git-ignored), plus `probe-report.json` and `analysis.md`.
+   - Then run `npm run epic:anonymize -- captures/epic/<name>` to make the publishable copy under `test/fixtures/epic/`.
    - Calls are spaced at least 1 s apart, so a full run takes about 30 s.
 5. **Rate limit (once, optional).** `npm run epic:probe -- --label rate --regions NAE --rate-test 30`. This stops at the first 429.
 6. **Record the findings** below.
@@ -31,6 +32,11 @@ In a cloud session, prefix commands with `NODE_USE_ENV_PROXY=1`, so Node's fetch
 ### Schedule (`GET /api/v1/events/Fortnite/download/{accountId}?region=&platform=&teamAccountIds={self}`)
 - [x] **`region=` is required.** Without it the call returns 400 `MissingQueryParamRejection`, so `/api/events` fans out with one call per region.
 - [x] Events per region: NAC 50, NAW 50, NAE 32, EU 29, and 28 each for BR, OCE, ME and ASIA.
+- [x] **Region responses overlap.** A `region=X` response lists every event whose `regions` array contains X.
+  - NA has no `_NAE` events this season: a NAE request returns NAC and NAW events.
+  - NAC and NAW share many events.
+  - One global event (`epicgames_Bog_Official`) is in all eight.
+  - So: take an event's home region from its ID suffix, and de-duplicate by `eventId` across the 8 calls. A region view shows the events whose `regions` include it, as Epic's own Compete tab does.
 - [x] Responses are large: about 1.2 to 1.9 MB of JSON per region (indented as saved). The route must trim before caching.
 - [x] Top-level keys: `player`, `events`, `templates`, `scoringRuleSets`, `payoutTables`, `leaderboardDefs`, `scoreLocationScoringRuleSets`, `scoreLocationPayoutTables`, `resolvedWindowLocations`, `eventSeries`, `scores`.
   - `/data/` returns the same keys minus `player` and `scores`.
@@ -103,10 +109,13 @@ In a cloud session, prefix commands with `NODE_USE_ENV_PROXY=1`, so Node's fetch
 
 - [x] The token flow and the leaderboard endpoint both work, so the fortnite.com fallback isn't needed.
 - [x] Every endpoint used in Phases 1 and 2 has a recorded response shape.
-- [ ] Commit fixtures for parser tests. This is blocked on the fixtures decision below.
+- [x] Anonymized fixtures for parser tests are committed.
 
 ## Fixtures and privacy
 
-The capture holds about 10,000 other players' account IDs, their country flags (`playerFlagTokens`) and, from the bulk lookup, display names. The probe now strips account profiles down to `id` and `displayName`.
+Raw captures go to `captures/epic/<label>/`, which is git-ignored because it holds other players' account IDs, country flags and display names. `npm run epic:anonymize -- captures/epic/<label>` writes the publishable copy to `test/fixtures/epic/<label>/`:
+- Account and session IDs become consistent stand-ins.
+- Display names become `PlayerNNNNN`.
+- Country flags and spectate tokens are redacted.
 
-While the repo is public, captures stay local: `test/fixtures/epic/*/` is git-ignored. To commit fixtures, either make the repo private, or anonymize them first by replacing account IDs and display names with stable stand-ins.
+It then re-checks the output against the raw capture and refuses (exit 2) if any ID, name, country or token survived. `test/fixtures/epic/first/` is the anonymized first capture, and `test/fixtures.test.ts` checks that it still hangs together.

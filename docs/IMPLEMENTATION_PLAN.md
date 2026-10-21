@@ -22,7 +22,7 @@ These are gaps or traps in the spec that change code structure. Each has a recom
 | D8 | Time zone. | All server data is UTC ISO strings. Formatting happens only in the browser via `Intl.DateTimeFormat` with the settings time zone (default `America/New_York`). No date library needed beyond small helpers. |
 | D9 | Monorepo vs. single package. | Single package. Vite app in `src/`, Vercel functions in `api/`, shared code in `lib/` (imported by both — types only from the browser side). |
 | D10 | Epic won't return another account's row or history: `teamAccountIds=` accepts only the caller's own team, and per-player endpoints return 403. | Find a player by **scanning** board pages (100 per page, at most 100 pages) and stopping at the first hit. Final windows: scan once and cache for 24 h. Live windows: look only at pages already being fetched, plus at most one rescan per 5 min. Results are top 10,000 only, like Fortnite Tracker. |
-| D11 | Schedule responses need `region=` and are about 1.2 to 1.9 MB each. | `/api/events` makes one Epic call per region (8 in all) and trims each response to the plan's shapes before caching. Ranked cups use the main window board, not the per-tier boards. |
+| D11 | Schedule responses need `region=`, are about 1.2 to 1.9 MB each, and overlap (a region lists every event visible to it; NAE has no events of its own). | `/api/events` makes one Epic call per region (8 in all), de-duplicates events by `eventId`, takes the home region from the ID suffix, and trims to the plan's shapes before caching. Ranked cups use the main window board, not the per-tier boards. |
 
 ---
 
@@ -147,7 +147,7 @@ Each phase ends with a deployed preview you can open, a commit, and a push. **MV
 
 Goal: replace every "not yet verified" line in the spec with facts and fixtures. No UI.
 
-> **Status:** done except committed fixtures. A live capture on 2026-10-21 answered the checklist; see [`EPIC_API_NOTES.md`](./EPIC_API_NOTES.md). It added D10 and D11 above and resolved D7. Fixtures stay local while the repo is public.
+> **Status: done.** A live capture on 2026-10-21 answered the checklist; see [`EPIC_API_NOTES.md`](./EPIC_API_NOTES.md). It added D10 and D11 above and resolved D7. The anonymized fixtures are in `test/fixtures/epic/first/`.
 
 Tasks
 1. Create the secondary Epic account; generate device-auth credentials (`accountId`, `deviceId`, `secret`) via a one-off local script (`scripts/create-device-auth.ts`, never deployed). Store them in `.env.local` and Vercel env vars.

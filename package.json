@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit",
     "epic:device-auth": "tsx scripts/create-device-auth.ts",
     "epic:probe": "tsx scripts/probe.ts",
-    "epic:analyze": "tsx scripts/analyze-fixtures.ts"
+    "epic:analyze": "tsx scripts/analyze-fixtures.ts",
+    "epic:anonymize": "tsx scripts/anonymize-fixtures.ts"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",
