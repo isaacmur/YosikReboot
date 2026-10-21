@@ -16,6 +16,7 @@ import {
   type WindowDetail,
 } from '../../lib/types';
 import { apiGetCached, useApi } from '../api';
+import { keptEvent } from '../archive';
 import { pageOfRank } from '../board';
 import { fileName, saveFile, toCsv } from '../csv';
 import { addFollow, removeFollow, useFollows } from '../follows';
@@ -217,7 +218,9 @@ export function PlayerView({ id, name, isMe }: { id: string; name: string; isMe?
       .flatMap((event) => event.windows.filter((w) => windowState(w, now) === 'final').map((w) => ({ event, w })))
       .sort((a, b) => b.w.end.localeCompare(a.w.end));
   }, [data, type]);
-  const artFor = (eventId: string) => data?.events.find((e) => e.id === eventId)?.art ?? NO_ART;
+  // Results can be from other regions, or from events Epic no longer lists (D31).
+  const artFor = (eventId: string) =>
+    data?.events.find((e) => e.id === eventId)?.art ?? keptEvent(eventId)?.art ?? NO_ART;
 
   const results = resultsFor(id);
   useBackfillPayouts(results);

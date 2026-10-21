@@ -5,15 +5,23 @@
 // doesn't cover.
 
 import { isAccountId } from '../validate.js';
-import { boardInfos, boardRules, isFetchable, windowLocations, type ScoreLocation } from './boards.js';
+import { boardInfos, boardLabel, boardRules, isFetchable, windowLocations, type ScoreLocation } from './boards.js';
 import type { EpicClient } from './client.js';
 import { endpoints } from './endpoints.js';
 import { EpicHttpError } from './errors.js';
+import { windowLabel } from './events.js';
 import { asArr, asObj, num, str, strings } from './json.js';
 import { liteEntry, normalizeEntries } from './leaderboard.js';
 import { findWindow } from './schedule.js';
 import { windowState } from '../status.js';
-import type { BoardInfo, Entry, SyncEventHistory, SyncRowResult, SyncSession } from '../types.js';
+import {
+  REGIONS,
+  type BoardInfo,
+  type Entry,
+  type SyncEventHistory,
+  type SyncRowResult,
+  type SyncSession,
+} from '../types.js';
 
 export interface PlayedSession {
   eventId: string;
@@ -217,6 +225,51 @@ export function historyResults(
   return { played: [...byWindow.keys()], results, toRead, unmatched };
 }
 
+/** A Ranked Cup tier board's ID: its window's, then `_<round>_<tier>` (see boards.ts). */
+const TIER_BOARD = new RegExp(`^(.+_(?:${REGIONS.join('|')}))_\\d+_[A-Za-z]+$`);
+
+/**
+ * Like `historyResults`, for an event Epic's schedule no longer lists (it drops
+ * events about a week after they end, D31): every session is long final, and
+ * boards are told apart by their IDs alone. Without the schedule there are no
+ * scoring rules or payouts, so rows carry Epic's points but not each game's.
+ */
+export function pastHistoryResults(eventId: string, scores: unknown[]): Omit<SyncEventHistory, 'eventId' | 'error'> {
+  const byWindow = new Map<string, { loc: ScoreLocation; score: Record<string, unknown> }[]>();
+  let unmatched = 0;
+  for (const score of scores.map(asObj)) {
+    const [group, instance] = (score && scoreBoard(score, eventId)?.split(':')) ?? [];
+    if (!score || group !== eventId || !instance) {
+      unmatched++;
+      continue;
+    }
+    const windowId = TIER_BOARD.exec(instance)?.[1] ?? instance;
+    const loc = { key: `Fortnite:${group}:${instance}`, group, instance };
+    byWindow.set(windowId, [...(byWindow.get(windowId) ?? []), { loc, score }]);
+  }
+
+  const results: SyncRowResult[] = [];
+  for (const [windowId, found] of byWindow) {
+    // A tier board you scored on, else the session's own board, unless that's a Ranked Cup's (no points, D14).
+    const tier = found.filter((f) => f.loc.instance !== windowId && (num(f.score.pointsEarned) ?? 0) > 0).pop();
+    const pick = tier ?? (/RankedCup/i.test(eventId) ? undefined : found.find((f) => f.loc.instance === windowId));
+    const entry = pick && normalizeEntries({ entries: [pick.score] }, []).find((e) => e.rank > 0);
+    if (!pick || !entry) continue;
+    const label = boardLabel(pick.loc, windowId);
+    results.push({
+      eventId,
+      windowId,
+      status: 'found',
+      board: { id: pick.loc.instance, label, payouts: [] },
+      entry: liteEntry(entry),
+      trace: [`history: ${label}, rank ${entry.rank}`],
+      label: windowLabel(windowId, eventId),
+      endedAt: entry.sessions[entry.sessions.length - 1]?.endedAt || undefined,
+    });
+  }
+  return { played: [...byWindow.keys()], results, toRead: [], unmatched };
+}
+
 /**
  * Your history in one event, with your own sign-in: one Epic call, or two if
  * Epic wants a team named. `spend` works as for `ownRow` (undefined once the
@@ -238,8 +291,8 @@ export async function eventHistory(
     toRead: [],
     unmatched: 0,
   });
+  // Not in the schedule: Epic has stopped listing it, but still keeps your scores (D31).
   const inSchedule = asArr(asObj(raw)?.events).some((e) => str(asObj(e)?.eventId) === eventId);
-  if (!inSchedule) return refused("not in this season's schedule");
 
   const ask = async (team?: string[]): Promise<unknown> => {
     try {
@@ -259,5 +312,9 @@ export async function eventHistory(
   }
   if (body instanceof EpicHttpError) return refused(describeError(body));
   if (!Array.isArray(body)) return refused(`200 ${shapeOf(body)}`.slice(0, 300));
-  return { eventId, error: null, ...historyResults(raw, eventId, body, accountId, now) };
+  return {
+    eventId,
+    error: null,
+    ...(inSchedule ? historyResults(raw, eventId, body, accountId, now) : pastHistoryResults(eventId, body)),
+  };
 }

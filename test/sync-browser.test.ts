@@ -14,6 +14,7 @@ import type {
   SyncSession,
 } from '../lib/types';
 import { logout } from '../src/api';
+import { keptEvents, rememberEvents } from '../src/archive';
 import { getFollows } from '../src/follows';
 import { allScans, didNotPlay, isWindowChecked, scanBoard } from '../src/scan';
 import { syncWithEpic } from '../src/sync';
@@ -140,6 +141,9 @@ function fakeApi(
 }
 
 const sync = () => syncWithEpic({ region: 'EU', signal: new AbortController().signal, onProgress: () => {} });
+/** Events from before this browser kept any, asked about once per account. */
+const EARLIER = keptEvents().map((e) => e.id);
+const listedOnly = (requests: string[][]) => requests.flat().filter((id) => !EARLIER.includes(id));
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -153,14 +157,24 @@ describe('syncWithEpic', () => {
           ? history(id, { results: [found(id, 's2_EU', row(A, 42))] })
           : id === 'duo_EU'
             ? history(id, { results: [found(id, 'd1_EU', row(A, 7))] })
-            : history(id, { toRead: [{ eventId: id, windowId: 'r1_NAC', team: [A] }] }),
+            : id === 'ranked_NAC'
+              ? history(id, { toRead: [{ eventId: id, windowId: 'r1_NAC', team: [A] }] })
+              : history(id),
       (s) => found(s.eventId, s.windowId, row(A, 3), 'Gold'),
     );
     const summary = await sync();
-    // One request, your region's events first; the upcoming one isn't asked about, and SOLO only once.
-    expect(historyRequests).toEqual([['duo_EU', 'solo_EU', 'ranked_NAC']]);
+    // Your region's events first; the upcoming one isn't asked about, and SOLO only once. Events from before
+    // this browser kept any are asked about too, by region.
+    expect(listedOnly(historyRequests)).toEqual(['duo_EU', 'solo_EU', 'ranked_NAC']);
+    expect(historyRequests[0]!.slice(0, 3)).toEqual(['duo_EU', 'epicgames_S42_FNCSSoloQualifiers_EU', 'solo_EU']);
+    expect(
+      historyRequests
+        .flat()
+        .filter((id) => EARLIER.includes(id))
+        .sort(),
+    ).toEqual([...EARLIER].sort());
     expect(rowRequests).toEqual([[{ eventId: 'ranked_NAC', windowId: 'r1_NAC', team: [A] }]]);
-    expect(summary).toMatchObject({ accountId: A, events: 3, found: 3 });
+    expect(summary).toMatchObject({ accountId: A, events: 3 + EARLIER.length, found: 3 });
     expect(allScans().find((x) => x.windowId === 'd1_EU')?.found[A]).toMatchObject({ rank: 7 });
     expect(allScans().find((x) => x.windowId === 'r1_NAC')).toMatchObject({ board: 'r1_NAC_Gold', boardLabel: 'Gold' });
     // The history lists every session you played, so the rest of each event's finished ones you didn't,
@@ -180,7 +194,8 @@ describe('syncWithEpic', () => {
     expect(getFollows().find((f) => f.id === A)).toMatchObject({ isMe: true });
     expect(calls[calls.length - 1]).toBe('DELETE /api/sync');
 
-    // A second sync only asks about events with a finished session still unsettled: none.
+    // A second sync only asks about events with a finished session still unsettled, and not again about
+    // events Epic no longer lists: none.
     const again = fakeApi(ready(A), (id) => history(id));
     expect((await sync()).events).toBe(0);
     expect(again.historyRequests).toEqual([]);
@@ -194,7 +209,7 @@ describe('syncWithEpic', () => {
       id === 'duo_EU' ? history(id, { results: [found(id, 'd1_EU', row(B, 7))] }) : history(id),
     );
     const summary = await sync();
-    expect(historyRequests).toEqual([['duo_EU', 'solo_EU', 'ranked_NAC']]);
+    expect(listedOnly(historyRequests)).toEqual(['duo_EU', 'solo_EU', 'ranked_NAC']);
     expect(summary.details.join('\n')).toContain(
       "Check on Cup solo_EU · s2_EU: a board search found you 99th; Epic's history doesn't list it.",
     );
@@ -212,6 +227,46 @@ describe('syncWithEpic', () => {
     expect(didNotPlay('solo_EU', 's2_EU', C)).toBe(true);
     expect(didNotPlay('ranked_NAC', 'r1_NAC', C)).toBe(true);
     expect(didNotPlay('duo_EU', 'd1_EU', C)).toBe(false);
+  });
+
+  it('asks once about events Epic no longer lists: ones this browser kept, and earlier ones', async () => {
+    const E = 'e'.repeat(32);
+    const gone = event('gone_NAC', 1, [
+      ['g1_NAC', 10],
+      ['g2_NAC', 9],
+    ]);
+    rememberEvents([gone]);
+    const FNCS = 'epicgames_S42_FNCSSoloQualifiers_NAC';
+    const { historyRequests } = fakeApi(ready(E), (id) =>
+      id === 'gone_NAC'
+        ? history(id, { results: [found(id, 'g1_NAC', row(E, 30))] })
+        : id === FNCS
+          ? history(id, {
+              results: [
+                {
+                  ...found(id, 'S42_FNCSSoloQualifiers_Qual1Round1Day1_NAC', row(E, 2500)),
+                  label: 'Qual 1 Round 1 Day 1',
+                  endedAt: '2026-09-27T03:00:00Z',
+                },
+              ],
+            })
+          : history(id),
+    );
+    const summary = await sync();
+    expect(historyRequests.flat()).toContain('gone_NAC');
+    expect(allScans().find((x) => x.windowId === 'g1_NAC')).toMatchObject({ title: 'Cup gone_NAC · g1_NAC' });
+    expect(didNotPlay('gone_NAC', 'g2_NAC', E)).toBe(true);
+    expect(allScans().find((x) => x.eventId === FNCS)).toMatchObject({
+      title: '[NAC] FNCS Solos Qualifiers · Qual 1 Round 1 Day 1',
+      endedAt: '2026-09-27T03:00:00Z',
+      found: { [E]: { rank: 2500 } },
+    });
+    expect(summary.details.join('\n')).toContain('[NAC] FNCS Solos Qualifiers: Qual 1 Round 1 Day 1 2,500th');
+
+    // Not asked again; only the duos event is, since the history hasn't shown a duos session for this account.
+    const again = fakeApi(ready(E), (id) => history(id));
+    await sync();
+    expect(again.historyRequests.flat()).toEqual(['duo_EU']);
   });
 
   it('stops asking once Epic forbids the history, and says so', async () => {

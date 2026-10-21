@@ -8,7 +8,7 @@ import { makeSyncHandlers } from '../api/sync';
 import { EpicTokenManager, type FetchLike } from '../lib/auth/epicToken';
 import { seal, unseal } from '../lib/auth/seal';
 import { EpicClient } from '../lib/epic/client';
-import { historyResults } from '../lib/epic/player';
+import { historyResults, pastHistoryResults } from '../lib/epic/player';
 import { clearScheduleCache } from '../lib/epic/schedule';
 import type { SyncHistory, SyncPoll, SyncRows, SyncStart } from '../lib/types';
 
@@ -333,7 +333,7 @@ describe('POST /api/sync', () => {
     );
   });
 
-  it('hands back events past the budget, skips unknown ones without asking Epic, and checks the request', async () => {
+  it('hands back events past the budget, and checks the request', async () => {
     const epic = fakeEpic({
       history: () => ({
         status: 400,
@@ -342,10 +342,9 @@ describe('POST /api/sync', () => {
     });
     const { cookie } = await signIn(epic);
     const nac = (JSON.parse(fixture('events-download-NAC.json')) as { events: { eventId: string }[] }).events;
-    const ids = ['epicgames_Nope_NAC', ...nac.slice(0, 11).map((e) => e.eventId)];
+    const ids = nac.slice(0, 12).map((e) => e.eventId);
     const body = (await (await epic.handlers.POST(post('history', cookie, { events: ids }))).json()) as SyncHistory;
-    expect(body.events[0]).toMatchObject({ eventId: 'epicgames_Nope_NAC', error: "not in this season's schedule" });
-    // Two calls per event (without a team, then naming you): the request's sixteen run out before the eleventh.
+    // Two calls per event (without a team, then naming you): the request's sixteen run out before the ninth.
     expect(epic.calls.filter((c) => c.startsWith('history'))).toHaveLength(16);
     expect(body.remaining.length).toBeGreaterThanOrEqual(3);
     expect([...body.events.map((h) => h.eventId), ...body.remaining].sort()).toEqual([...ids].sort());
@@ -354,6 +353,28 @@ describe('POST /api/sync', () => {
     expect(tooMany.status).toBe(400);
     const none = await epic.handlers.POST(post('history', undefined, { events: [RANKED] }));
     expect(none.status).toBe(409);
+  });
+
+  it("still asks about an event Epic's schedule no longer lists, telling its boards apart by ID", async () => {
+    const PAST = 'epicgames_S42_FNCSSoloQualifiers_NAC';
+    const epic = fakeEpic({
+      history: (eventId) => ({
+        status: 200,
+        body: eventId === PAST ? [scoreOn(PAST, 'S42_FNCSSoloQualifiers_Qual1Round1Day1_NAC')] : [],
+      }),
+    });
+    const { cookie } = await signIn(epic);
+    const res = await epic.handlers.POST(post('history', cookie, { events: [PAST] }));
+    const [h] = ((await res.json()) as SyncHistory).events;
+    expect(epic.calls).toContain(`history ${PAST}`);
+    expect(h).toMatchObject({ error: null, played: ['S42_FNCSSoloQualifiers_Qual1Round1Day1_NAC'], toRead: [] });
+    expect(h!.results[0]).toMatchObject({
+      windowId: 'S42_FNCSSoloQualifiers_Qual1Round1Day1_NAC',
+      board: { id: 'S42_FNCSSoloQualifiers_Qual1Round1Day1_NAC', label: 'Overall', payouts: [] },
+      label: 'Qual 1 Round 1 Day 1',
+      entry: { rank: 5, points: 584 },
+    });
+    expect(h!.results[0]!.endedAt).toMatch(/^20\d\d-/);
   });
 
   it('signs out when Epic ends the sign-in mid-history', async () => {
@@ -425,6 +446,27 @@ describe('historyResults', () => {
   it("lists sessions that aren't final yet as played, without a result", () => {
     const out = historyResults(raw('BR'), SLENDER.eventId, [scoreOn(SLENDER.eventId, SLENDER.windowId)], ME, 0);
     expect(out).toEqual({ played: [SLENDER.windowId], results: [], toRead: [], unmatched: 0 });
+  });
+
+  it('reads a Ranked Cup Epic no longer lists from its tier scores, never its pointless main board', () => {
+    const PAST = 'epicgames_S41_RankedCupSolo_NAC';
+    const [main8, main7] = ['S41_RankedCupSolo_Event8_NAC', 'S41_RankedCupSolo_Event7_NAC'];
+    const solo = { ...BOARD.entries[0]!, teamAccountIds: [ME] };
+    const out = pastHistoryResults(PAST, [
+      scoreOn(PAST, main8, { ...solo, pointsEarned: 0, score: 1, rank: 4000 }),
+      scoreOn(PAST, `${main8}_2_gold`, solo),
+      scoreOn(PAST, main7, { ...solo, pointsEarned: 0, score: 1, rank: 12 }),
+      scoreOn('another_event', main7, solo),
+    ]);
+    expect(out.played).toEqual([main8, main7]);
+    expect(out.unmatched).toBe(1);
+    expect(out.results).toHaveLength(1);
+    expect(out.results[0]).toMatchObject({
+      windowId: main8,
+      board: { id: `${main8}_2_gold`, label: 'Gold' },
+      entry: { rank: 1 },
+      label: 'Event 8',
+    });
   });
 
   it('counts scores it can place nowhere, and skips junk', () => {

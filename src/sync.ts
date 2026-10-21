@@ -1,8 +1,9 @@
 // Sync with Epic (D30): sign in with your own account once, read Epic's history
-// of your results in every event this season, in every region, keep each result
-// like a board search, and end the Epic session however the sync ends. The
-// sign-in itself never reaches this code: it rides in an HttpOnly cookie only
-// /api/sync can read.
+// of your results in every event this season, in every region (including events
+// Epic no longer lists, from this browser's archive, D31), keep each result like
+// a board search, and end the Epic session however the sync ends. The sign-in
+// itself never reaches this code: it rides in an HttpOnly cookie only /api/sync
+// can read.
 
 import { windowState } from '../lib/status';
 import {
@@ -19,6 +20,7 @@ import {
   type SyncStart,
 } from '../lib/types';
 import { apiGetCached, apiPost } from './api';
+import { keptEvents, rememberEvents, type KeptEvent } from './archive';
 import { sleep } from './boardIndex';
 import { addFollow, setMe } from './follows';
 import { ordinal, plural } from './format';
@@ -69,6 +71,13 @@ const last = createStore<SyncSummary | null>(
 );
 export const useLastSync = last.use;
 
+/** Events Epic no longer lists whose history was read, per account: their results can't change, so they're read once. */
+const pastRead = createStore<Record<string, string[]>>(
+  'yr.syncedPast.v1',
+  (r) => (r && typeof r === 'object' ? (r as Record<string, string[]>) : {}),
+  {},
+);
+
 /** Ends the Epic session on the server; safe to call more than once, and while the page closes. */
 export function endSync(): Promise<void> {
   return fetch('/api/sync', { method: 'DELETE', credentials: 'same-origin', keepalive: true }).then(
@@ -111,17 +120,23 @@ export async function syncWithEpic(o: {
         `${ready.epic.teams} teams, ${ready.epic.tokens} tokens, ${ready.epic.scores} scores.`,
     ];
 
-    // Every event this season, in every region (you can play outside yours), the one copy of each.
-    const events = new Map<string, EventInfo>();
+    // Every event this season, in every region (you can play outside yours), the one copy of each: those Epic
+    // lists, then those it has stopped listing that this browser kept (D31).
+    const current = new Map<string, EventInfo>();
     for (const list of await Promise.all(
       REGIONS.map((r) => apiGetCached<EventsResponse>(`/api/events?region=${r}`, 15 * 60_000)),
     ))
-      for (const e of list.events) if (!events.has(e.id)) events.set(e.id, e);
-    const finals = (e: EventInfo) => e.windows.filter((w) => windowState(w, now) === 'final');
-    const label = (x: { eventId: string; windowId: string }) => {
+      for (const e of list.events) if (!current.has(e.id)) current.set(e.id, e);
+    rememberEvents([...current.values()]);
+    const listed = new Set(current.keys());
+    const events = new Map<string, KeptEvent>(current);
+    for (const e of keptEvents()) if (!events.has(e.id)) events.set(e.id, e);
+    const readBefore = new Set(pastRead.get()[me] ?? []);
+    const finals = (e: KeptEvent) => e.windows.filter((w) => windowState(w, now) === 'final');
+    const label = (x: { eventId: string; windowId: string; label?: string }) => {
       const e = events.get(x.eventId);
-      const w = e?.windows.find((y) => y.id === x.windowId);
-      return e && w ? `${e.name} · ${w.label}` : x.windowId;
+      const w = e?.windows.find((y) => y.id === x.windowId)?.label ?? x.label;
+      return e && w ? `${e.name} · ${w}` : x.windowId;
     };
 
     // Up to three results a board search found (not an earlier sync) are read again, as a check on Epic's history.
@@ -133,7 +148,11 @@ export async function syncWithEpic(o: {
     // request reads one schedule (global events are served from NAE's).
     const home = (id: string) => regionOf(id) ?? 'NAE';
     const queue = [...events.values()]
-      .filter((e) => known.some((k) => k.eventId === e.id) || finals(e).some((w) => !isWindowChecked(e.id, w.id, me)))
+      .filter(
+        (e) =>
+          known.some((k) => k.eventId === e.id) ||
+          (listed.has(e.id) ? finals(e).some((w) => !isWindowChecked(e.id, w.id, me)) : !readBefore.has(e.id)),
+      )
       .map((e) => e.id)
       .sort(
         (a, b) =>
@@ -156,8 +175,8 @@ export async function syncWithEpic(o: {
           board: r.board.id,
           boardLabel: r.board.label,
           payouts: r.board.payouts,
-          title: w ? label(r) : undefined,
-          endedAt: w?.end,
+          title: label(r),
+          endedAt: w?.end ?? r.endedAt,
         },
         me,
         r.entry,
@@ -178,7 +197,10 @@ export async function syncWithEpic(o: {
         read.push(h);
         h.results.forEach(keep);
         toRead.push(...h.toRead);
+        // Gone from Epic's schedule: what it says now (even "no such event") won't change.
+        if (!listed.has(h.eventId) && (!h.error || h.error.startsWith('404'))) readBefore.add(h.eventId);
       }
+      pastRead.set({ ...pastRead.get(), [me]: [...readBefore] });
       done += res.events.length;
       o.onProgress({ step: 'reading', displayName, done, total });
       // Forbidden for every event so far: it won't answer for the rest either.
@@ -214,10 +236,15 @@ export async function syncWithEpic(o: {
       const sessions = h.played.map((w) => {
         const x = { eventId: h.eventId, windowId: w };
         const r = kept.get(w);
-        const name = events.get(h.eventId)?.windows.find((y) => y.id === w)?.label ?? w;
+        const name = events.get(h.eventId)?.windows.find((y) => y.id === w)?.label ?? r?.label ?? w;
         if (r?.entry)
           return `${name} ${ordinal(r.entry.rank)}${r.board?.label === 'Overall' ? '' : ` (${r.board?.label})`}`;
-        return `${name} (${h.toRead.some((t) => keyOf(t) === keyOf(x)) ? 'read from the board' : 'not final yet'})`;
+        const why = h.toRead.some((t) => keyOf(t) === keyOf(x))
+          ? 'read from the board'
+          : listed.has(h.eventId)
+            ? 'not final yet'
+            : 'no standing in the history';
+        return `${name} (${why})`;
       });
       details.push(
         `${events.get(h.eventId)?.name ?? h.eventId}: ${sessions.join('; ')}` +

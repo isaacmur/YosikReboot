@@ -263,6 +263,9 @@ export interface SyncRowResult {
   entry?: Entry;
   /** What Epic answered for each board tried. */
   trace?: string[];
+  /** For an event Epic's schedule no longer lists (D31): the session's name from its ID, and your last game's end. */
+  label?: string;
+  endedAt?: string;
 }
 
 /**
