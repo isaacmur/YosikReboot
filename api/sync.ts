@@ -1,8 +1,8 @@
 // Sync with Epic (D30): your own results, read with your own sign-in.
 //   POST /api/sync?step=start              -> SyncStart; open the link on epicgames.com and approve
-//   POST /api/sync?step=poll&region=       -> SyncPoll; once approved, the sessions Epic lists for you
-//   POST /api/sync?step=rows  { sessions } -> SyncRows; your row in each, a few per request
-//   POST /api/sync?step=probe { session }  -> SyncProbe; Epic's history for one session, as an outline
+//   POST /api/sync?step=poll&region=       -> SyncPoll; once approved, who you are
+//   POST /api/sync?step=history { events } -> SyncHistory; your results in each event, from Epic's history
+//   POST /api/sync?step=rows  { sessions } -> SyncRows; your row in sessions the history doesn't cover
 //   DELETE /api/sync                       -> ends your Epic session
 // The sign-in lives only in a sealed HttpOnly cookie (Path=/api/sync, 15 min):
 // nothing is stored on the server, the browser can't read it, and DELETE (sent
@@ -16,15 +16,17 @@ import { seal, unseal } from '../lib/auth/seal.js';
 import { CallLog, EpicClient, epicClient, fixedToken } from '../lib/epic/client.js';
 import { endpoints } from '../lib/epic/endpoints.js';
 import { EpicHttpError } from '../lib/epic/errors.js';
-import { ownRow, playedSessions, probeHistory, type PlayedSession } from '../lib/epic/player.js';
+import { eventHistory, ownRow, type PlayedSession } from '../lib/epic/player.js';
 import { asArr, asObj } from '../lib/epic/json.js';
 import { rawSchedule, regionForEvent } from '../lib/epic/schedule.js';
 import { authConfig, deviceCodeClient, epicConfig } from '../lib/config.js';
 import { apiError, json, toErrorResponse } from '../lib/http.js';
 import {
   isRegion,
+  type Region,
+  type SyncEventHistory,
+  type SyncHistory,
   type SyncPoll,
-  type SyncProbe,
   type SyncRowResult,
   type SyncRows,
   type SyncSession,
@@ -35,9 +37,12 @@ import { isAccountId, isEpicId } from '../lib/validate.js';
 const COOKIE = 'yr_epic';
 const PURPOSE = 'epic-sync';
 const MAX_AGE_MS = 15 * 60_000;
-/** Sessions per rows request, and Epic calls per request, to stay well inside the 30 s limit. */
+/** Events per history request, sessions per rows request, and Epic calls per request, to stay well inside the 30 s limit. */
+const MAX_EVENTS = 12;
 const MAX_SESSIONS = 8;
 const MAX_CALLS = 16;
+/** History calls in flight at once; the client still spaces them out (F37). */
+const PARALLEL = 4;
 
 type SyncState =
   | { phase: 'pending'; deviceCode: string; intervalMs: number }
@@ -155,17 +160,17 @@ export function makeSyncHandlers(deps: Deps) {
         }),
         'your schedule',
       );
-      const played = playedSessions(schedule, ready.accountId);
+      // Only an outline is kept, for the sync's details: `player.teams` turned out not to be a history (D30).
       const player = asObj(asObj(schedule)?.player);
       const body: SyncPoll = {
         status: 'ready',
         accountId: ready.accountId,
         displayName: ready.displayName,
-        played: played.length ? played : null,
         epic: {
           playerKeys: Object.keys(player ?? {}).slice(0, 20),
           teams: Object.keys(asObj(player?.teams) ?? {}).length,
           tokens: asArr(player?.tokens).length,
+          scores: asArr(asObj(schedule)?.scores).length,
         },
       };
       const expiresAt = Math.min(token.expiresAt, deps.now() + MAX_AGE_MS);
@@ -225,27 +230,57 @@ export function makeSyncHandlers(deps: Deps) {
     return json(body);
   }
 
-  async function probe(request: Request): Promise<Response> {
+  async function history(request: Request): Promise<Response> {
     const state = await readState(request, deps);
     if (!state || state.phase !== 'ready') return signedOut();
-    let parsed: { eventId?: unknown; windowId?: unknown } | undefined;
+    let parsed: unknown;
     try {
-      parsed = (await request.json()) as typeof parsed;
+      parsed = await request.json();
     } catch {
       parsed = undefined;
     }
-    const eventId = typeof parsed?.eventId === 'string' ? parsed.eventId : null;
-    const windowId = typeof parsed?.windowId === 'string' ? parsed.windowId : null;
-    if (!isEpicId(eventId) || !isEpicId(windowId)) return apiError(400, 'bad_session', 'Send { eventId, windowId }.');
-    try {
-      const body: SyncProbe = {
-        history: await probeHistory(userClient(state, deps), { eventId, windowId }, state.accountId),
-      };
-      return json(body);
-    } catch (err) {
-      if (err instanceof EpicHttpError && err.status === 401) return signedOut();
-      throw err;
+    const list = (parsed as { events?: unknown } | null)?.events;
+    const ids = Array.isArray(list) ? [...new Set(list.filter((x): x is string => typeof x === 'string'))] : [];
+    if (!ids.length || ids.length > MAX_EVENTS || !ids.every(isEpicId))
+      return apiError(400, 'bad_events', `Send { events: [...] }, 1 to ${MAX_EVENTS} event IDs at a time.`);
+
+    const client = userClient(state, deps);
+    let calls = 0;
+    const spend = () => (calls < MAX_CALLS ? (calls++, true) : false);
+    // Schedules first, one per region, so the history calls can run side by side.
+    const raws = new Map<Region, unknown>();
+    for (const r of new Set(ids.map(regionForEvent)))
+      raws.set(r, await rawSchedule(deps.serviceClient(), deps.serviceAccountId(), r, deps.now()));
+
+    const read = new Map<string, SyncEventHistory>();
+    let next = 0;
+    let failure: unknown;
+    const worker = async () => {
+      while (failure === undefined && next < ids.length) {
+        const id = ids[next++]!;
+        try {
+          const h = await eventHistory(client, raws.get(regionForEvent(id)), id, state.accountId, deps.now(), spend);
+          if (h) read.set(id, h);
+        } catch (err) {
+          failure ??= err;
+        }
+      }
+    };
+    await Promise.all(Array.from({ length: PARALLEL }, worker));
+    if (failure !== undefined) {
+      if (failure instanceof EpicHttpError && failure.status === 401) {
+        const res = signedOut();
+        res.headers.set('Set-Cookie', cleared());
+        return res;
+      }
+      throw failure;
     }
+    // Once the budget runs out, the rest go back for the next request.
+    const body: SyncHistory = {
+      events: ids.flatMap((id) => read.get(id) ?? []),
+      remaining: ids.filter((id) => !read.has(id)),
+    };
+    return json(body);
   }
 
   async function POST(request: Request): Promise<Response> {
@@ -256,12 +291,12 @@ export function makeSyncHandlers(deps: Deps) {
           return await start(request);
         case 'poll':
           return await poll(request, q.get('region') ?? '');
+        case 'history':
+          return await history(request);
         case 'rows':
           return await rows(request);
-        case 'probe':
-          return await probe(request);
         default:
-          return apiError(400, 'bad_step', 'step must be start, poll, rows or probe.');
+          return apiError(400, 'bad_step', 'step must be start, poll, history or rows.');
       }
     } catch (err) {
       return toErrorResponse(err);

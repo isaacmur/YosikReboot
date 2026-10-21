@@ -224,7 +224,7 @@ export interface LeaderboardPage {
 
 // --- Sync with Epic (D30): your own sign-in, for the minutes a sync takes ---
 
-/** A session to read your row from; `team` is your team's account IDs when Epic listed them. */
+/** A session to read your row from; `team` is your team's account IDs, from your history. */
 export interface SyncSession {
   eventId: string;
   windowId: string;
@@ -243,30 +243,16 @@ export interface SyncStart {
 export interface SyncEpicInfo {
   /** Keys of its `player` part. */
   playerKeys: string[];
-  /** Entries in `player.teams`, and tokens you hold. */
+  /** Entries in `player.teams`, tokens you hold, and entries in `scores`. */
   teams: number;
   tokens: number;
+  scores: number;
 }
 
-/**
- * POST /api/sync?step=poll. `played` is what `player.teams` lists, null when it's
- * empty; it turned out not to be a history of what you played (D30), so it's only
- * one source of sessions to read.
- */
+/** POST /api/sync?step=poll. */
 export type SyncPoll =
   | { status: 'pending'; intervalMs: number }
-  | {
-      status: 'ready';
-      accountId: string;
-      displayName: string | null;
-      played: SyncSession[] | null;
-      epic: SyncEpicInfo;
-    };
-
-/** POST /api/sync?step=probe: Epic's per-player history for one session, as an outline. */
-export interface SyncProbe {
-  history: string;
-}
+  | { status: 'ready'; accountId: string; displayName: string | null; epic: SyncEpicInfo };
 
 export interface SyncRowResult {
   eventId: string;
@@ -277,6 +263,30 @@ export interface SyncRowResult {
   entry?: Entry;
   /** What Epic answered for each board tried. */
   trace?: string[];
+}
+
+/**
+ * One event read from Epic's per-player history (D30), which lists a score for
+ * every board you have a row on, in every session, whatever team you played in.
+ */
+export interface SyncEventHistory {
+  eventId: string;
+  /** Epic's answer in one line when it didn't return your history; null when it did. */
+  error: string | null;
+  /** Sessions the history lists you in, final or not. */
+  played: string[];
+  /** Your row in each final session you played, on its scored board. */
+  results: SyncRowResult[];
+  /** Final sessions you played whose standing the history doesn't hold (a Ranked Cup's tiers): read them with `rows`. */
+  toRead: SyncSession[];
+  /** Scores that matched none of the event's boards. */
+  unmatched: number;
+}
+
+/** POST /api/sync?step=history: the events read, and what's left for the next request. */
+export interface SyncHistory {
+  events: SyncEventHistory[];
+  remaining: string[];
 }
 
 /** POST /api/sync?step=rows: what was read, and what's left for the next request. */

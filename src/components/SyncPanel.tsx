@@ -1,6 +1,7 @@
 // Sync with Epic (D30) on Me: sign in on epicgames.com with your own account,
-// and your recent sessions are read for your results. The sign-in is used for the
-// sync only, then ended. What Epic answered is kept for when results are missing.
+// and Epic's history of your results this season is read, in every region. The
+// sign-in is used for the sync only, then ended. What Epic answered is kept for
+// when results are missing.
 
 import { useEffect, useRef, useState } from 'react';
 import { formatDay, formatTime, plural, useNow } from '../format';
@@ -45,8 +46,8 @@ export function SyncPanel({ intro }: { intro?: boolean }) {
           <h2 className="font-display text-lg leading-none font-bold tracking-wide uppercase">Sync with Epic</h2>
           <p className="mt-1.5 max-w-prose text-xs text-muted">
             {intro
-              ? 'Sign in with your own Epic account to fill this page with the sessions you played in the last three weeks. '
-              : 'Pull in the sessions you played in the last three weeks. '}
+              ? "Sign in with your own Epic account to fill this page with every session you've played this season, in any region. "
+              : "Pull in every session you've played this season, in any region. "}
             You approve on epicgames.com; the sign-in is used for this sync only, then ended, and nothing is stored.
           </p>
         </div>
@@ -92,7 +93,7 @@ export function SyncPanel({ intro }: { intro?: boolean }) {
         <div className="space-y-2">
           <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
             <span role="status">
-              Signed in as <b>{progress.displayName}</b>. Reading your sessions
+              Signed in as <b>{progress.displayName}</b>. Reading your history
               {progress.total ? `: ${progress.done} of ${progress.total}` : '…'}
             </span>
             <Button size="sm" onClick={() => ctl.current?.abort()}>
@@ -117,9 +118,7 @@ export function SyncPanel({ intro }: { intro?: boolean }) {
           <p className="text-xs text-muted">
             Last synced {formatDay(last.at, timeZone)}, {formatTime(last.at, timeZone)} as{' '}
             <b className="text-ink">{last.displayName}</b>: {plural(last.found, 'result')} from{' '}
-            {plural(last.sessions, 'session')}
-            {last.stoppedEarly ? ", stopped early because Epic didn't return a result you have" : ''}. Signed out of
-            Epic.
+            {plural(last.events, 'event')}. Signed out of Epic.
           </p>
           <details className="text-xs text-muted">
             <summary className="cursor-pointer font-semibold text-accent-bright">What Epic returned</summary>

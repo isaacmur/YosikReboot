@@ -73,6 +73,11 @@ export const endpoints = {
     `${HOSTS.events}/api/v1/events/${GAME_ID}/${seg(eventId)}/${seg(windowId)}/history`,
   playerWindowHistory: (eventId: string, windowId: string, accountId: string) =>
     `${HOSTS.events}/api/v1/events/${GAME_ID}/${seg(eventId)}/${seg(windowId)}/history/${seg(accountId)}`,
+  /** Every score an account has in one event, all sessions; only for the signed-in account (D30). */
+  playerEventHistory: (eventId: string, accountId: string, teamAccountIds?: string[]) =>
+    withQuery(`${HOSTS.events}/api/v1/events/${GAME_ID}/${seg(eventId)}/history/${seg(accountId)}`, {
+      teamAccountIds: teamAccountIds?.join(','),
+    }),
   playerTokens: (accountIds: string[]) =>
     withQuery(`${HOSTS.events}/api/v1/players/${GAME_ID}/tokens`, {
       teamAccountIds: accountIds.join(','),

@@ -1,5 +1,5 @@
-// Sync with Epic (D30): sealed cookies, the device code sign-in, your own rows,
-// and the session always ending at Epic.
+// Sync with Epic (D30): sealed cookies, the device code sign-in, your history
+// and your own rows, and the session always ending at Epic.
 
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -8,9 +8,9 @@ import { makeSyncHandlers } from '../api/sync';
 import { EpicTokenManager, type FetchLike } from '../lib/auth/epicToken';
 import { seal, unseal } from '../lib/auth/seal';
 import { EpicClient } from '../lib/epic/client';
-import { playedSessions } from '../lib/epic/player';
+import { historyResults } from '../lib/epic/player';
 import { clearScheduleCache } from '../lib/epic/schedule';
-import type { SyncPoll, SyncProbe, SyncRows, SyncStart } from '../lib/types';
+import type { SyncHistory, SyncPoll, SyncRows, SyncStart } from '../lib/types';
 
 const fixture = (f: string) => readFileSync(join(__dirname, 'fixtures/epic/first', f), 'utf8');
 const SECRET = 'test-cookie-secret-0123456789';
@@ -30,17 +30,31 @@ describe('sealed cookie values', () => {
 });
 
 // The fixture board's 5th team stands in for you and your teammate.
-const BOARD = JSON.parse(fixture('leaderboard-final-p0.json')) as { entries: { teamAccountIds: string[] }[] };
+const BOARD = JSON.parse(fixture('leaderboard-final-p0.json')) as {
+  entries: ({ teamAccountIds: string[] } & Record<string, unknown>)[];
+};
 const [ME, MATE] = BOARD.entries[4]!.teamAccountIds as [string, string];
 const SLENDER = { eventId: 'epicgames_S42_SlenderManCup_ZB_BR', windowId: 'S42_SlenderManCup_ZB_BR' };
+const RANKED = 'epicgames_S42_RankedCupSolo_NAC';
 const NOW = Date.parse('2026-10-21T03:00:00Z');
+
+/**
+ * A score as Epic's per-player history lists it: a leaderboard entry (here, a real
+ * one from the fixture board) with a `scoreKey` naming its board.
+ */
+const scoreOn = (eventId: string, windowId: string, entry: Record<string, unknown> = BOARD.entries[4]!) => ({
+  scoreKey: { gameId: 'Fortnite', eventId, eventWindowId: windowId, _scoreId: null },
+  liveSessionId: null,
+  ...entry,
+});
 
 /** A fake Epic for the whole sync: device code sign-in, exchange, your schedule and your filtered rows. */
 function fakeEpic(
   o: {
     pendingPolls?: number;
     teams?: Record<string, string[]>;
-    history?: { status: number; body: unknown };
+    /** Epic's per-player history for an event; `team` is the teamAccountIds asked with, null if none. */
+    history?: (eventId: string, team: string | null) => { status: number; body: unknown };
     /** Answer boards you're not on as Epic does for your own ID (200, no rows), instead of refusing. */
     emptyOnMiss?: boolean;
   } = {},
@@ -94,10 +108,14 @@ function fakeEpic(
       }
       return new Response(fixture(`events-download-${region}.json`));
     }
-    if (/^\/api\/v1\/events\/Fortnite\/[^/]+\/[^/]+\/history\//.test(path)) {
-      calls.push('history');
+    const history = /^\/api\/v1\/events\/Fortnite\/([^/]+)\/history\/([^/]+)$/.exec(path);
+    if (history) {
+      const team = u.searchParams.get('teamAccountIds');
+      calls.push(`history ${history[1]}${team === null ? '' : ` team=${team}`}`);
+      expect(history[2]).toBe(ME);
       expect(auth).toBe('bearer your-token');
-      return Response.json(o.history?.body ?? {}, { status: o.history?.status ?? 200 });
+      const answer = o.history?.(history[1]!, team) ?? { status: 200, body: [] };
+      return Response.json(answer.body, { status: answer.status });
     }
     if (path.startsWith('/api/v1/leaderboards/Fortnite/')) {
       const [, instance, caller] = path.split('/').slice(5, 8) as [string, string, string];
@@ -173,7 +191,7 @@ describe('POST /api/sync', () => {
     expect(res.headers.get('cache-control')).toBe('no-store');
   });
 
-  it('waits for approval, then signs in, ends the first session and lists the sessions Epic has you in', async () => {
+  it('waits for approval, then signs in, ends the first session and outlines your schedule download', async () => {
     const epic = fakeEpic({
       pendingPolls: 1,
       teams: { [`${SLENDER.eventId}:${SLENDER.windowId}`]: [MATE, ME], 'bad-key': [ME] },
@@ -187,8 +205,7 @@ describe('POST /api/sync', () => {
       status: 'ready',
       accountId: ME,
       displayName: 'You',
-      played: [{ ...SLENDER, team: [ME, MATE] }],
-      epic: { playerKeys: ['accountId', 'tokens', 'teams'], teams: 2, tokens: 0 },
+      epic: { playerKeys: ['accountId', 'tokens', 'teams'], teams: 2, tokens: 0, scores: 0 },
     });
     expect(epic.killed).toEqual(['switch-token']);
     expect(ready.headers.get('set-cookie')).not.toContain('your-token');
@@ -196,10 +213,9 @@ describe('POST /api/sync', () => {
   });
 
   it('reads your row with your team, as a lite entry, and ends the session when asked', async () => {
-    const epic = fakeEpic({ teams: { [`${SLENDER.eventId}:${SLENDER.windowId}`]: [ME, MATE] } });
-    const { cookie, body } = await signIn(epic);
-    if (body.status !== 'ready') throw new Error('not ready');
-    const res = await epic.handlers.POST(post('rows', cookie, { sessions: body.played }));
+    const epic = fakeEpic();
+    const { cookie } = await signIn(epic);
+    const res = await epic.handlers.POST(post('rows', cookie, { sessions: [{ ...SLENDER, team: [MATE] }] }));
     const rows = (await res.json()) as SyncRows;
     expect(rows.remaining).toEqual([]);
     expect(rows.results).toHaveLength(1);
@@ -259,26 +275,95 @@ describe('POST /api/sync', () => {
     expect(bad.status).toBe(400);
   });
 
-  it("probes Epic's history for one session, reporting only its outline and shortened IDs", async () => {
-    const forbidden = fakeEpic({
-      history: {
-        status: 403,
-        body: { errorCode: 'errors.com.epicgames.common.forbidden', errorMessage: `No access for ${ME}` },
-      },
+  it("reads Epic's history for each event: your row in every final session, on its board", async () => {
+    const epic = fakeEpic({
+      history: (eventId) => ({
+        status: 200,
+        body:
+          eventId === SLENDER.eventId
+            ? [scoreOn(SLENDER.eventId, SLENDER.windowId), scoreOn(SLENDER.eventId, 'no_such_board')]
+            : [],
+      }),
     });
-    const { cookie } = await signIn(forbidden);
-    const res = await forbidden.handlers.POST(post('probe', cookie, SLENDER));
-    const { history } = (await res.json()) as SyncProbe;
-    expect(history).toBe(`403 errors.com.epicgames.common.forbidden: No access for ${ME.slice(0, 6)}…`);
+    const { cookie } = await signIn(epic);
+    const res = await epic.handlers.POST(post('history', cookie, { events: [SLENDER.eventId, RANKED] }));
+    const body = (await res.json()) as SyncHistory;
+    expect(res.headers.get('cache-control')).toBe('no-store');
+    expect(body.remaining).toEqual([]);
+    expect(body.events.map((h) => h.eventId)).toEqual([SLENDER.eventId, RANKED]);
+    const [slender, ranked] = body.events as [SyncHistory['events'][0], SyncHistory['events'][0]];
+    expect(slender).toMatchObject({ error: null, played: [SLENDER.windowId], toRead: [], unmatched: 1 });
+    expect(slender.results).toHaveLength(1);
+    expect(slender.results[0]).toMatchObject({ ...SLENDER, status: 'found', board: { id: SLENDER.windowId } });
+    expect(slender.results[0]!.entry).toMatchObject({ rank: 5, points: 584, sessions: [] });
+    expect(slender.results[0]!.entry!.members.map((m) => m.id)).toEqual([ME, MATE]);
+    expect(ranked).toEqual({ eventId: RANKED, error: null, played: [], results: [], toRead: [], unmatched: 0 });
+    // One call per event, without a team, and no board reads.
+    expect(epic.calls.filter((c) => /^(history|row)/.test(c))).toEqual([
+      `history ${SLENDER.eventId}`,
+      `history ${RANKED}`,
+    ]);
+  });
 
-    const ok = fakeEpic({
-      history: { status: 200, body: [{ sessionId: 'secret-ish', rank: 7, sessions: [{ x: 1 }] }] },
+  it('asks again naming just you when Epic wants a team, and reports a refusal in one line', async () => {
+    const epic = fakeEpic({
+      history: (eventId, team) =>
+        eventId === RANKED
+          ? {
+              status: 403,
+              body: {
+                errorCode: 'errors.com.epicgames.common.forbidden',
+                errorMessage: `Sorry your login does not posses the permissions 'Fortnite:profile:${ME}:commands READ'`,
+              },
+            }
+          : team === null
+            ? { status: 400, body: { errorCode: 'errors.com.epicgames.common.rejection.MissingQueryParamRejection' } }
+            : { status: 200, body: [scoreOn(SLENDER.eventId, SLENDER.windowId)] },
     });
-    const signed = await signIn(ok);
-    const outline = ((await (await ok.handlers.POST(post('probe', signed.cookie, SLENDER))).json()) as SyncProbe)
-      .history;
-    expect(outline).toBe('200 [1 × {sessionId: string, rank: 7, sessions: [1 × {x: 1}]}]');
-    expect(outline).not.toContain('secret-ish');
+    const { cookie } = await signIn(epic);
+    const res = await epic.handlers.POST(post('history', cookie, { events: [SLENDER.eventId, RANKED] }));
+    const [slender, ranked] = ((await res.json()) as SyncHistory).events;
+    expect(epic.calls.filter((c) => c.startsWith(`history ${SLENDER.eventId}`))).toEqual([
+      `history ${SLENDER.eventId}`,
+      `history ${SLENDER.eventId} team=${ME}`,
+    ]);
+    expect(slender!.results.map((r) => r.entry?.rank)).toEqual([5]);
+    expect(ranked!.error).toBe(
+      `403 errors.com.epicgames.common.forbidden: Sorry your login does not posses the permissions 'Fortnite:profile:${ME.slice(0, 6)}…:commands READ'`,
+    );
+  });
+
+  it('hands back events past the budget, skips unknown ones without asking Epic, and checks the request', async () => {
+    const epic = fakeEpic({
+      history: () => ({
+        status: 400,
+        body: { errorCode: 'errors.com.epicgames.common.rejection.MissingQueryParamRejection' },
+      }),
+    });
+    const { cookie } = await signIn(epic);
+    const nac = (JSON.parse(fixture('events-download-NAC.json')) as { events: { eventId: string }[] }).events;
+    const ids = ['epicgames_Nope_NAC', ...nac.slice(0, 11).map((e) => e.eventId)];
+    const body = (await (await epic.handlers.POST(post('history', cookie, { events: ids }))).json()) as SyncHistory;
+    expect(body.events[0]).toMatchObject({ eventId: 'epicgames_Nope_NAC', error: "not in this season's schedule" });
+    // Two calls per event (without a team, then naming you): the request's sixteen run out before the eleventh.
+    expect(epic.calls.filter((c) => c.startsWith('history'))).toHaveLength(16);
+    expect(body.remaining.length).toBeGreaterThanOrEqual(3);
+    expect([...body.events.map((h) => h.eventId), ...body.remaining].sort()).toEqual([...ids].sort());
+
+    const tooMany = await epic.handlers.POST(post('history', cookie, { events: [...ids, 'epicgames_X_NAC'] }));
+    expect(tooMany.status).toBe(400);
+    const none = await epic.handlers.POST(post('history', undefined, { events: [RANKED] }));
+    expect(none.status).toBe(409);
+  });
+
+  it('signs out when Epic ends the sign-in mid-history', async () => {
+    const epic = fakeEpic({
+      history: () => ({ status: 401, body: { errorCode: 'errors.com.epicgames.common.unauthorized' } }),
+    });
+    const { cookie } = await signIn(epic);
+    const res = await epic.handlers.POST(post('history', cookie, { events: [RANKED] }));
+    expect(res.status).toBe(409);
+    expect(res.headers.get('set-cookie')).toContain('Max-Age=0');
   });
 
   it('ends an unfinished sync when a new one starts', async () => {
@@ -289,22 +374,61 @@ describe('POST /api/sync', () => {
   });
 });
 
-describe('playedSessions', () => {
-  it('reads "<event>:<window>" keys with your team, and skips anything else', () => {
-    const raw = {
-      player: {
-        teams: {
-          'e1:w1': [ME, 'not-an-id'],
-          'e2:w2': 'junk',
-          'only-one-part': [ME],
-          'a:b:c': [ME],
-        },
-      },
-    };
-    expect(playedSessions(raw, ME)).toEqual([
-      { eventId: 'e1', windowId: 'w1', team: [ME] },
-      { eventId: 'e2', windowId: 'w2', team: [ME] },
-    ]);
-    expect(playedSessions(JSON.parse(fixture('events-download-NAC.json')), ME)).toEqual([]);
+describe('historyResults', () => {
+  const raw = (region: string) => JSON.parse(fixture(`events-download-${region}.json`)) as unknown;
+  const nac = raw('NAC');
+  const tiers = (windowId: string) =>
+    (
+      (nac as { resolvedWindowLocations: Record<string, string[]> }).resolvedWindowLocations[
+        `Fortnite:${RANKED}:${windowId}`
+      ] ?? []
+    )
+      .map((k) => k.split(':')[2]!)
+      .filter((id) => id !== windowId);
+
+  it("takes a Ranked Cup's standing from its tier board, and sends sessions with only the main board to be read", () => {
+    const [event8, event7] = ['S42_RankedCupSolo_Event8_NAC', 'S42_RankedCupSolo_Event7_NAC'];
+    const gold = tiers(event8).find((id) => /gold$/i.test(id))!;
+    expect(gold).toBeDefined();
+    const solo = { ...BOARD.entries[0]!, teamAccountIds: [ME] };
+    const out = historyResults(
+      nac,
+      RANKED,
+      [
+        // Event 8: the main board (no points) and the Gold tier, found through `_scoreId`.
+        scoreOn(RANKED, event8, solo),
+        { ...scoreOn(RANKED, event8, solo), scoreKey: { eventId: RANKED, _scoreId: `Fortnite:${RANKED}:${gold}` } },
+        // Event 7: only the main board.
+        scoreOn(RANKED, event7, { ...solo, teamAccountIds: [ME, 'not-an-id'] }),
+      ],
+      ME,
+      NOW,
+    );
+    expect(out.played).toEqual([event8, event7]);
+    expect(out.results).toHaveLength(1);
+    expect(out.results[0]).toMatchObject({ windowId: event8, board: { id: gold, label: 'Gold' } });
+    expect(out.results[0]!.entry!.rank).toBe(1);
+    expect(out.toRead).toEqual([{ eventId: RANKED, windowId: event7, team: [ME] }]);
+
+    // A tier score without a standing goes to be read too.
+    const unranked = historyResults(
+      nac,
+      RANKED,
+      [{ ...scoreOn(RANKED, gold, solo), rank: 0, scoreKey: { eventId: RANKED, eventWindowId: gold } }],
+      ME,
+      NOW,
+    );
+    expect(unranked).toMatchObject({ played: [event8], results: [], toRead: [{ windowId: event8 }] });
+    expect(out.unmatched).toBe(0);
+  });
+
+  it("lists sessions that aren't final yet as played, without a result", () => {
+    const out = historyResults(raw('BR'), SLENDER.eventId, [scoreOn(SLENDER.eventId, SLENDER.windowId)], ME, 0);
+    expect(out).toEqual({ played: [SLENDER.windowId], results: [], toRead: [], unmatched: 0 });
+  });
+
+  it('counts scores it can place nowhere, and skips junk', () => {
+    const out = historyResults(raw('BR'), SLENDER.eventId, [null, 'x', { rank: 3 }, scoreOn('other', 'w')], ME, NOW);
+    expect(out).toEqual({ played: [], results: [], toRead: [], unmatched: 4 });
   });
 });

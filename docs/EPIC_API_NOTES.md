@@ -79,7 +79,7 @@ In a cloud session, prefix commands with `NODE_USE_ENV_PROXY=1`, so Node's fetch
 ### Looking up one player or team
 - [x] **`teamAccountIds=` only accepts the signed-in account's own team.** Any other account returns 400 `com.epicgames.api.malformed_data`, however the IDs are formatted (single ID, encoded comma, literal comma). The service account's own ID returns 200 with no entries.
 - [x] `events/download/{otherAccountId}` returns 403 `forbidden`.
-- [x] Window history (`/history`) returns 404, and player history (`/history/{id}`) returns 403. Neither is usable.
+- [x] Window history (`/history`) returns 404, and player history (`/history/{id}`) returns 403 for another account: `Fortnite:profile:<id>:commands READ` is missing. That permission is the signed-in account's own, so your own history is read during a sync (D30).
 - **Consequence (D10):** results for you and your follows have to come from scanning finished boards, top 10,000 only. This matches Fortnite Tracker's own top-10K limit.
 
 ### Cumulative and ranked tier boards
@@ -111,7 +111,8 @@ In a cloud session, prefix commands with `NODE_USE_ENV_PROXY=1`, so Node's fetch
 ### Still open
 - [ ] Rate limit: not tested yet. Run step 5 once.
 - [x] Sync with Epic (D30), first real sync: `player.teams` in your own schedule download listed **one** session, not the ones you'd played. It isn't a history (it may be the events you have a team set up for), so a sync now reads sessions one by one instead of trusting it.
-- [ ] Sync with Epic: that a board filtered with `teamAccountIds=` set to just you returns your row with its rank on the full board, and whether `/history/{yourId}` answers for your own account. The sync's "What Epic returned" shows both on the next run.
+- [x] Sync with Epic, second real sync: a board filtered with `teamAccountIds=` set to just you found 1 result in 60 sessions (a solo one). It missed a duos Ranked Cup you'd played (just you isn't your team), and anything outside your region's newest 60 sessions. A sync now reads your per-event history instead.
+- [ ] Sync with Epic: that `/api/v1/events/Fortnite/{eventId}/history/{yourId}` answers for your own account (Phase 0's 403 for another account named the permission your own sign-in has), with a list of scores keyed by `scoreKey.eventWindowId`, ranks that match the boards, and Ranked Cup tiers either as their own scores or not at all. Also what `scores` in your own schedule download holds. The sync's "What Epic returned" shows all of these on the next run.
 - [ ] Player tokens (`/api/v1/players/Fortnite/tokens`) work but are empty for a new account, so the eligibility feature (F9, Later) needs your own account's tokens.
 
 ## Gate 0

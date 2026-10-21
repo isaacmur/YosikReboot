@@ -1,42 +1,25 @@
 // Your own results, read with your own sign-in during a sync (D30). Epic answers
-// these only for the signed-in account (D10): the `player` part of your schedule
-// download lists the sessions you have a team in, and a board filtered to your
-// team (`teamAccountIds=`) returns just your row.
+// these only for the signed-in account (D10): its per-player history lists every
+// score you have in an event, one call per event, and a board filtered to your
+// team (`teamAccountIds=`) returns just your row, for the boards the history
+// doesn't cover.
 
 import { isAccountId } from '../validate.js';
-import { boardInfos, boardRules, isFetchable, windowLocations } from './boards.js';
+import { boardInfos, boardRules, isFetchable, windowLocations, type ScoreLocation } from './boards.js';
 import type { EpicClient } from './client.js';
 import { endpoints } from './endpoints.js';
 import { EpicHttpError } from './errors.js';
-import { asObj, num, str } from './json.js';
+import { asArr, asObj, num, str, strings } from './json.js';
 import { liteEntry, normalizeEntries } from './leaderboard.js';
 import { findWindow } from './schedule.js';
 import { windowState } from '../status.js';
-import type { BoardInfo, Entry } from '../types.js';
+import type { BoardInfo, Entry, SyncEventHistory, SyncRowResult, SyncSession } from '../types.js';
 
 export interface PlayedSession {
   eventId: string;
   windowId: string;
   /** Your team's account IDs, you included. */
   team: string[];
-}
-
-/**
- * Sessions Epic lists a team for you in: `player.teams`, keyed
- * "<eventId>:<windowId>" with the team's account IDs. Unverified against a real
- * player until the first sync: the service account's list is empty.
- */
-export function playedSessions(rawSchedule: unknown, accountId: string): PlayedSession[] {
-  const teams = asObj(asObj(asObj(rawSchedule)?.player)?.teams);
-  if (!teams) return [];
-  const out: PlayedSession[] = [];
-  for (const [key, ids] of Object.entries(teams)) {
-    const [eventId, windowId, extra] = key.split(':');
-    if (!eventId || !windowId || extra !== undefined) continue;
-    const members = (Array.isArray(ids) ? ids : []).filter((id): id is string => typeof id === 'string');
-    out.push({ eventId, windowId, team: [...new Set([accountId, ...members.filter(isAccountId)])] });
-  }
-  return out;
 }
 
 export type OwnRow = (
@@ -72,6 +55,16 @@ export function shapeOf(v: unknown, depth = 0): string {
   return typeof v;
 }
 
+const isFinal = (window: Record<string, unknown>, now: number) =>
+  windowState(
+    {
+      begin: str(window.beginTime) ?? '',
+      end: str(window.endTime) ?? '',
+      payoutDelayMin: num(window.payoutDelay) ?? null,
+    },
+    new Date(now),
+  ) === 'final';
+
 /**
  * Your row in one session: its scored boards (Ranked Cup tiers top first, once
  * the main board says you played), each filtered to your team, until it turns
@@ -88,9 +81,7 @@ export async function ownRow(
 ): Promise<OwnRow | undefined> {
   const ref = findWindow(raw, s.eventId, s.windowId);
   if (!ref) return { status: 'unknown', trace: ["not in this season's schedule"] };
-  const times = { begin: str(ref.window.beginTime) ?? '', end: str(ref.window.endTime) ?? '' };
-  if (windowState({ ...times, payoutDelayMin: num(ref.window.payoutDelay) ?? null }, new Date(now)) !== 'final')
-    return { status: 'not_final', trace: ['results not final yet'] };
+  if (!isFinal(ref.window, now)) return { status: 'not_final', trace: ['results not final yet'] };
   const trace: string[] = [];
   const all = boardInfos(raw, s.eventId, s.windowId, ref.templateRules).filter((b) => !b.computed);
   const scored = all.filter((b) => b.hasPoints);
@@ -146,21 +137,127 @@ export async function ownRow(
   return { status: 'not_found', trace };
 }
 
+/** The board a history score is on, as `<group>:<instance>`: its `_scoreId` location if it names one, else its window. */
+function scoreBoard(score: Record<string, unknown>, eventId: string): string | undefined {
+  const key = asObj(score.scoreKey) ?? score;
+  const loc = /^Fortnite:([^:]+):([^:]+)$/.exec(str(key._scoreId) ?? '');
+  if (loc) return `${loc[1]}:${loc[2]}`;
+  const windowId = str(key.eventWindowId);
+  return windowId ? `${str(key.eventId) ?? eventId}:${windowId}` : undefined;
+}
+
 /**
- * Epic's per-player history for one session, asked once with your own sign-in.
- * Phase 0 got 403 asking about another account; this checks whether your own
- * works, and reports only the response's outline (D30).
+ * Turns one event's history (a list of scores shaped like leaderboard entries,
+ * each with a `scoreKey` naming its board) into your row per final session.
+ * Ranked Cup standings are the tier boards (D14): when the history only has a
+ * session's main board, the session goes to `toRead` with your team from it.
  */
-export async function probeHistory(
-  client: EpicClient,
-  s: { eventId: string; windowId: string },
+export function historyResults(
+  raw: unknown,
+  eventId: string,
+  scores: unknown[],
   accountId: string,
-): Promise<string> {
-  try {
-    const body = await client.getJson(endpoints.playerWindowHistory(s.eventId, s.windowId, accountId), 'your history');
-    return `200 ${shapeOf(body)}`.slice(0, 600);
-  } catch (err) {
-    if (err instanceof EpicHttpError) return describeError(err);
-    throw err;
+  now: number,
+): Omit<SyncEventHistory, 'eventId' | 'error'> {
+  const event = asArr(asObj(raw)?.events)
+    .map(asObj)
+    .find((e) => str(e?.eventId) === eventId);
+  const boardsAt = new Map<string, { windowId: string; loc: ScoreLocation }>();
+  for (const w of asArr(event?.eventWindows).map(asObj)) {
+    const windowId = str(w?.eventWindowId);
+    if (!windowId) continue;
+    for (const loc of windowLocations(raw, eventId, windowId).filter(isFetchable))
+      boardsAt.set(`${loc.group}:${loc.instance}`, { windowId, loc });
   }
+
+  const byWindow = new Map<string, { loc: ScoreLocation; score: Record<string, unknown> }[]>();
+  let unmatched = 0;
+  for (const score of scores.map(asObj)) {
+    const at = score && boardsAt.get(scoreBoard(score, eventId) ?? '');
+    if (!score || !at) {
+      unmatched++;
+      continue;
+    }
+    byWindow.set(at.windowId, [...(byWindow.get(at.windowId) ?? []), { loc: at.loc, score }]);
+  }
+
+  const results: SyncRowResult[] = [];
+  const toRead: SyncSession[] = [];
+  for (const [windowId, found] of byWindow) {
+    const ref = findWindow(raw, eventId, windowId);
+    if (!ref || !isFinal(ref.window, now)) continue;
+    const boards = boardInfos(raw, eventId, windowId, ref.templateRules).filter((b) => !b.computed);
+    const scored = boards.filter((b) => b.hasPoints);
+    // Your standing is on a scored board (the top tier you're on, as Epic lists them), else the only board there is.
+    const pick = [...(scored.length ? scored : boards)]
+      .reverse()
+      .map((board) => ({ board, hit: found.find((f) => f.loc.instance === board.id) }))
+      .find((x) => x.hit);
+    const team = [
+      ...new Set([accountId, ...found.flatMap((f) => strings(f.score.teamAccountIds)).filter(isAccountId)]),
+    ];
+    // A score without a rank (or rank 0) isn't a standing: the board is read instead.
+    const entry =
+      pick &&
+      normalizeEntries(
+        { entries: [pick.hit!.score] },
+        boardRules(raw, pick.hit!.loc, pick.hit!.loc.instance === windowId ? ref.templateRules : undefined),
+      ).find((e) => e.rank > 0);
+    if (pick && entry)
+      results.push({
+        eventId,
+        windowId,
+        status: 'found',
+        board: { id: pick.board.id, label: pick.board.label, payouts: pick.board.payouts },
+        entry: liteEntry(entry),
+        trace: [`history: ${pick.board.label}, rank ${entry.rank}`],
+      });
+    else toRead.push({ eventId, windowId, team: team.slice(0, 4) });
+  }
+  return { played: [...byWindow.keys()], results, toRead, unmatched };
+}
+
+/**
+ * Your history in one event, with your own sign-in: one Epic call, or two if
+ * Epic wants a team named. `spend` works as for `ownRow` (undefined once the
+ * request's budget is used up). An Epic refusal comes back as `error`.
+ */
+export async function eventHistory(
+  client: EpicClient,
+  raw: unknown,
+  eventId: string,
+  accountId: string,
+  now: number,
+  spend: () => boolean,
+): Promise<SyncEventHistory | undefined> {
+  const refused = (error: string): SyncEventHistory => ({
+    eventId,
+    error,
+    played: [],
+    results: [],
+    toRead: [],
+    unmatched: 0,
+  });
+  const inSchedule = asArr(asObj(raw)?.events).some((e) => str(asObj(e)?.eventId) === eventId);
+  if (!inSchedule) return refused("not in this season's schedule");
+
+  const ask = async (team?: string[]): Promise<unknown> => {
+    try {
+      return await client.getJson(endpoints.playerEventHistory(eventId, accountId, team), 'your history');
+    } catch (err) {
+      // Sign-in ended, rate limited or Epic down: the whole request stops. Anything else is this event's answer.
+      if (!(err instanceof EpicHttpError) || err.status === 401 || err.status === 429 || err.status >= 500) throw err;
+      return err;
+    }
+  };
+  if (!spend()) return undefined;
+  let body = await ask();
+  // Asked without a team, Epic may want one (400): name just you, as for your schedule.
+  if (body instanceof EpicHttpError && body.status === 400) {
+    if (!spend()) return undefined;
+    body = await ask([accountId]);
+  }
+  if (body instanceof EpicHttpError) return refused(describeError(body));
+  if (!Array.isArray(body)) return refused(`200 ${shapeOf(body)}`.slice(0, 300));
+  return { eventId, error: null, ...historyResults(raw, eventId, body, accountId, now) };
 }

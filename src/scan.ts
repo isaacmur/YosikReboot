@@ -55,30 +55,32 @@ const windowChecks = createStore<Record<string, string[]>>(
 );
 /** Sessions a sync showed you didn't play (D30), so they're left out of the list to check. */
 const notPlayed = createStore<Record<string, string[]>>(
-  'yr.notPlayed.v2',
+  'yr.notPlayed.v3',
   (r) => (r && typeof r === 'object' ? (r as Record<string, string[]>) : {}),
   {},
 );
 
-// The first Sync with Epic took Epic's `player.teams` for a history of what you
-// played and marked every other session as not played. It isn't one (D30), so
-// those marks are undone once.
-try {
-  const old = localStorage.getItem('yr.notPlayed.v1');
-  if (old) {
-    const marks = JSON.parse(old) as Record<string, string[]>;
-    const checks = { ...windowChecks.get() };
-    for (const [key, ids] of Object.entries(marks)) {
-      const kept = (checks[key] ?? []).filter((id) => !ids.includes(id));
-      if (kept.length) checks[key] = kept;
-      else delete checks[key];
+// The first two versions of Sync with Epic marked sessions as not played on
+// weaker evidence than Epic's history: `player.teams`, which isn't a history,
+// then boards filtered to just you (D30). Those marks are undone once, so the
+// history-based sync asks about those sessions again.
+for (const key of ['yr.notPlayed.v1', 'yr.notPlayed.v2'])
+  try {
+    const old = localStorage.getItem(key);
+    if (old) {
+      const marks = JSON.parse(old) as Record<string, string[]>;
+      const checks = { ...windowChecks.get() };
+      for (const [session, ids] of Object.entries(marks)) {
+        const kept = (checks[session] ?? []).filter((id) => !ids.includes(id));
+        if (kept.length) checks[session] = kept;
+        else delete checks[session];
+      }
+      windowChecks.set(checks);
+      localStorage.removeItem(key);
     }
-    windowChecks.set(checks);
-    localStorage.removeItem('yr.notPlayed.v1');
+  } catch {
+    // No storage: nothing was kept.
   }
-} catch {
-  // No storage: nothing was kept.
-}
 const keyOf = (eventId: string, windowId: string, board: string) => `${eventId}|${windowId}|${board}`;
 
 /** Re-renders when saved scans or session checks change. */
