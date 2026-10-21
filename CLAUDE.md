@@ -20,8 +20,8 @@ Vite + React + TypeScript + Tailwind (`src/`), Vercel Functions (`api/`), shared
 - Changing dependencies: npm 10 crashes resolving vitest's optional peers (`edgesOut`), so use `npx npm@11.6.2 install <pkg>`. `npm ci` on npm 10 is fine.
 
 ## Rules
-- Only `api/` + `lib/` talk to Epic. The browser never sees Epic's raw format or any credential. `src/` may import only `lib/types.ts` and `lib/status.ts`.
-- The passphrase gate lives in `middleware.ts` so it also covers CDN-cached responses.
+- Only `api/` + `lib/` talk to Epic. The browser never sees Epic's raw format or any credential, except the calendar feed token, which the signed-in app reads to build your subscribe link (D21). `src/` may import only `lib/types.ts` and `lib/status.ts`.
+- The passphrase gate lives in `middleware.ts` so it also covers CDN-cached responses. `/api/ics` with a `token` is unlocked by `ICS_TOKEN` instead, and only that route (D21).
 - API responses are identical for every caller (they're CDN-cached); per-user logic stays in the browser.
 - Errors are `Cache-Control: no-store`. Cacheable API responses use `cdnCacheHeaders()`: the browser never stores them, and Vercel's CDN caches them via `Vercel-CDN-Cache-Control` (D12).
 - Relative imports in `api/`, `lib/` and `middleware.ts` end in `.js`. Vercel doesn't bundle functions (D13).
@@ -30,6 +30,7 @@ Vite + React + TypeScript + Tailwind (`src/`), Vercel Functions (`api/`), shared
 - Ranked Cup standings are the tier boards; the main Ranked Cup board has no points (D14).
 - Route handlers are built by `make…Handler(deps)` factories, so tests can inject a fake `EpicClient`. Only `GET`/`POST`/`DELETE` exports are routes.
 - Times are UTC ISO on the wire; format in the browser with the user's time zone setting.
+- Charts are hand-drawn SVG in `src/components/Charts.tsx` (D24), not a chart library; each sits beside a table with the same numbers.
 - UI: colors are tokens in `src/index.css` (dark default, light override); build on the primitives in `src/components/ui.tsx`. Show event art with `Art`, which asks Epic's CDN for a resized copy. Don't override a primitive's classes through `className` (two Tailwind classes for the same property have no reliable winner); add a prop instead, like `tone` or `size`.
 - Key players and teams by account ID, never display name.
 - Parser changes need a fixture-based test. `test/fixtures/epic/` holds anonymized real captures only; synthetic test data lives in `test/helpers/`.

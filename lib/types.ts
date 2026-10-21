@@ -119,6 +119,13 @@ export interface PayoutTier {
   rewards: string[];
   /** True if any reward is a qualification token (a cutoff line, not just a prize). */
   qualifies: boolean;
+  /**
+   * Which of the board's payout tables this tier is in. Within a table a rank
+   * (or percentile) earns its nearest tier at or after it; points tiers add up.
+   */
+  table: number;
+  /** Cash in this tier, in US dollars (0 if none). */
+  usd: number;
 }
 
 /**
@@ -197,6 +204,11 @@ export interface LeaderboardPage {
   /** Cumulative only: some sessions have more teams than were summed. */
   approximate?: boolean;
   entries: Entry[];
+}
+
+/** GET /api/ics, signed in: the calendar feed's secret for the subscribe link; null while the feed is off. */
+export interface CalendarFeed {
+  token: string | null;
 }
 
 /** GET /api/player */

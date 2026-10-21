@@ -12,6 +12,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Me from './pages/Me';
 import NotFound from './pages/NotFound';
+import Player from './pages/Player';
 import Settings from './pages/Settings';
 import { useSettings } from './settings';
 
@@ -119,6 +120,7 @@ export default function App() {
           <Route path="/events/:eventId" element={<EventPage />} />
           <Route path="/events/:eventId/:windowId" element={<EventPage />} />
           <Route path="/me" element={<Me />} />
+          <Route path="/players/:accountId" element={<Player />} />
           <Route path="/follows" element={<Follows />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/health" element={<Health />} />

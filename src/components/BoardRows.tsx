@@ -4,12 +4,14 @@
 // (F16) and gaps between loaded pages sit between rows.
 
 import { memo, useState, type FormEvent } from 'react';
+import { Link } from 'react-router';
 import type { Entry } from '../../lib/types';
 import { cutoffTitle, type PlacedCutoff } from '../board';
 import { addFollow, useFollows } from '../follows';
 import { formatTime, plural } from '../format';
 import type { Move } from '../movement';
 import { removeTeam, saveTeam, useTeams } from '../teams';
+import { MatchChart } from './Charts';
 import { MoveIcon, PlusIcon, StarIcon } from './icons';
 import { Button, Chip } from './ui';
 
@@ -76,20 +78,26 @@ function Members({ e }: { e: Entry }) {
       {members.map((m) => {
         const following = follows.some((f) => f.id === m.id);
         return (
-          <button
+          <span
             key={m.id}
-            onClick={() => addFollow(m.id, m.name)}
-            disabled={following}
-            className="inline-flex h-7 max-w-[11rem] items-center gap-1 rounded-md border border-line bg-surface px-2 text-xs font-semibold transition hover:border-accent/60 disabled:cursor-default disabled:border-accent/40 disabled:bg-accent-soft"
+            className={`inline-flex h-7 max-w-[12rem] items-center rounded-md border text-xs font-semibold ${following ? 'border-accent/40 bg-accent-soft' : 'border-line bg-surface'}`}
           >
-            {following ? (
-              <StarIcon size={12} className="shrink-0 fill-accent text-accent" />
-            ) : (
-              <PlusIcon size={12} className="shrink-0 text-accent-bright" />
-            )}
-            <span className="truncate">{m.name}</span>
-            <span className="sr-only">{following ? '(following)' : '(follow)'}</span>
-          </button>
+            <button
+              onClick={() => addFollow(m.id, m.name)}
+              disabled={following}
+              aria-label={following ? `Following ${m.name}` : `Follow ${m.name}`}
+              className="grid h-full w-7 shrink-0 place-items-center disabled:cursor-default"
+            >
+              {following ? (
+                <StarIcon size={12} className="fill-accent text-accent" />
+              ) : (
+                <PlusIcon size={12} className="text-accent-bright" />
+              )}
+            </button>
+            <Link to={`/players/${m.id}`} className="truncate pr-2 hover:underline">
+              {m.name}
+            </Link>
+          </span>
         );
       })}
       {members.length > 1 &&
@@ -130,6 +138,11 @@ function Games({ e, tz }: { e: Entry; tz: string }) {
   return (
     <div className="space-y-2.5 border-t border-line bg-bg/60 px-3 py-2.5 sm:pl-[3.25rem]">
       <Members e={e} />
+      {e.sessions.length > 1 && (
+        <div className="max-w-md">
+          <MatchChart sessions={e.sessions} tz={tz} />
+        </div>
+      )}
       {e.sessions.length > 0 && (
         <table className="nums w-full max-w-md text-xs">
           <thead className="text-faint">

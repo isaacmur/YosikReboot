@@ -7,6 +7,8 @@ import { eventState, latestWindow, windowState } from '../../lib/status';
 import { REGIONS, type EventInfo, type EventWindow, type Region, type WindowDetail } from '../../lib/types';
 import { useApi } from '../api';
 import { BoardPicker, Leaderboard, useBoardChoice } from '../components/Board';
+import { CutoffHistory } from '../components/CutoffHistory';
+import { finishedSessions } from '../cutoffHistory';
 import { eventTags } from '../components/EventCard';
 import { PrizesPanel, ScoringPanel } from '../components/Scoring';
 import { ChevronLeft, ChevronRight, ClockIcon, GlobeIcon } from '../components/icons';
@@ -282,6 +284,12 @@ function SessionsTab({
           </Panel>
         </section>
       ))}
+      {finishedSessions(event.windows, now).length > 0 && (
+        <section>
+          <SectionHeader title="Cutoff history" />
+          <CutoffHistory event={event} />
+        </section>
+      )}
     </div>
   );
 }

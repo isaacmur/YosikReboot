@@ -17,6 +17,7 @@ const health = await load('api/health.js');
 const leaderboard = await load('api/leaderboard.js');
 const windowRoute = await load('api/window.js');
 const player = await load('api/player.js');
+const ics = await load('api/ics.js');
 const middleware = (await load('middleware.js')).default;
 
 let failed = 0;
@@ -50,6 +51,14 @@ const badWindow = await windowRoute.GET(new Request('https://smoke.test/api/wind
 check('window rejects missing window', badWindow.status === 400);
 const badPlayer = await player.GET(new Request('https://smoke.test/api/player?ids=nothex'));
 check('player rejects bad ids', badPlayer.status === 400);
+
+process.env.ICS_TOKEN = 'smoke-feed-token-0123456789';
+const feedOk = await middleware(new Request('https://smoke.test/api/ics?token=smoke-feed-token-0123456789'));
+check('middleware passes the calendar feed on its token', feedOk.headers.get('x-middleware-next') === '1');
+const feedBad = await middleware(new Request('https://smoke.test/api/ics?token=guess'));
+check('middleware blocks a wrong calendar token', feedBad.status === 401);
+const feedLink = await ics.GET(new Request('https://smoke.test/api/ics'));
+check('feed link needs a session', feedLink.status === 401);
 
 const h = await (await health.GET()).json();
 check('health reports missing Epic config', h.status === 'down' && h.missingConfig.includes('EPIC_DEVICE_SECRET'));

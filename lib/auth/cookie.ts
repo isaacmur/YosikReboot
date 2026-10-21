@@ -39,6 +39,18 @@ export async function passphraseMatches(given: string, expected: string): Promis
   return constantTimeEqual(a!, b!);
 }
 
+/** Shortest calendar feed token accepted; anything shorter leaves the feed off. */
+export const MIN_FEED_TOKEN = 16;
+
+/**
+ * The calendar feed's secret (ICS_TOKEN, D21). Calendar apps can't send the session
+ * cookie, so the feed URL carries this instead. Never matches while the feed is off.
+ */
+export async function feedTokenMatches(given: string | null, expected: string | undefined): Promise<boolean> {
+  if (!given || !expected || expected.length < MIN_FEED_TOKEN) return false;
+  return passphraseMatches(given, expected);
+}
+
 export async function signSession(secret: string, now = Date.now()): Promise<string> {
   if (!secret) throw new Error('signSession needs a non-empty secret');
   const payload = `v1.${now}`;

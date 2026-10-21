@@ -70,16 +70,12 @@ function FollowsPanel() {
           );
           return (
             <li key={f.id}>
-              {latest ? (
-                <Link
-                  to={eventPath(latest.eventId, latest.windowId, `board=${encodeURIComponent(latest.board)}`)}
-                  className="flex items-center gap-3 px-3 py-2.5 transition hover:bg-raised/60"
-                >
-                  {inner}
-                </Link>
-              ) : (
-                <div className="flex items-center gap-3 px-3 py-2.5">{inner}</div>
-              )}
+              <Link
+                to={`/players/${f.id}`}
+                className="flex items-center gap-3 px-3 py-2.5 transition hover:bg-raised/60"
+              >
+                {inner}
+              </Link>
             </li>
           );
         })}

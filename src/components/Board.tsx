@@ -376,6 +376,7 @@ export function Leaderboard({
         boardLabel: board.label,
         title: `${eventName} · ${w.label}`,
         endedAt: w.end,
+        payouts: board.payouts,
         hints,
         onProgress: (done, total) => setSearch((s) => ({ ...s, done, total })),
       });
