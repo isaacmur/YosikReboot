@@ -14,6 +14,9 @@ const load = (p) => import(new URL(p, root).href);
 const login = await load('api/login.js');
 const events = await load('api/events.js');
 const health = await load('api/health.js');
+const leaderboard = await load('api/leaderboard.js');
+const windowRoute = await load('api/window.js');
+const player = await load('api/player.js');
 const middleware = (await load('middleware.js')).default;
 
 let failed = 0;
@@ -40,6 +43,13 @@ check('middleware passes a valid session', passed.headers.get('x-middleware-next
 
 const badRegion = await events.GET(new Request('https://smoke.test/api/events?region=XX'));
 check('events rejects a bad region', badRegion.status === 400);
+
+const badBoard = await leaderboard.GET(new Request('https://smoke.test/api/leaderboard?window=x'));
+check('leaderboard rejects missing event', badBoard.status === 400);
+const badWindow = await windowRoute.GET(new Request('https://smoke.test/api/window?event=e'));
+check('window rejects missing window', badWindow.status === 400);
+const badPlayer = await player.GET(new Request('https://smoke.test/api/player?ids=nothex'));
+check('player rejects bad ids', badPlayer.status === 400);
 
 const h = await (await health.GET()).json();
 check('health reports missing Epic config', h.status === 'down' && h.missingConfig.includes('EPIC_DEVICE_SECRET'));

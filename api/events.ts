@@ -8,6 +8,7 @@ import { indexCms, type CmsIndex } from '../lib/epic/cms.js';
 import { epicClient, type EpicClient } from '../lib/epic/client.js';
 import { endpoints } from '../lib/epic/endpoints.js';
 import { normalizeEvents } from '../lib/epic/events.js';
+import { rawSchedule } from '../lib/epic/schedule.js';
 import { epicConfig } from '../lib/config.js';
 import { apiError, cdnCacheHeaders, json, toErrorResponse } from '../lib/http.js';
 import { REGIONS, isRegion, type EventsResponse } from '../lib/types.js';
@@ -44,13 +45,7 @@ export function makeEventsHandler(deps: Deps) {
     try {
       const client = deps.client();
       const accountId = deps.accountId();
-      const [raw, index] = await Promise.all([
-        client.getJson(
-          endpoints.eventsDownload(accountId, { region, platform: 'Windows', teamAccountIds: accountId }),
-          `events ${region}`,
-        ),
-        cmsIndex(client),
-      ]);
+      const [raw, index] = await Promise.all([rawSchedule(client, accountId, region, deps.now()), cmsIndex(client)]);
       const body: EventsResponse = {
         region,
         fetchedAt: new Date(deps.now()).toISOString(),

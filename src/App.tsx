@@ -5,8 +5,11 @@ import { REGION_LABEL } from './format';
 import EventDetail from './pages/EventDetail';
 import Events from './pages/Events';
 import Health from './pages/Health';
+import Follows from './pages/Follows';
 import Home from './pages/Home';
+import Leaderboard from './pages/Leaderboard';
 import Login from './pages/Login';
+import Me from './pages/Me';
 import NotFound from './pages/NotFound';
 import Settings from './pages/Settings';
 import { useSettings } from './settings';
@@ -58,6 +61,9 @@ export default function App() {
             <NavLink to="/events" className={navClass}>
               Events
             </NavLink>
+            <NavLink to="/me" className={navClass}>
+              Me
+            </NavLink>
             <NavLink to="/settings" className={navClass}>
               Settings
             </NavLink>
@@ -69,6 +75,9 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/events" element={<Events />} />
           <Route path="/events/:eventId" element={<EventDetail />} />
+          <Route path="/events/:eventId/:windowId" element={<Leaderboard />} />
+          <Route path="/me" element={<Me />} />
+          <Route path="/follows" element={<Follows />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/health" element={<Health />} />
           <Route path="/login" element={<Login />} />

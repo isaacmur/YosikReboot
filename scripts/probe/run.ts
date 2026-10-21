@@ -10,6 +10,7 @@ import {
   type TokenResponse,
 } from '../../lib/auth/epicToken';
 import { BULK_ACCOUNT_LIMIT, endpoints } from '../../lib/epic/endpoints';
+import { isFetchable, windowLocations } from '../../lib/epic/boards.js';
 import { parseEpicError } from '../../lib/epic/errors';
 import { REGIONS, type Region } from '../../lib/types';
 import { sanitizeAccount, sanitizeToken, scrub } from './scrub';
@@ -268,6 +269,7 @@ export async function runProbe(opts: ProbeOptions): Promise<ProbeReport> {
 
   // --- Schedule -----------------------------------------------------------------
   const windows = new Map<string, ProbeWindow>();
+  const schedules = new Map<string, unknown>();
   for (const region of regions) {
     const { body } = await call(
       `events.download.${region}`,
@@ -275,6 +277,7 @@ export async function runProbe(opts: ProbeOptions): Promise<ProbeReport> {
       { file: `events-download-${region}.json` },
     );
     for (const w of listWindows(body)) windows.set(w.windowId, w);
+    schedules.set(region, body);
   }
   await call('events.download.noregion', endpoints.eventsDownload(accountId, { platform, teamAccountIds: accountId }), {
     file: 'events-download-noregion.json',
@@ -307,6 +310,22 @@ export async function runProbe(opts: ProbeOptions): Promise<ProbeReport> {
     if (kind === 'live') {
       await call('leaderboard.live.p0.liveSessions', lb(w, { showLiveSessions: true }), {
         file: 'leaderboard-live-p0-liveSessions.json',
+      });
+    }
+  }
+
+  // Extra boards Epic lists for each sampled window (Ranked Cup tiers), page 0 each.
+  for (const kind of ['live', 'wrapping', 'final'] as const) {
+    const w = samples[kind];
+    if (!w) continue;
+    const raw = [...schedules.values()].find((doc) => windowLocations(doc, w.eventId, w.windowId).length > 1);
+    const extra = raw ? windowLocations(raw, w.eventId, w.windowId).slice(1).filter(isFetchable) : [];
+    for (const loc of extra.slice(0, 9)) {
+      const suffix = loc.instance.startsWith(`${w.windowId}_`)
+        ? loc.instance.slice(w.windowId.length + 1)
+        : loc.instance;
+      await call(`leaderboard.${kind}.board.${suffix}`, endpoints.leaderboard(loc.group, loc.instance, accountId), {
+        file: `leaderboard-${kind}-board-${suffix.toLowerCase()}.json`,
       });
     }
   }

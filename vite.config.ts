@@ -25,11 +25,12 @@ function devApi(): Plugin {
   };
 }
 
-async function readBody(req: IncomingMessage): Promise<Buffer | undefined> {
+/** Request body as text; the API only takes JSON. */
+async function readBody(req: IncomingMessage): Promise<string | undefined> {
   if (req.method === 'GET' || req.method === 'HEAD') return undefined;
   const chunks: Buffer[] = [];
   for await (const c of req) chunks.push(c as Buffer);
-  return Buffer.concat(chunks);
+  return Buffer.concat(chunks).toString('utf8');
 }
 
 async function handle(server: ViteDevServer, req: IncomingMessage, res: ServerResponse) {

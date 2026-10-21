@@ -21,10 +21,12 @@ These are gaps or traps in the spec that change code structure. Each has a recom
 | D7 | "Cumulative" leaderboards. | **Resolved in Phase 0:** cumulative boards are score locations, not windows, and the leaderboard endpoint doesn't serve them. F12 computes cumulative standings server-side by summing the event's session boards, capped to the top N. |
 | D8 | Time zone. | All server data is UTC ISO strings. Formatting happens only in the browser via `Intl.DateTimeFormat` with the settings time zone (default `America/New_York`). No date library needed beyond small helpers. |
 | D9 | Monorepo vs. single package. | Single package. Vite app in `src/`, Vercel functions in `api/`, shared code in `lib/` (imported by both — types only from the browser side). |
-| D10 | Epic won't return another account's row or history: `teamAccountIds=` accepts only the caller's own team, and per-player endpoints return 403. | Find a player by **scanning** board pages (100 per page, at most 100 pages) and stopping at the first hit. Final windows: scan once and cache for 24 h. Live windows: look only at pages already being fetched, plus at most one rescan per 5 min. Results are top 10,000 only, like Fortnite Tracker. |
+| D10 | Epic won't return another account's row or history: `teamAccountIds=` accepts only the caller's own team, and per-player endpoints return 403. | Players are found by **scanning in the browser** (`src/scan.ts`). It reads a board's pages one at a time through `/api/leaderboard?lite=1`, which is CDN-cached and skips names, and stops once everyone is found. Ranked Cup sessions try the top tier first. Scans of final boards are kept in the browser for good; live ones for 5 minutes. Scans run only when you ask (Leaderboard → Find on all pages, Me → Check), and only the top 10,000 are reachable, like Fortnite Tracker. |
 | D11 | Schedule responses need `region=`, are about 1.2 to 1.9 MB each, and overlap: a region lists every event visible to it, and NAE has no events of its own. | `/api/events?region=X` makes **one** Epic call, because the response already holds everything visible in X. The route trims the response to `EventInfo` and takes the home region from the ID suffix; cards tag events from another home region. Combining regions (calendar, search) de-duplicates by `eventId`. Ranked cups use the main window board, not the per-tier boards. |
 | D12 | Browsers honour `stale-while-revalidate`, so a CDN-style `Cache-Control` let a signed-out browser show cached API data. | API responses send `Cache-Control: private, no-store` to the browser, and configure Vercel's CDN separately with `Vercel-CDN-Cache-Control`. Vercel consumes that header and never forwards it. Session state is computed in the browser from the times, so a cached schedule never shows a stale "live". |
 | D13 | Vercel compiles each function file without bundling, so Node's ESM rules apply. | Relative imports in `api/`, `lib/` and `middleware.ts` use explicit `.js` extensions. `npm run smoke:api` compiles them and loads them with bare Node in CI, and fails with `ERR_MODULE_NOT_FOUND` if one is missing. |
+| D14 | A session can have several boards: the main board, one per Ranked Cup tier, and an FNCS cumulative board. Ranked Cup main boards carry no points (Phase 2 finding). | `/api/window` lists a session's boards, with scoring and payouts in plain terms. `/api/leaderboard` takes `board=`, and defaults to the main board if it scores, else the top tier. The UI hides unscored boards and remembers your tier. `board=cumulative` sums the top 300 of each session (D7) and says when lower ranks are approximate. |
+| D15 | The leaderboard and window routes need window times and scoring rules from the schedule. | The raw schedule document is kept per warm function instance for 15 minutes (`lib/epic/schedule.ts`), shared with `/api/events`, so a board request costs one Epic call. Display names are kept for 24 hours (`lib/epic/accounts.ts`). |
 
 ---
 
@@ -160,14 +162,28 @@ Goal: open a live board during a real session, watch it refresh, find yourself a
 
 Features: F10, F11, F12, F13, F22, F25, F37 (client side), Home page, F6 completed (scoring if available).
 
+> **Status: done** (code), pending your check on a real live session in production.
+> - **Built:**
+>   - `/api/leaderboard` (boards, cumulative, `lite`), `/api/window` and `/api/player`
+>   - scoring and payout parsing, plus per-match points
+>   - the live refresh hook, the leaderboard page (tier tabs, search, match details, load more, scoring panel, follows strip)
+>   - Follows (add by name, mark yourself, export/import), Me (check sessions, results list, trend) and a follows section on Home
+>   - the browser-side scanner
+> - **Verified locally against live Epic data** (scripted Chromium at 390 px):
+>   - A live board refreshed once in 70 s, not at all in 70 s hidden, and once on return.
+>   - Wrapping-up and final boards get the right CDN lifetimes (5 min, 24 h).
+>   - Ranked Cup tier tabs work.
+>   - A "Check" on Me found the test account 1st on the Unreal board in one page.
+> - **Not verifiable locally:** that Vercel's CDN holds Epic calls to one per board page per 30 s. The headers are tested, but the dev server has no CDN. Check `/api/health` in production during a live session.
+
 Tasks
-1. **`/api/leaderboard?window=&page=`:** state lookup (D4) → Epic page → `epic/leaderboard.ts` normaliser → bulk name resolution (D3) → `s-maxage` from `cacheSecondsFor(state)`. Optional `&accountIds=a,b` mode (D10: implemented by scanning, not by an Epic filter) returns just those teams' rows (implementation depends on Phase 0 finding; fallback is "scan pages, stop when all found", only allowed for `final` windows and cached 24 h).
-2. **`/api/window?window=`:** template → scoring, payouts, cutoffs. Cached 24 h.
-3. **`useLiveQuery`:** interval from `refreshMsFor(state)`; pauses on `visibilitychange` hidden, fires once on visible; backoff 2 → 4 min on errors with a "Stale since hh:mm" banner; resets on success; exposes `fetchedAt` for the "updated 12 s ago" stamp.
-4. **Leaderboard page:** sticky header (name, region, `StatusBadge`, updated stamp), session/cumulative toggle (D7), name search (current page client-side; "find across pages" button uses `accountIds` lookup if a follow, else pages forward), virtualised list for long pages.
-5. **Follows (`/follows`):** add by Epic name → `/api/player?name=` → store `{ id, label, isMe }` keyed by ID; export/import JSON with schema version.
-6. **`/api/player`:** name⇄id; season results = for each ended window in the cached event lists, find the account's row (by scanning, per D10), cached 24 h per window.
-7. **`/me` and Home:** Home = live-now list, next three sessions, follows' current rank in any live window they appear in. `/me` = your season results table + a simple placement trend line.
+1. ~~**`/api/leaderboard?window=&page=`:** state lookup (D4) → Epic page → `epic/leaderboard.ts` normaliser → bulk name resolution (D3) → `s-maxage` from `cacheSecondsFor(state)`. Optional `&accountIds=a,b` mode (D10: implemented by scanning, not by an Epic filter) returns just those teams' rows (implementation depends on Phase 0 finding; fallback is "scan pages, stop when all found", only allowed for `final` windows and cached 24 h).~~ Done.
+2. ~~**`/api/window?window=`:** template → scoring, payouts, cutoffs. Cached 24 h.~~ Done.
+3. ~~**`useLiveQuery`:** interval from `refreshMsFor(state)`; pauses on `visibilitychange` hidden, fires once on visible; backoff 2 → 4 min on errors with a "Stale since hh:mm" banner; resets on success; exposes `fetchedAt` for the "updated 12 s ago" stamp.~~ Done.
+4. ~~**Leaderboard page:** sticky header (name, region, `StatusBadge`, updated stamp), session/cumulative toggle (D7), name search (current page client-side; "find across pages" button uses `accountIds` lookup if a follow, else pages forward), virtualised list for long pages.~~ Done, with board tabs (D14) and "load more" instead of a virtualised list, since full-depth scrolling is F14 in Phase 3.
+5. ~~**Follows (`/follows`):** add by Epic name → `/api/player?name=` → store `{ id, label, isMe }` keyed by ID; export/import JSON with schema version.~~ Done.
+6. ~~**`/api/player`:** name⇄id; season results = for each ended window in the cached event lists, find the account's row (by scanning, per D10), cached 24 h per window.~~ Done as a name/ID lookup; results scanning moved to the browser (D10).
+7. ~~**`/me` and Home:** Home = live-now list, next three sessions, follows' current rank in any live window they appear in. `/me` = your season results table + a simple placement trend line.~~ Done.
 
 **Acceptance (Gate 2 / MVP)**
 - During a real live session on a phone: the board refreshes ~every 60 s, pauses when the screen locks, and `/api/health` shows ≤1 Epic leaderboard call per 30 s per page regardless of how many tabs are open.

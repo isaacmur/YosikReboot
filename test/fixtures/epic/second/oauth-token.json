@@ -1,0 +1,21 @@
+{
+  "access_token": "[redacted]",
+  "expires_in": 7200,
+  "expires_at": "2026-10-21T03:49:53.175Z",
+  "token_type": "bearer",
+  "refresh_token": "[redacted]",
+  "refresh_expires": 172800,
+  "refresh_expires_at": "2026-10-23T01:49:53.176Z",
+  "account_id": "f0000000000000000000000000000001",
+  "client_id": "3f69e56c7649492c8cc29f1af08a8a12",
+  "internal_client": true,
+  "client_service": "prod-fn",
+  "displayName": "Player00001",
+  "app": "prod-fn",
+  "in_app_id": "f0000000000000000000000000000001",
+  "product_id": "prod-fn",
+  "application_id": "fghi4567FNFBKFz3E4TROb0bmPS8h1GW",
+  "country": "[redacted]",
+  "acr": "urn:epic:loa:aal1",
+  "auth_time": "2026-10-21T01:49:53.174Z"
+}
