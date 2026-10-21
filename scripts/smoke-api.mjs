@@ -57,6 +57,10 @@ const syncBad = await sync.POST(new Request('https://smoke.test/api/sync?step=no
 check('sync rejects an unknown step', syncBad.status === 400);
 const syncRows = await sync.POST(new Request('https://smoke.test/api/sync?step=rows', { method: 'POST', body: '{}' }));
 check('sync refuses rows without a sign-in', syncRows.status === 409);
+const syncHistory = await sync.POST(
+  new Request('https://smoke.test/api/sync?step=history', { method: 'POST', body: '{"events":["e_NAC"]}' }),
+);
+check('sync refuses history without a sign-in', syncHistory.status === 409);
 const syncEnd = await sync.DELETE(new Request('https://smoke.test/api/sync', { method: 'DELETE' }));
 check(
   'sync end clears its cookie',

@@ -1,24 +1,31 @@
-// Sync with Epic (D30): sign in with your own account once, read your row in
-// every session Epic lists you in, keep each result like a board search, and end
-// the Epic session however the sync ends. The sign-in itself never reaches this
-// code: it rides in an HttpOnly cookie only /api/sync can read.
+// Sync with Epic (D30): sign in with your own account once, read Epic's history
+// of your results in every event this season, in every region (including events
+// Epic no longer lists, from this browser's archive, D31), keep each result like
+// a board search, and end the Epic session however the sync ends. The sign-in
+// itself never reaches this code: it rides in an HttpOnly cookie only /api/sync
+// can read.
 
 import { windowState } from '../lib/status';
-import type {
-  EventInfo,
-  EventsResponse,
-  EventWindow,
-  Region,
-  SyncPoll,
-  SyncRows,
-  SyncSession,
-  SyncStart,
+import {
+  REGIONS,
+  type EventInfo,
+  type EventsResponse,
+  type Region,
+  type SyncEventHistory,
+  type SyncHistory,
+  type SyncPoll,
+  type SyncRowResult,
+  type SyncRows,
+  type SyncSession,
+  type SyncStart,
 } from '../lib/types';
 import { apiGetCached, apiPost } from './api';
+import { keptEvents, rememberEvents, type KeptEvent } from './archive';
 import { sleep } from './boardIndex';
 import { addFollow, setMe } from './follows';
+import { ordinal, plural } from './format';
 import { regionOf } from './links';
-import { isWindowChecked, markNotPlayed, markWindowChecked, recordResult } from './scan';
+import { allScans, isWindowChecked, markNotPlayed, markWindowChecked, recordResult } from './scan';
 import { createStore } from './store';
 
 export interface SyncProgress {
@@ -35,24 +42,41 @@ export interface SyncSummary {
   at: string;
   accountId: string;
   displayName: string;
-  /** Sessions read. */
-  sessions: number;
-  /** Results found among them. */
+  /** Events whose history was read. */
+  events: number;
+  /** Results kept from them. */
   found: number;
-  /** Epic listed the sessions you played (else the latest sessions in your region were tried). */
-  fromEpicList: boolean;
+  /** What Epic returned, in plain lines, for when results are missing. */
+  details: string[];
 }
 
-/** Sessions tried when Epic lists none for you: the latest finished ones in your region. */
-const FALLBACK_SESSIONS = 40;
+/** Events per history request (one Epic call each), and sessions per rows request. */
+const EVENTS_PER_REQUEST = 12;
 const BATCH = 8;
+/** Results a board search already found, compared with Epic's history as a check. */
+const KNOWN = 3;
+/** Events listed one by one in the details. */
+const LISTED = 25;
 
 const last = createStore<SyncSummary | null>(
-  'yr.sync.v1',
-  (r) => (r && typeof r === 'object' && typeof (r as SyncSummary).at === 'string' ? (r as SyncSummary) : null),
+  'yr.sync.v3',
+  (r) =>
+    r &&
+    typeof r === 'object' &&
+    Array.isArray((r as SyncSummary).details) &&
+    typeof (r as SyncSummary).events === 'number'
+      ? (r as SyncSummary)
+      : null,
   null,
 );
 export const useLastSync = last.use;
+
+/** Events Epic no longer lists whose history was read, per account: their results can't change, so they're read once. */
+const pastRead = createStore<Record<string, string[]>>(
+  'yr.syncedPast.v1',
+  (r) => (r && typeof r === 'object' ? (r as Record<string, string[]>) : {}),
+  {},
+);
 
 /** Ends the Epic session on the server; safe to call more than once, and while the page closes. */
 export function endSync(): Promise<void> {
@@ -62,8 +86,7 @@ export function endSync(): Promise<void> {
   );
 }
 
-const finished = (events: EventInfo[], now: Date) =>
-  events.flatMap((event) => event.windows.filter((w) => windowState(w, now) === 'final').map((w) => ({ event, w })));
+const keyOf = (x: { eventId: string; windowId: string }) => `${x.eventId}|${x.windowId}`;
 
 export async function syncWithEpic(o: {
   region: Region;
@@ -72,17 +95,6 @@ export async function syncWithEpic(o: {
 }): Promise<SyncSummary> {
   const aborted = () => {
     if (o.signal.aborted) throw new DOMException('Aborted', 'AbortError');
-  };
-  const schedules = new Map<Region, Promise<EventsResponse>>();
-  const eventsIn = (r: Region) => {
-    if (!schedules.has(r)) schedules.set(r, apiGetCached<EventsResponse>(`/api/events?region=${r}`, 15 * 60_000));
-    return schedules.get(r)!;
-  };
-  const sessionInfo = async (s: SyncSession): Promise<{ event: EventInfo; w: EventWindow } | undefined> => {
-    const { events } = await eventsIn(regionOf(s.eventId) ?? o.region);
-    const event = events.find((e) => e.id === s.eventId);
-    const w = event?.windows.find((x) => x.id === s.windowId);
-    return event && w ? { event, w } : undefined;
   };
 
   try {
@@ -102,63 +114,184 @@ export async function syncWithEpic(o: {
     aborted();
     const me = ready.accountId;
     const displayName = ready.displayName ?? 'You';
-
-    // What to read: the sessions Epic lists you in, else the latest finished ones in your region.
     const now = new Date();
-    const regionSessions = finished((await eventsIn(o.region)).events, now);
-    // A copy: the queue is used up as it's read, and the list is needed again below.
-    const queue: SyncSession[] = ready.played
-      ? [...ready.played]
-      : regionSessions
-          .filter(({ event, w }) => !isWindowChecked(event.id, w.id, me))
-          .sort((a, b) => b.w.end.localeCompare(a.w.end))
-          .slice(0, FALLBACK_SESSIONS)
-          .map(({ event, w }) => ({ eventId: event.id, windowId: w.id }));
-    const total = queue.length;
+    const details: string[] = [
+      `Your schedule download: player part ${ready.epic.playerKeys.join(', ') || 'empty'}; ` +
+        `${ready.epic.teams} teams, ${ready.epic.tokens} tokens, ${ready.epic.scores} scores.`,
+    ];
+
+    // Every event this season, in every region (you can play outside yours), the one copy of each: those Epic
+    // lists, then those it has stopped listing that this browser kept (D31).
+    const current = new Map<string, EventInfo>();
+    for (const list of await Promise.all(
+      REGIONS.map((r) => apiGetCached<EventsResponse>(`/api/events?region=${r}`, 15 * 60_000)),
+    ))
+      for (const e of list.events) if (!current.has(e.id)) current.set(e.id, e);
+    rememberEvents([...current.values()]);
+    const listed = new Set(current.keys());
+    const events = new Map<string, KeptEvent>(current);
+    for (const e of keptEvents()) if (!events.has(e.id)) events.set(e.id, e);
+    const readBefore = new Set(pastRead.get()[me] ?? []);
+    const finals = (e: KeptEvent) => e.windows.filter((w) => windowState(w, now) === 'final');
+    const label = (x: { eventId: string; windowId: string; label?: string }) => {
+      const e = events.get(x.eventId);
+      const w = e?.windows.find((y) => y.id === x.windowId)?.label ?? x.label;
+      return e && w ? `${e.name} · ${w}` : x.windowId;
+    };
+
+    // Up to three results a board search found (not an earlier sync) are read again, as a check on Epic's history.
+    const known = allScans()
+      .filter((x) => x.final && x.pagesScanned > 0 && x.found[me] && events.has(x.eventId))
+      .slice(0, KNOWN)
+      .map((x) => ({ eventId: x.eventId, windowId: x.windowId, rank: x.found[me]!.rank }));
+    // Events with a finished session not yet settled for you: your region's first, then by region, so each
+    // request reads one schedule (global events are served from NAE's).
+    const home = (id: string) => regionOf(id) ?? 'NAE';
+    const queue = [...events.values()]
+      .filter(
+        (e) =>
+          known.some((k) => k.eventId === e.id) ||
+          (listed.has(e.id) ? finals(e).some((w) => !isWindowChecked(e.id, w.id, me)) : !readBefore.has(e.id)),
+      )
+      .map((e) => e.id)
+      .sort(
+        (a, b) =>
+          Number(home(a) !== o.region) - Number(home(b) !== o.region) ||
+          home(a).localeCompare(home(b)) ||
+          a.localeCompare(b),
+      );
+
+    let total = queue.length;
     let done = 0;
     let found = 0;
     o.onProgress({ step: 'reading', displayName, done, total });
+    const keep = (r: SyncRowResult) => {
+      if (r.status !== 'found' || !r.entry || !r.board) return;
+      const w = events.get(r.eventId)?.windows.find((x) => x.id === r.windowId);
+      recordResult(
+        {
+          eventId: r.eventId,
+          windowId: r.windowId,
+          board: r.board.id,
+          boardLabel: r.board.label,
+          payouts: r.board.payouts,
+          title: label(r),
+          endedAt: w?.end ?? r.endedAt,
+        },
+        me,
+        r.entry,
+      );
+      markWindowChecked(r.eventId, r.windowId, me);
+      found++;
+    };
 
+    // 1: Epic's history, one call per event: every session you played in it, with your rank.
+    const read: SyncEventHistory[] = [];
+    const toRead: SyncSession[] = [];
     while (queue.length) {
       aborted();
-      const batch = queue.splice(0, BATCH);
-      const res = await apiPost<SyncRows>('/api/sync?step=rows', { sessions: batch });
-      if (!res.results.length) throw new Error('Reading your sessions stalled. Try again.');
+      const res = await apiPost<SyncHistory>('/api/sync?step=history', { events: queue.splice(0, EVENTS_PER_REQUEST) });
+      if (!res.events.length) throw new Error('Reading your history stalled. Try again.');
       queue.unshift(...res.remaining);
+      for (const h of res.events) {
+        read.push(h);
+        h.results.forEach(keep);
+        toRead.push(...h.toRead);
+        // Gone from Epic's schedule: what it says now (even "no such event") won't change.
+        if (!listed.has(h.eventId) && (!h.error || h.error.startsWith('404'))) readBefore.add(h.eventId);
+      }
+      pastRead.set({ ...pastRead.get(), [me]: [...readBefore] });
+      done += res.events.length;
+      o.onProgress({ step: 'reading', displayName, done, total });
+      // Forbidden for every event so far: it won't answer for the rest either.
+      if (read.every((h) => h.error?.startsWith('403'))) break;
+    }
+
+    // 2: Sessions the history has you in without your standing (a Ranked Cup's tiers): read with your team.
+    const rowMisses: string[] = [];
+    total += toRead.length;
+    while (toRead.length) {
+      aborted();
+      const res = await apiPost<SyncRows>('/api/sync?step=rows', { sessions: toRead.splice(0, BATCH) });
+      if (!res.results.length) throw new Error('Reading your sessions stalled. Try again.');
+      toRead.unshift(...res.remaining);
       for (const r of res.results) {
-        const info = await sessionInfo(r);
-        if (r.status === 'found' && r.entry && r.board) {
-          found++;
-          recordResult(
-            {
-              eventId: r.eventId,
-              windowId: r.windowId,
-              board: r.board.id,
-              boardLabel: r.board.label,
-              payouts: r.board.payouts,
-              title: info ? `${info.event.name} · ${info.w.label}` : undefined,
-              endedAt: info?.w.end,
-            },
-            me,
-            r.entry,
-          );
-          markWindowChecked(r.eventId, r.windowId, me);
-        } else if (r.status === 'not_found' && !ready.played && info?.event.teamSize === 1) {
-          // A solo session read with just you: you didn't play it. (In team modes a miss might
-          // mean a different team, so those stay for a manual check.)
-          markNotPlayed(r.eventId, r.windowId, me);
-        }
+        keep(r);
+        if (r.status !== 'found')
+          rowMisses.push(`${label(r)}: ${r.status.replace('_', ' ')}. Epic said: ${r.trace?.join('; ') || '—'}`);
       }
       done += res.results.length;
       o.onProgress({ step: 'reading', displayName, done, total });
     }
 
-    // Epic listed what you played, so your region's other finished sessions are ones you didn't.
-    if (ready.played) {
-      const played = new Set(ready.played.map((s) => `${s.eventId}|${s.windowId}`));
-      for (const { event, w } of regionSessions)
-        if (!played.has(`${event.id}|${w.id}`)) markNotPlayed(event.id, w.id, me);
+    const answered = read.filter((h) => !h.error);
+    const refused = read.filter((h) => h.error);
+    const withScores = answered.filter((h) => h.played.length);
+    details.push(
+      `Epic's history: asked about ${plural(read.length, 'event')}; ${plural(answered.length, 'answer')}, ` +
+        `${withScores.length} with sessions you played.`,
+    );
+    for (const h of withScores.slice(0, LISTED)) {
+      const kept = new Map(h.results.map((r) => [r.windowId, r]));
+      const sessions = h.played.map((w) => {
+        const x = { eventId: h.eventId, windowId: w };
+        const r = kept.get(w);
+        const name = events.get(h.eventId)?.windows.find((y) => y.id === w)?.label ?? r?.label ?? w;
+        if (r?.entry)
+          return `${name} ${ordinal(r.entry.rank)}${r.board?.label === 'Overall' ? '' : ` (${r.board?.label})`}`;
+        const why = h.toRead.some((t) => keyOf(t) === keyOf(x))
+          ? 'read from the board'
+          : listed.has(h.eventId)
+            ? 'not final yet'
+            : 'no standing in the history';
+        return `${name} (${why})`;
+      });
+      details.push(
+        `${events.get(h.eventId)?.name ?? h.eventId}: ${sessions.join('; ')}` +
+          (h.unmatched ? `; ${plural(h.unmatched, 'score')} on no board of this event` : ''),
+      );
     }
+    if (withScores.length > LISTED) details.push(`…and ${withScores.length - LISTED} more events.`);
+    if (refused.length)
+      details.push(
+        `Epic didn't return the history for ${plural(refused.length, 'event')}, e.g. ` +
+          `${events.get(refused[0]!.eventId)?.name ?? refused[0]!.eventId}: ${refused[0]!.error}`,
+      );
+    details.push(...rowMisses);
+
+    // The check: a result a board search found should be in Epic's history too.
+    let trusted = true;
+    for (const k of known) {
+      const h = answered.find((x) => x.eventId === k.eventId);
+      if (!h) continue;
+      const r = h.results.find((x) => x.windowId === k.windowId);
+      const listed = h.played.includes(k.windowId);
+      if (!listed) trusted = false;
+      details.push(
+        `Check on ${label(k)}: a board search found you ${ordinal(k.rank)}; Epic's history ` +
+          (r?.entry ? `says ${ordinal(r.entry.rank)}.` : listed ? 'has you in it.' : "doesn't list it."),
+      );
+    }
+
+    // The history lists every session you played in an event, so its finished sessions it doesn't list are ones
+    // you didn't. Only for team sizes it has shown it lists (in case it misses some kinds of team), and only if
+    // every check above held.
+    let skipped = 0;
+    const sizes = new Set(withScores.map((h) => events.get(h.eventId)?.teamSize));
+    if (trusted)
+      for (const h of answered) {
+        const e = events.get(h.eventId);
+        if (!e || h.unmatched || !sizes.has(e.teamSize)) continue;
+        for (const w of finals(e))
+          if (!h.played.includes(w.id) && !isWindowChecked(e.id, w.id, me)) {
+            markNotPlayed(e.id, w.id, me);
+            skipped++;
+          }
+      }
+    details.push(
+      `Kept ${plural(found, 'result')}` +
+        (skipped ? `; ${plural(skipped, 'finished session')} you didn't play left off the list to check.` : '.'),
+    );
 
     addFollow(me, displayName);
     setMe(me);
@@ -166,9 +299,9 @@ export async function syncWithEpic(o: {
       at: new Date().toISOString(),
       accountId: me,
       displayName,
-      sessions: done,
+      events: read.length,
       found,
-      fromEpicList: !!ready.played,
+      details,
     };
     last.set(summary);
     return summary;

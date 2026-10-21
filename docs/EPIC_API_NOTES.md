@@ -79,7 +79,7 @@ In a cloud session, prefix commands with `NODE_USE_ENV_PROXY=1`, so Node's fetch
 ### Looking up one player or team
 - [x] **`teamAccountIds=` only accepts the signed-in account's own team.** Any other account returns 400 `com.epicgames.api.malformed_data`, however the IDs are formatted (single ID, encoded comma, literal comma). The service account's own ID returns 200 with no entries.
 - [x] `events/download/{otherAccountId}` returns 403 `forbidden`.
-- [x] Window history (`/history`) returns 404, and player history (`/history/{id}`) returns 403. Neither is usable.
+- [x] Window history (`/history`) returns 404, and player history (`/history/{id}`) returns 403 for another account: `Fortnite:profile:<id>:commands READ` is missing. That permission is the signed-in account's own, so your own history is read during a sync (D30).
 - **Consequence (D10):** results for you and your follows have to come from scanning finished boards, top 10,000 only. This matches Fortnite Tracker's own top-10K limit.
 
 ### Cumulative and ranked tier boards
@@ -110,7 +110,11 @@ In a cloud session, prefix commands with `NODE_USE_ENV_PROXY=1`, so Node's fetch
 
 ### Still open
 - [ ] Rate limit: not tested yet. Run step 5 once.
-- [ ] Sync with Epic (D30), on the first real sync: that `player.teams` in your own schedule download is keyed `"<eventId>:<windowId>"` with your team's account IDs and lists the sessions you played this season, and that a board filtered with `teamAccountIds=` your whole team returns your row with its rank on the full board. The service account's `teams` is empty, so neither could be checked in Phase 0.
+- [x] Sync with Epic (D30), first real sync: `player.teams` in your own schedule download listed **one** session, not the ones you'd played. It isn't a history (it may be the events you have a team set up for), so a sync now reads sessions one by one instead of trusting it.
+- [x] Sync with Epic, second real sync: a board filtered with `teamAccountIds=` set to just you found 1 result in 60 sessions (a solo one). It missed a duos Ranked Cup you'd played (just you isn't your team), and anything outside your region's newest 60 sessions. A sync now reads your per-event history instead.
+- [x] Sync with Epic, third real sync: `/api/v1/events/Fortnite/{eventId}/history/{yourId}` answers for your own account. It returned 5 results from 149 events, including another region's session and ranks past the top 10,000 (14,839th, 65,944th), which boards can't reach. What it missed were events Epic's schedule no longer lists (below), so they were never asked about.
+- [x] **Epic's schedule keeps an event only about a week after it ends.** In the first capture (2026-10-21) the oldest event ended 2026-10-13. `/data/` with `showPastEvents=true` (`events-data-NAC.json`) stops at the same week; its extra 10 events are mobile and console ones, which the Windows download leaves out. Nothing else in Epic's API lists older events, so the app keeps every event it sees (D31). Fortnite Tracker's event IDs are `epicgames_<fortnite.com event>_<region>`, e.g. `epicgames_S42_FNCSSoloQualifiers_NAC` with windows `S42_FNCSSoloQualifiers_Qual1Round1Day1_NAC`.
+- [ ] Sync with Epic: that the history answers for events Epic no longer lists, and what its Ranked Cup scores look like (`scoreKey.eventWindowId` set to a tier's ID, or `_scoreId` naming it). Also what `scores` in your own schedule download holds. The sync's "What Epic returned" shows these.
 - [ ] Player tokens (`/api/v1/players/Fortnite/tokens`) work but are empty for a new account, so the eligibility feature (F9, Later) needs your own account's tokens.
 
 ## Gate 0
