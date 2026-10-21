@@ -37,6 +37,7 @@ import {
 } from '../components/ui';
 import { formatDay, formatRange, formatTime, REGION_LABEL, STAGE_LABEL, useNow, zoneAbbrev } from '../format';
 import { eventPath, inRegion, regionOf } from '../links';
+import { showsPlacement } from '../placements';
 import { useSettings } from '../settings';
 import { useEvent } from '../useEvent';
 import { useEvents } from '../useEvents';
@@ -369,7 +370,14 @@ function BoardTab({ event, w, detail }: { event: EventInfo; w: EventWindow; deta
   return (
     <div className="space-y-3">
       <BoardPicker boards={boards} board={board} onPick={pick} />
-      <Leaderboard key={`${w.id}|${board.id}`} eventId={event.id} eventName={event.name} w={w} board={board} />
+      <Leaderboard
+        key={`${w.id}|${board.id}`}
+        eventId={event.id}
+        eventName={event.name}
+        w={w}
+        board={board}
+        placementHistory={showsPlacement(event, w)}
+      />
     </div>
   );
 }

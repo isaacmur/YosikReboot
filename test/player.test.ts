@@ -7,7 +7,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { parsePayouts } from '../lib/epic/scoring';
 import type { EventWindow, LeaderboardPage, WindowDetail } from '../lib/types';
 import { finishedSessions, loadCutoffs, savedCutoffs } from '../src/cutoffHistory';
-import { logTicks, niceMax, niceTicks } from '../src/scales';
+import { logTicks, niceMax, niceTicks, rankTicks } from '../src/scales';
 import { formatUsd, prizeFor } from '../src/prizes';
 
 const NAC = JSON.parse(readFileSync(join(__dirname, 'fixtures/epic/first/events-download-NAC.json'), 'utf8')) as {
@@ -70,6 +70,10 @@ describe('chart scales', () => {
   it('puts rank ticks on powers of ten', () => {
     expect(logTicks(12, 2500)).toEqual([10, 100, 1000]);
     expect(logTicks(1, 9)).toEqual([1]);
+    // A narrow range of ranks gets whole-number steps instead, never a 0th.
+    expect(rankTicks(12, 2500)).toEqual({ ticks: [10, 100, 1000], log: true });
+    expect(rankTicks(1, 8)).toEqual({ ticks: [1, 5, 10], log: false });
+    expect(rankTicks(230, 355)).toEqual({ ticks: [200, 250, 300, 350, 400], log: false });
   });
 });
 

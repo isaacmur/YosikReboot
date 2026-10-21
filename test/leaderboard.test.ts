@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { boardInfos, boardRules, defaultBoard, parseScoreLocation, windowLocations } from '../lib/epic/boards';
-import { mergeCumulative, normalizeEntries, teamKeyOf } from '../lib/epic/leaderboard';
+import { liteEntry, mergeCumulative, normalizeEntries, teamKeyOf } from '../lib/epic/leaderboard';
 import { findWindow, regionForEvent } from '../lib/epic/schedule';
 import {
   parseCutoffs,
@@ -127,6 +127,19 @@ describe('normalizeEntries', () => {
     expect(rows.every((r) => r.points === 0)).toBe(true);
     expect(rows.some((r) => r.sessions.some((s) => s.place !== null))).toBe(true);
     expect(rows[0]!.sessions[0]!.points).toBeNull();
+  });
+
+  it("keeps each game's points on lite rows, which add up to the team's total (D29)", () => {
+    const lite = entries.map(liteEntry);
+    expect(lite[0]!.sessions).toEqual([]);
+    expect(lite[0]!.members.every((m) => m.name === undefined)).toBe(true);
+    lite.forEach((e, i) => {
+      expect(e.gamePoints).toEqual(entries[i]!.sessions.map((s) => s.points));
+      expect(e.gamePoints!.reduce((a, b) => a + b, 0)).toBe(e.points);
+    });
+    // Unscored boards have no game points to rank by.
+    const unscored = normalizeEntries(load('first', 'leaderboard-live-p0.json'), []).map(liteEntry);
+    expect(unscored.some((e) => e.matches > 0 && e.gamePoints)).toBe(false);
   });
 
   it('skips malformed rows', () => {

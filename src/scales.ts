@@ -14,6 +14,22 @@ export function logTicks(lo: number, hi: number): number[] {
   return out;
 }
 
+/**
+ * A rank axis: powers of ten when the ranks span ten times or more, otherwise
+ * whole-number steps (never a 0th or a 2.5th), so a narrow range still gets labels.
+ */
+export function rankTicks(lo: number, hi: number): { ticks: number[]; log: boolean } {
+  if (hi >= Math.max(1, lo) * 10) return { ticks: logTicks(lo, hi), log: true };
+  const ticks = [
+    ...new Set(
+      niceTicks(lo, hi)
+        .filter(Number.isInteger)
+        .map((t) => Math.max(1, t)),
+    ),
+  ];
+  return { ticks, log: false };
+}
+
 /** 950, 1.2K */
 export const compact = (n: number) => (n >= 1000 ? `${+(n / 1000).toFixed(1)}K` : String(n));
 

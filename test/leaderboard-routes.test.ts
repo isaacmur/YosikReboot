@@ -113,6 +113,7 @@ describe('GET /api/leaderboard', () => {
     const body = (await res.json()) as LeaderboardPage;
     expect(body.entries[0]!.members[0]!.name).toBeUndefined();
     expect(body.entries[0]!.sessions).toEqual([]);
+    expect(body.entries[0]!.gamePoints!.length).toBe(body.entries[0]!.matches);
     expect(calls.some((c) => c.startsWith('names'))).toBe(false);
   });
 

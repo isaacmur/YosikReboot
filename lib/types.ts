@@ -205,6 +205,8 @@ export interface Entry {
   avgPlace: number | null;
   /** Oldest first. Empty in `lite` responses. */
   sessions: MatchResult[];
+  /** `lite` responses only: each game's points, oldest first; missing when a game's points are unknown (D29). */
+  gamePoints?: number[];
 }
 
 /** GET /api/leaderboard */

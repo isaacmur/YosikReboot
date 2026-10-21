@@ -76,5 +76,13 @@ export function mergeCumulative(boards: Entry[][]): Entry[] {
   return merged;
 }
 
-/** Drops names and match details, for page scans that only need ranks and IDs. */
-export const liteEntry = (e: Entry): Entry => ({ ...e, members: e.members.map(({ id }) => ({ id })), sessions: [] });
+/**
+ * Drops names and match details, for page scans that only need ranks and IDs,
+ * keeping each game's points so placement after each game can be worked out (D29).
+ */
+export function liteEntry(e: Entry): Entry {
+  const points = e.sessions.map((s) => s.points);
+  const lite: Entry = { ...e, members: e.members.map(({ id }) => ({ id })), sessions: [] };
+  if (points.every((p) => p !== null)) lite.gamePoints = points as number[];
+  return lite;
+}
