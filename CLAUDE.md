@@ -29,6 +29,7 @@ Vite + React + TypeScript + Tailwind (`src/`), Vercel Functions (`api/`), shared
 - Ranked Cup standings are the tier boards; the main Ranked Cup board has no points (D14).
 - Route handlers are built by `make…Handler(deps)` factories, so tests can inject a fake `EpicClient`. Only `GET`/`POST`/`DELETE` exports are routes.
 - Times are UTC ISO on the wire; format in the browser with the user's time zone setting.
+- UI: colors are tokens in `src/index.css` (dark default, light override); build on the primitives in `src/components/ui.tsx`. Show event art with `Art`, which asks Epic's CDN for a resized copy. Don't override a primitive's classes through `className` (two Tailwind classes for the same property have no reliable winner); add a prop instead, like `tone` or `size`.
 - Key players and teams by account ID, never display name.
 - Parser changes need a fixture-based test. `test/fixtures/epic/` holds anonymized real captures only; synthetic test data lives in `test/helpers/`.
 - The repo is public. Raw captures stay in git-ignored `captures/`; never commit them or anything copied from them without `epic:anonymize`.

@@ -201,9 +201,14 @@ export function normalizeEvents(rawDoc: unknown, cms: CmsIndex): EventInfo[] {
       mobileOnly: /mobile/i.test(id) || /mobile/i.test(displayId ?? ''),
       platforms: platformGroups(strings(ev.platforms)),
       minAccountLevel: level && level > 0 ? level : null,
-      posterUrl: display?.posterUrl,
-      tileUrl: display?.tileUrl,
-      color: display?.color,
+      art: {
+        square: display?.square,
+        tile: display?.tile,
+        background: display?.background,
+        primary: display?.primary,
+        left: display?.left,
+        right: display?.right,
+      },
       windows,
     });
   }

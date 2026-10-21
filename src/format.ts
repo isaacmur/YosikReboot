@@ -84,6 +84,16 @@ export function ordinal(n: number): string {
   return `${n.toLocaleString('en-US')}${teen ? 'th' : (suffixes[n % 10] ?? 'th')}`;
 }
 
+/** "1 win", "3 wins" */
+export const plural = (n: number, word: string) => `${n.toLocaleString('en-US')} ${word}${n === 1 ? '' : 's'}`;
+
+/** Calendar day number of an instant in a time zone, for "today" / "tomorrow" comparisons. */
+export function dayIndex(at: string | Date, tz: string): number {
+  const parts = fmt(tz, { year: 'numeric', month: 'numeric', day: 'numeric' }).formatToParts(new Date(at));
+  const part = (type: string) => Number(parts.find((p) => p.type === type)?.value);
+  return Date.UTC(part('year'), part('month') - 1, part('day')) / 86_400_000;
+}
+
 /** "12 s ago" under a minute, else like formatAgo. */
 export function formatSecondsAgo(at: Date, now: Date): string {
   const s = Math.max(0, Math.round((now.getTime() - at.getTime()) / 1000));

@@ -43,6 +43,20 @@ export interface EventWindow {
   requirements: string[];
 }
 
+/** Tournament artwork and colors from Epic's CMS; any of it can be missing. */
+export interface EventArt {
+  /** Square poster, 800×800. */
+  square?: string;
+  /** 16:9 tile, 1920×1080. */
+  tile?: string;
+  /** Wide background, about 1560×1024. */
+  background?: string;
+  /** Hex colors without '#'. */
+  primary?: string;
+  left?: string;
+  right?: string;
+}
+
 export interface EventInfo {
   id: string;
   /** Region from the event ID suffix; GLOBAL for events with no suffix. */
@@ -59,10 +73,7 @@ export interface EventInfo {
   mobileOnly: boolean;
   platforms: PlatformGroup[];
   minAccountLevel: number | null;
-  posterUrl?: string;
-  tileUrl?: string;
-  /** Hex color without '#', from the CMS. */
-  color?: string;
+  art: EventArt;
   windows: EventWindow[];
 }
 

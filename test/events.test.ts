@@ -15,7 +15,7 @@ import {
   teamSizeOf,
   windowLabel,
 } from '../lib/epic/events';
-import { eventState, nextWindow } from '../lib/status';
+import { eventState, latestWindow, nextWindow } from '../lib/status';
 import { REGIONS, type EventInfo } from '../lib/types';
 
 const DIR = join(__dirname, 'fixtures/epic/first');
@@ -83,9 +83,11 @@ describe('normalizeEvents on the live capture', () => {
     const purge = find('epicgames_S42_PurgeCup_EU');
     expect(purge).toMatchObject({ name: 'Lady Liberty Cup', subtitle: 'Battle Royale' });
     expect(purge.description).toMatch(/Lady Liberty/);
-    expect(purge.posterUrl).toMatch(/^https:\/\/cdn2\.unrealengine\.com\//);
-    expect(purge.color).toMatch(/^[0-9A-F]{6}$/);
-    const fromCms = byRegion.NAC!.filter((e) => e.posterUrl !== undefined);
+    for (const url of [purge.art.square, purge.art.tile, purge.art.background]) {
+      expect(url).toMatch(/^https:\/\/cdn2\.unrealengine\.com\//);
+    }
+    for (const c of [purge.art.primary, purge.art.left, purge.art.right]) expect(c).toMatch(/^[0-9A-F]{6}$/);
+    const fromCms = byRegion.NAC!.filter((e) => e.art.square !== undefined);
     expect(fromCms.length / byRegion.NAC!.length).toBeGreaterThan(0.9);
   });
 
@@ -181,5 +183,20 @@ describe('event state', () => {
     expect(nextWindow(ws, at('2026-10-21T19:00:00Z'))).toBe(ws[0]);
     expect(nextWindow(ws, at('2026-10-21T22:00:00Z'))).toBe(ws[1]);
     expect(nextWindow(ws, at('2026-10-23T00:00:00Z'))).toBeUndefined();
+  });
+
+  it('opens the live session, else the one that ended last, and nothing before the first starts', () => {
+    expect(latestWindow(ws, at('2026-10-21T17:00:00Z'))).toBeUndefined();
+    expect(latestWindow(ws, at('2026-10-21T19:00:00Z'))).toBe(ws[0]);
+    expect(latestWindow(ws, at('2026-10-22T12:00:00Z'))).toBe(ws[0]);
+    expect(latestWindow(ws, at('2026-10-22T19:00:00Z'))).toBe(ws[1]);
+    expect(latestWindow(ws, at('2026-10-23T00:00:00Z'))).toBe(ws[1]);
+    // Two live at once: the one that started last.
+    const overlap = [
+      w('2026-10-21T18:00:00Z', '2026-10-21T23:00:00Z'),
+      w('2026-10-21T19:00:00Z', '2026-10-21T21:00:00Z'),
+    ];
+    expect(latestWindow(overlap, at('2026-10-21T20:00:00Z'))).toBe(overlap[1]);
+    expect(latestWindow(overlap, at('2026-10-21T22:00:00Z'))).toBe(overlap[0]);
   });
 });

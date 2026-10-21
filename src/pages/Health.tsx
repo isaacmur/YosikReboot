@@ -1,13 +1,14 @@
 import type { HealthResponse } from '../../lib/types';
 import { useApi } from '../api';
-import { Card, LoadState, Pill, SectionTitle } from '../components/ui';
+import { RefreshIcon } from '../components/icons';
+import { Button, Empty, LoadState, PageTitle, Panel, SectionHeader } from '../components/ui';
 import { formatAgo, formatDateTime, useNow } from '../format';
 import { useSettings } from '../settings';
 
-const STATUS_STYLE: Record<HealthResponse['status'], string> = {
-  ok: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300',
-  degraded: 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300',
-  down: 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300',
+const STATUS: Record<HealthResponse['status'], { label: string; tone: string }> = {
+  ok: { label: 'All good', tone: 'bg-ok text-black' },
+  degraded: { label: 'Degraded', tone: 'bg-wrap text-black' },
+  down: { label: 'Down', tone: 'bg-live text-white' },
 };
 
 export default function Health() {
@@ -17,77 +18,81 @@ export default function Health() {
   const fmt = (iso?: string) => (iso ? `${formatDateTime(iso, timeZone)} (${formatAgo(iso, now)})` : '—');
 
   return (
-    <div>
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold">API health</h1>
-        <button onClick={reload} className="text-sm font-medium text-blue-600 underline dark:text-blue-400">
-          Refresh
-        </button>
+    <div className="max-w-3xl">
+      <div className="flex items-start justify-between gap-3">
+        <PageTitle sub="What the server's Epic connection looks like right now.">API health</PageTitle>
+        <Button size="sm" onClick={reload}>
+          <RefreshIcon size={14} className={loading ? 'animate-spin' : ''} /> Refresh
+        </Button>
       </div>
       {!data ? (
         <LoadState loading={loading} error={error} onRetry={reload} />
       ) : (
         <>
-          <p className="mt-3">
-            <Pill className={`${STATUS_STYLE[data.status]} text-sm`}>{data.status.toUpperCase()}</Pill>
-            <span className="ml-2 text-xs text-zinc-500">checked {formatAgo(data.checkedAt, now)}</span>
-          </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <span className={`skew inline-flex rounded-[4px] px-3 py-1 ${STATUS[data.status].tone}`}>
+              <span className="font-display text-xl leading-6 font-bold tracking-wide uppercase">
+                {STATUS[data.status].label}
+              </span>
+            </span>
+            <span className="text-xs text-muted">checked {formatAgo(data.checkedAt, now)}</span>
+          </div>
           {data.missingConfig.length > 0 && (
-            <p className="mt-2 text-sm text-rose-700 dark:text-rose-300">
+            <p className="mt-3 rounded-md border border-live/40 bg-live/10 px-3 py-2 text-sm">
               Missing environment variables: {data.missingConfig.join(', ')}
             </p>
           )}
-          <SectionTitle>Epic token</SectionTitle>
-          <Card className="p-3 text-sm">
-            <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1">
-              <dt className="text-zinc-500">Minted</dt>
+
+          <SectionHeader title="Epic token" />
+          <Panel className="p-4 text-sm">
+            <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-1.5">
+              <dt className="text-muted">Minted</dt>
               <dd>{fmt(data.token.mintedAt)}</dd>
-              <dt className="text-zinc-500">Expires</dt>
+              <dt className="text-muted">Expires</dt>
               <dd>{data.token.expiresAt ? formatDateTime(data.token.expiresAt, timeZone) : '—'}</dd>
-              <dt className="text-zinc-500">Failures in a row</dt>
-              <dd>{data.token.consecutiveFailures}</dd>
+              <dt className="text-muted">Failures in a row</dt>
+              <dd className="nums">{data.token.consecutiveFailures}</dd>
               {data.token.lastError && (
                 <>
-                  <dt className="text-zinc-500">Last error</dt>
-                  <dd className="text-rose-700 dark:text-rose-300">{data.token.lastError}</dd>
+                  <dt className="text-muted">Last error</dt>
+                  <dd className="text-live">{data.token.lastError}</dd>
                 </>
               )}
             </dl>
-          </Card>
-          <SectionTitle>Recent Epic calls</SectionTitle>
-          <Card className="overflow-x-auto">
-            {data.upstream.recent.length ? (
-              <table className="w-full text-left text-sm">
-                <thead className="text-xs text-zinc-500">
-                  <tr>
-                    <th className="p-2 font-medium">When</th>
-                    <th className="p-2 font-medium">Call</th>
-                    <th className="p-2 font-medium">Status</th>
-                    <th className="p-2 text-right font-medium">ms</th>
+          </Panel>
+
+          <SectionHeader title="Recent Epic calls" />
+          {data.upstream.recent.length ? (
+            <Panel className="overflow-x-auto">
+              <table className="nums w-full text-left text-sm">
+                <thead className="text-[10px] tracking-wider text-faint uppercase">
+                  <tr className="border-b border-line">
+                    <th className="px-3 py-2 font-semibold">When</th>
+                    <th className="px-3 py-2 font-semibold">Call</th>
+                    <th className="px-3 py-2 font-semibold">Status</th>
+                    <th className="px-3 py-2 text-right font-semibold">ms</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+                <tbody className="divide-y divide-line">
                   {data.upstream.recent.map((c, i) => (
                     <tr key={`${c.at}-${i}`}>
-                      <td className="p-2 whitespace-nowrap">{formatAgo(c.at, now)}</td>
-                      <td className="p-2">{c.label}</td>
-                      <td
-                        className={`p-2 ${c.status >= 200 && c.status < 400 ? '' : 'text-rose-700 dark:text-rose-300'}`}
-                      >
+                      <td className="px-3 py-2 whitespace-nowrap text-muted">{formatAgo(c.at, now)}</td>
+                      <td className="px-3 py-2">{c.label}</td>
+                      <td className={`px-3 py-2 ${c.status >= 200 && c.status < 400 ? 'text-ok' : 'text-live'}`}>
                         {c.status || 'network'} {c.errorCode && <span className="text-xs">({c.errorCode})</span>}
                       </td>
-                      <td className="p-2 text-right tabular-nums">{c.ms}</td>
+                      <td className="px-3 py-2 text-right text-muted">{c.ms}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-            ) : (
-              <p className="p-3 text-sm text-zinc-500">No calls yet on this server instance.</p>
-            )}
-          </Card>
-          <p className="mt-3 text-xs text-zinc-500">
-            Each serverless instance keeps its own log since {formatAgo(data.instanceStartedAt, now)}, so this shows one
-            instance's view.
+            </Panel>
+          ) : (
+            <Empty>No calls yet on this server instance.</Empty>
+          )}
+          <p className="mt-3 text-xs text-faint">
+            Each serverless instance keeps its own log, this one since {formatAgo(data.instanceStartedAt, now)}, so this
+            is one instance's view.
           </p>
         </>
       )}

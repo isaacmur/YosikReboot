@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { AuthError, login } from '../api';
-import { Card } from '../components/ui';
+import { Button } from '../components/ui';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -25,12 +25,25 @@ export default function Login() {
   }
 
   return (
-    <div className="flex min-h-[70dvh] items-center justify-center">
-      <Card className="w-full max-w-sm p-6">
-        <h1 className="text-xl font-semibold">YosikReboot</h1>
-        <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">Enter the passphrase to continue.</p>
-        <form onSubmit={submit} className="mt-4 space-y-3">
-          <label className="block text-sm font-medium" htmlFor="passphrase">
+    <div className="relative flex min-h-dvh items-center justify-center overflow-hidden px-4">
+      {/* Backdrop: a violet glow and two slanted bands. */}
+      <div className="pointer-events-none absolute inset-0" aria-hidden>
+        <div className="absolute -top-1/3 left-1/2 h-[70vh] w-[70vh] -translate-x-1/2 rounded-full bg-accent/25 blur-[120px]" />
+        <div className="skew absolute -right-24 bottom-[12%] h-24 w-[70vw] bg-accent/10" />
+        <div className="skew absolute -left-24 top-[16%] h-10 w-[55vw] bg-accent/10" />
+      </div>
+      <div className="relative w-full max-w-sm">
+        <div className="mb-6 flex flex-col items-center text-center">
+          <span className="skew grid size-14 place-items-center rounded-md bg-accent shadow-[0_10px_40px_-10px_var(--accent)]">
+            <span className="font-display text-4xl leading-none font-bold text-accent-ink">Y</span>
+          </span>
+          <h1 className="mt-4 font-display text-4xl leading-none font-bold tracking-wide uppercase">
+            Yosik<span className="text-accent-bright">Reboot</span>
+          </h1>
+          <p className="mt-2 text-sm text-muted">Fortnite competitive, live.</p>
+        </div>
+        <form onSubmit={submit} className="space-y-3 rounded-xl border border-line bg-surface/80 p-5 backdrop-blur">
+          <label className="block text-xs font-semibold tracking-wider text-muted uppercase" htmlFor="passphrase">
             Passphrase
           </label>
           <input
@@ -41,22 +54,18 @@ export default function Login() {
             required
             value={passphrase}
             onChange={(e) => setPassphrase(e.target.value)}
-            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 dark:border-zinc-700 dark:bg-zinc-950"
+            className="h-11 w-full rounded-md border border-line-strong bg-bg px-3 outline-none focus:border-accent"
           />
           {error && (
-            <p role="alert" className="text-sm text-rose-700 dark:text-rose-300">
+            <p role="alert" className="text-sm text-live">
               {error}
             </p>
           )}
-          <button
-            type="submit"
-            disabled={busy || !passphrase}
-            className="w-full rounded-lg bg-zinc-900 px-3 py-2 font-medium text-white disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900"
-          >
+          <Button type="submit" variant="primary" size="lg" className="w-full" disabled={busy || !passphrase}>
             {busy ? 'Signing in…' : 'Sign in'}
-          </button>
+          </Button>
         </form>
-      </Card>
+      </div>
     </div>
   );
 }

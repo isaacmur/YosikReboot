@@ -2,7 +2,8 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Link } from 'react-router';
 import type { PlayerLookup } from '../../lib/types';
 import { ApiError, apiGet } from '../api';
-import { Card, Pill } from '../components/ui';
+import { DownloadIcon, SearchIcon, UploadIcon, XIcon } from '../components/icons';
+import { Button, Chip, Empty, PageTitle, Panel } from '../components/ui';
 import { addFollow, exportFollows, importFollows, removeFollow, renameFollows, setMe, useFollows } from '../follows';
 
 let namesRefreshed = false;
@@ -60,89 +61,87 @@ export default function Follows() {
 
   return (
     <div>
-      <h1 className="text-xl font-semibold">Follows</h1>
-      <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-        Players you follow, saved in this browser. Mark one as you to see your results on{' '}
-        <Link to="/me" className="underline">
-          Me
-        </Link>
-        .
-      </p>
+      <PageTitle
+        sub={
+          <>
+            Saved in this browser. Mark one as you to see your results on{' '}
+            <Link to="/me" className="font-semibold text-accent-bright hover:underline">
+              Me
+            </Link>
+            .
+          </>
+        }
+      >
+        Follows
+      </PageTitle>
 
-      <form onSubmit={add} className="mt-4 flex gap-2">
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Epic display name"
-          aria-label="Epic display name"
-          required
-          className="min-w-0 flex-1 rounded-lg border border-zinc-300 bg-white px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
-        />
-        <button
-          type="submit"
-          disabled={busy || !name.trim()}
-          className="rounded-lg bg-zinc-900 px-4 py-2 font-medium text-white disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900"
-        >
+      <form onSubmit={add} className="flex gap-2">
+        <label className="relative min-w-0 flex-1">
+          <SearchIcon size={15} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-faint" />
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Epic display name"
+            aria-label="Epic display name"
+            required
+            className="h-9 w-full rounded-md border border-line bg-surface pr-3 pl-9 text-sm outline-none placeholder:text-faint focus:border-accent"
+          />
+        </label>
+        <Button type="submit" variant="primary" disabled={busy || !name.trim()}>
           {busy ? 'Finding…' : 'Follow'}
-        </button>
+        </Button>
       </form>
       {message && (
-        <p
-          role="status"
-          className={`mt-2 text-sm ${message.ok ? 'text-emerald-700 dark:text-emerald-300' : 'text-rose-700 dark:text-rose-300'}`}
-        >
+        <p role="status" className={`mt-2 text-sm ${message.ok ? 'text-ok' : 'text-live'}`}>
           {message.text}
         </p>
       )}
 
-      <Card className="mt-4">
+      <div className="mt-4">
         {follows.length ? (
-          <ul className="divide-y divide-zinc-200 dark:divide-zinc-800">
-            {follows.map((f) => (
-              <li key={f.id} className="flex items-center justify-between gap-2 p-3">
-                <span className="min-w-0 truncate font-medium">
-                  {f.name}{' '}
-                  {f.isMe && (
-                    <Pill className="bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
-                      You
-                    </Pill>
-                  )}
-                </span>
-                <span className="flex shrink-0 gap-3 text-sm">
-                  <button
-                    onClick={() => setMe(f.isMe ? null : f.id)}
-                    className="text-blue-600 underline dark:text-blue-400"
+          <Panel className="overflow-hidden">
+            <ul className="divide-y divide-line">
+              {follows.map((f) => (
+                <li key={f.id} className="flex items-center gap-3 px-3 py-2.5">
+                  <span
+                    className={`skew grid size-9 shrink-0 place-items-center rounded-[4px] ${f.isMe ? 'bg-accent' : 'bg-raised'}`}
                   >
+                    <span
+                      className={`font-display text-lg font-bold ${f.isMe ? 'text-accent-ink' : 'text-accent-bright'}`}
+                    >
+                      {f.name.slice(0, 1).toUpperCase()}
+                    </span>
+                  </span>
+                  <span className="flex min-w-0 flex-1 items-center gap-2">
+                    <span className="truncate font-semibold">{f.name}</span>
+                    {f.isMe && <Chip tone="accent">You</Chip>}
+                  </span>
+                  <Button size="sm" variant="ghost" onClick={() => setMe(f.isMe ? null : f.id)}>
                     {f.isMe ? 'Not me' : 'This is me'}
+                  </Button>
+                  <button
+                    onClick={() => removeFollow(f.id)}
+                    aria-label={`Remove ${f.name}`}
+                    className="grid size-8 shrink-0 place-items-center rounded-md text-faint transition hover:bg-live/10 hover:text-live"
+                  >
+                    <XIcon size={16} />
                   </button>
-                  <button onClick={() => removeFollow(f.id)} className="text-rose-700 underline dark:text-rose-300">
-                    Remove
-                  </button>
-                </span>
-              </li>
-            ))}
-          </ul>
+                </li>
+              ))}
+            </ul>
+          </Panel>
         ) : (
-          <p className="p-4 text-sm text-zinc-500">
-            No follows yet. Add yourself first, then anyone you want to keep an eye on.
-          </p>
+          <Empty>No follows yet. Add yourself first, then anyone you want to keep an eye on.</Empty>
         )}
-      </Card>
+      </div>
 
-      <div className="mt-4 flex flex-wrap gap-2 text-sm">
-        <button
-          onClick={download}
-          disabled={!follows.length}
-          className="rounded-lg border border-zinc-300 px-3 py-1.5 font-medium disabled:opacity-50 dark:border-zinc-700"
-        >
-          Export list
-        </button>
-        <button
-          onClick={() => fileRef.current?.click()}
-          className="rounded-lg border border-zinc-300 px-3 py-1.5 font-medium dark:border-zinc-700"
-        >
-          Import list
-        </button>
+      <div className="mt-4 flex flex-wrap gap-2">
+        <Button size="sm" onClick={download} disabled={!follows.length}>
+          <DownloadIcon size={14} /> Export list
+        </Button>
+        <Button size="sm" onClick={() => fileRef.current?.click()}>
+          <UploadIcon size={14} /> Import list
+        </Button>
         <input
           ref={fileRef}
           type="file"
@@ -155,9 +154,7 @@ export default function Follows() {
           }}
         />
       </div>
-      <p className="mt-2 text-xs text-zinc-500">
-        Export on one device and import on another to keep both lists the same.
-      </p>
+      <p className="mt-2 text-xs text-faint">Export on one device and import on another to keep both lists the same.</p>
     </div>
   );
 }

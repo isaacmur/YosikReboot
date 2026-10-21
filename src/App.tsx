@@ -1,81 +1,123 @@
-import { NavLink, Route, Routes, useLocation } from 'react-router';
+import { useEffect } from 'react';
+import { NavLink, Route, Routes, useLocation, useNavigationType } from 'react-router';
 import { REGIONS, type Region } from '../lib/types';
-import { SELECT } from './components/ui';
+import { GlobeIcon, HomeIcon, SettingsIcon, TrophyIcon, UserIcon } from './components/icons';
+import { PillSelect } from './components/ui';
 import { REGION_LABEL } from './format';
-import EventDetail from './pages/EventDetail';
+import EventPage from './pages/EventPage';
 import Events from './pages/Events';
-import Health from './pages/Health';
 import Follows from './pages/Follows';
+import Health from './pages/Health';
 import Home from './pages/Home';
-import Leaderboard from './pages/Leaderboard';
 import Login from './pages/Login';
 import Me from './pages/Me';
 import NotFound from './pages/NotFound';
 import Settings from './pages/Settings';
 import { useSettings } from './settings';
 
-function RegionSelect() {
-  const [{ region }, update] = useSettings();
+const NAV = [
+  { to: '/', label: 'Home', icon: HomeIcon, end: true },
+  { to: '/events', label: 'Events', icon: TrophyIcon, end: false },
+  { to: '/me', label: 'Me', icon: UserIcon, end: false },
+  { to: '/settings', label: 'Settings', icon: SettingsIcon, end: false },
+];
+
+function Brand() {
   return (
-    <label className="flex items-center gap-1 text-sm">
-      <span className="sr-only">Region</span>
-      <select
-        value={region}
-        onChange={(e) => update({ region: e.target.value as Region })}
-        className={SELECT}
-        aria-label="Region"
-      >
-        {REGIONS.map((r) => (
-          <option key={r} value={r}>
-            {r} · {REGION_LABEL[r]}
-          </option>
-        ))}
-      </select>
-    </label>
+    <NavLink to="/" className="flex items-center gap-2" aria-label="YosikReboot home">
+      <span className="skew grid h-7 w-7 place-items-center rounded-[4px] bg-accent">
+        <span className="font-display text-lg leading-none font-bold text-accent-ink">Y</span>
+      </span>
+      <span className="font-display text-xl leading-none font-bold tracking-wide uppercase">
+        Yosik<span className="text-accent-bright">Reboot</span>
+      </span>
+    </NavLink>
   );
 }
 
-const navClass = ({ isActive }: { isActive: boolean }) =>
-  `rounded-lg px-3 py-1.5 text-sm font-medium ${
-    isActive
-      ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900'
-      : 'text-zinc-600 hover:bg-zinc-200 dark:text-zinc-400 dark:hover:bg-zinc-800'
-  }`;
+function RegionPicker() {
+  const [{ region }, update] = useSettings();
+  return (
+    <PillSelect
+      aria-label="Region"
+      icon={<GlobeIcon size={15} />}
+      value={region}
+      onChange={(e) => update({ region: e.target.value as Region })}
+    >
+      {REGIONS.map((r) => (
+        <option key={r} value={r}>
+          {r} · {REGION_LABEL[r]}
+        </option>
+      ))}
+    </PillSelect>
+  );
+}
+
+function NavItems({ compact }: { compact?: boolean }) {
+  return (
+    <>
+      {NAV.map(({ to, label, icon: Icon, end }) => (
+        <NavLink
+          key={to}
+          to={to}
+          end={end}
+          className={({ isActive }) =>
+            `relative flex items-center justify-center gap-1.5 font-display text-[15px] font-bold tracking-wide uppercase transition ${
+              compact ? 'flex-1 py-2.5' : 'px-1 py-2'
+            } ${isActive ? 'text-ink' : 'text-faint hover:text-muted'}`
+          }
+        >
+          {({ isActive }) => (
+            <>
+              <Icon size={16} />
+              {label}
+              {isActive && <span className="skew absolute inset-x-3 -bottom-px h-[3px] bg-accent" aria-hidden />}
+            </>
+          )}
+        </NavLink>
+      ))}
+    </>
+  );
+}
+
+function TopBar() {
+  return (
+    <header className="sticky top-0 z-30 border-b border-line bg-bg/85 backdrop-blur-md">
+      <div className="mx-auto flex h-14 max-w-5xl items-center justify-between gap-4 px-4">
+        <Brand />
+        <nav className="hidden items-center gap-6 md:flex" aria-label="Main">
+          <NavItems />
+        </nav>
+        <RegionPicker />
+      </div>
+      <nav className="mx-auto flex max-w-5xl px-1 md:hidden" aria-label="Main">
+        <NavItems compact />
+      </nav>
+    </header>
+  );
+}
+
+/** New pages start at the top; Back and Forward leave the browser to restore the position. */
+function useScrollToTop(pathname: string) {
+  const navigationType = useNavigationType();
+  useEffect(() => {
+    if (navigationType !== 'POP') window.scrollTo(0, 0);
+  }, [pathname, navigationType]);
+}
 
 export default function App() {
-  const onLogin = useLocation().pathname === '/login';
+  const { pathname } = useLocation();
+  const onLogin = pathname === '/login';
+  useScrollToTop(pathname);
   return (
-    <div className="mx-auto flex min-h-dvh max-w-3xl flex-col px-4">
-      {!onLogin && (
-        <header className="sticky top-0 z-10 -mx-4 border-b border-zinc-200 bg-zinc-50/90 px-4 py-3 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/90">
-          <div className="flex items-center justify-between gap-3">
-            <NavLink to="/" className="text-lg font-semibold tracking-tight">
-              YosikReboot
-            </NavLink>
-            <RegionSelect />
-          </div>
-          <nav className="mt-2 flex gap-1" aria-label="Main">
-            <NavLink to="/" end className={navClass}>
-              Home
-            </NavLink>
-            <NavLink to="/events" className={navClass}>
-              Events
-            </NavLink>
-            <NavLink to="/me" className={navClass}>
-              Me
-            </NavLink>
-            <NavLink to="/settings" className={navClass}>
-              Settings
-            </NavLink>
-          </nav>
-        </header>
-      )}
-      <main className="flex-1 py-4">
+    <div className="flex min-h-dvh flex-col">
+      {!onLogin && <TopBar />}
+      <main className={onLogin ? 'flex-1' : 'mx-auto w-full max-w-5xl flex-1 px-4 pt-5 pb-16'}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/events" element={<Events />} />
-          <Route path="/events/:eventId" element={<EventDetail />} />
-          <Route path="/events/:eventId/:windowId" element={<Leaderboard />} />
+          <Route path="/events/:eventId" element={<EventPage />} />
+          <Route path="/events/:eventId/:windowId" element={<EventPage />} />
           <Route path="/me" element={<Me />} />
           <Route path="/follows" element={<Follows />} />
           <Route path="/settings" element={<Settings />} />
