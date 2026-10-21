@@ -18,6 +18,7 @@ const leaderboard = await load('api/leaderboard.js');
 const windowRoute = await load('api/window.js');
 const player = await load('api/player.js');
 const ics = await load('api/ics.js');
+const sync = await load('api/sync.js');
 const middleware = (await load('middleware.js')).default;
 
 let failed = 0;
@@ -51,6 +52,16 @@ const badWindow = await windowRoute.GET(new Request('https://smoke.test/api/wind
 check('window rejects missing window', badWindow.status === 400);
 const badPlayer = await player.GET(new Request('https://smoke.test/api/player?ids=nothex'));
 check('player rejects bad ids', badPlayer.status === 400);
+
+const syncBad = await sync.POST(new Request('https://smoke.test/api/sync?step=nope', { method: 'POST' }));
+check('sync rejects an unknown step', syncBad.status === 400);
+const syncRows = await sync.POST(new Request('https://smoke.test/api/sync?step=rows', { method: 'POST', body: '{}' }));
+check('sync refuses rows without a sign-in', syncRows.status === 409);
+const syncEnd = await sync.DELETE(new Request('https://smoke.test/api/sync', { method: 'DELETE' }));
+check(
+  'sync end clears its cookie',
+  syncEnd.status === 200 && /Max-Age=0/.test(syncEnd.headers.get('set-cookie') ?? ''),
+);
 
 process.env.ICS_TOKEN = 'smoke-feed-token-0123456789';
 const feedOk = await middleware(new Request('https://smoke.test/api/ics?token=smoke-feed-token-0123456789'));

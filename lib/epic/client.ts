@@ -1,7 +1,7 @@
 // The only way API routes talk to Epic: adds the token, spaces calls out,
 // retries once after a 401 with a fresh token, and logs every call for /api/health.
 
-import { EpicTokenManager, readJson, type FetchLike, type TokenStatus } from '../auth/epicToken.js';
+import { EpicTokenManager, readJson, type EpicToken, type FetchLike, type TokenStatus } from '../auth/epicToken.js';
 import { epicConfig } from '../config.js';
 import { EpicHttpError, parseEpicError } from './errors.js';
 
@@ -36,8 +36,20 @@ export class CallLog {
   }
 }
 
+/** Where a client gets its access token: the service account's device auth, or a fixed sign-in. */
+export interface TokenSource {
+  get(): Promise<EpicToken>;
+  invalidate(): void;
+  status(): TokenStatus;
+}
+
+/** A token that's used as is and never re-minted (your own sign-in during a sync, D30). */
+export function fixedToken(token: EpicToken): TokenSource {
+  return { get: async () => token, invalidate: () => {}, status: () => ({ consecutiveFailures: 0 }) };
+}
+
 export interface EpicClientOptions {
-  tokens: EpicTokenManager;
+  tokens: TokenSource;
   fetch?: FetchLike;
   /**
    * Minimum gap between calls from this instance (politeness, F37). 250 ms lets a

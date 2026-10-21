@@ -25,6 +25,7 @@ import { isSetLobby } from '../matches';
 import { formatUsd, prizeFor, type Prize } from '../prizes';
 import {
   allScans,
+  didNotPlay,
   isWindowChecked,
   scanWindow,
   setScanPayouts,
@@ -37,6 +38,7 @@ import { useEvents } from '../useEvents';
 import { LineChart, MatchChart } from './Charts';
 import { ChevronDown, ChevronRight, DownloadIcon, StarIcon } from './icons';
 import { GamesTable } from './MatchView';
+import { SyncPanel } from './SyncPanel';
 import { Art, Button, Chip, Empty, ErrorNote, LoadState, Panel, PillSelect, SectionHeader, Skeleton } from './ui';
 
 function Stat({ label, value }: { label: string; value: string }) {
@@ -54,8 +56,12 @@ interface Result {
   prize?: Prize;
 }
 
-/** Boards Epic shows past 100 pages don't say how many teams there are; percentile prizes need it. */
-const teamsOn = (x: BoardScan) => (x.complete || x.totalPages < 100 ? x.totalPages * 100 - 50 : undefined);
+/**
+ * Boards Epic shows past 100 pages don't say how many teams there are; percentile prizes need it.
+ * Synced results (D30) didn't read the board, so they don't know either.
+ */
+const teamsOn = (x: BoardScan) =>
+  x.totalPages > 0 && (x.complete || x.totalPages < 100) ? x.totalPages * 100 - 50 : undefined;
 
 function resultsFor(id: string): Result[] {
   return allScans()
@@ -282,6 +288,9 @@ export function PlayerView({ id, name, isMe }: { id: string; name: string; isMe?
     );
 
   const unchecked = ended.filter((s) => !resultFor(s).done);
+  // Sessions a sync showed weren't played stay out of the list (D30).
+  const listed = ended.filter((s) => !didNotPlay(s.event.id, s.w.id, id));
+  const skipped = ended.length - listed.length;
   const progressText =
     progress &&
     `Checking ${progress.i} of ${progress.n}: ${progress.label}` +
@@ -299,7 +308,9 @@ export function PlayerView({ id, name, isMe }: { id: string; name: string; isMe?
             <span className="truncate">{name}</span>
             {isMe && <Chip tone="accent">You</Chip>}
           </h1>
-          <p className="mt-1 text-sm text-muted">This season, from sessions you've checked</p>
+          <p className="mt-1 text-sm text-muted">
+            This season, from sessions you've {isMe ? 'synced or checked' : 'checked'}
+          </p>
         </div>
         <Button
           size="sm"
@@ -310,6 +321,12 @@ export function PlayerView({ id, name, isMe }: { id: string; name: string; isMe?
           {following ? 'Following' : 'Follow'}
         </Button>
       </div>
+
+      {isMe && (
+        <div className="mb-4">
+          <SyncPanel />
+        </div>
+      )}
 
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         <Stat label="Best finish" value={ranks.length ? ordinal(Math.min(...ranks)) : '—'} />
@@ -432,9 +449,9 @@ export function PlayerView({ id, name, isMe }: { id: string; name: string; isMe?
       <div className="mt-3">
         {!data ? (
           <LoadState loading={loading} error={error} onRetry={reload} />
-        ) : ended.length ? (
+        ) : listed.length ? (
           <Panel className="divide-y divide-line overflow-hidden">
-            {ended.slice(0, 40).map((s) => {
+            {listed.slice(0, 40).map((s) => {
               const r = resultFor(s);
               return (
                 <div key={s.w.id} className="flex items-center gap-3 px-3 py-2.5">
@@ -476,7 +493,12 @@ export function PlayerView({ id, name, isMe }: { id: string; name: string; isMe?
             })}
           </Panel>
         ) : (
-          <Empty>No finished sessions match.</Empty>
+          <Empty>{skipped ? 'You played every finished session that matches.' : 'No finished sessions match.'}</Empty>
+        )}
+        {skipped > 0 && (
+          <p className="mt-2 text-xs text-faint">
+            {plural(skipped, 'session')} you didn't play {skipped === 1 ? 'is' : 'are'} left out, from your last sync.
+          </p>
         )}
       </div>
     </div>
