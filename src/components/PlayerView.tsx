@@ -24,6 +24,7 @@ import { addFollow, removeFollow, useFollows } from '../follows';
 import { formatDay, ordinal, plural, REGION_LABEL, TEAM_LABEL, TYPE_LABEL } from '../format';
 import { eventPath } from '../links';
 import { isSetLobby } from '../matches';
+import { useRecentReplays } from '../replays';
 import { formatUsd, prizeFor, type Prize } from '../prizes';
 import {
   allScans,
@@ -232,6 +233,8 @@ export function PlayerView({ id, name, isMe }: { id: string; name: string; isMe?
 
   const results = resultsFor(id);
   useBackfillPayouts(results);
+  // Your recent results' replays are read while Epic still has them (D31); a player page reads them when opened.
+  useRecentReplays(isMe ? results : [], id);
   const ranks = results.map((r) => r.row.rank);
   const prizeMoney = results.reduce((sum, r) => sum + (r.prize?.usd ?? 0), 0);
   const qualified = results.filter((r) => r.prize?.qualifies.length).length;

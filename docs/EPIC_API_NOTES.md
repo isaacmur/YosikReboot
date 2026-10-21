@@ -84,6 +84,13 @@ In a cloud session, prefix commands with `NODE_USE_ENV_PROXY=1`, so Node's fetch
 - [x] Window history (`/history`) returns 404, and player history (`/history/{id}`) returns 403. Neither is usable.
 - **Consequence (D10):** results for you and your follows have to come from scanning finished boards, top 10,000 only. This matches Fortnite Tracker's own top-10K limit.
 
+### Tournament replays (D31, not yet captured)
+- Per the open-source downloader (`fortnite-replay-downloader`, Feb 2025): `GET https://datastorage-public-service-live.ol.epicgames.com/api/v1/data/fnreplaysmetadata/public/{matchId}.json` with an app token (client credentials for the Android client, `token_type=eg1`) returns `LengthInMS`, `bIsLive`, `bCompressed` and the parts: `Events` (`Id`, `Group`, `Metadata`, `Time1`, `Time2`), `DataChunks` and `Checkpoints`.
+- `POST https://datastorage-public-service-live.ol.epicgames.com/api/v1/access/fnreplays/public/{matchId}/` with `{ "files": ["header.bin", "<part id>.bin", …] }` returns `files["<name>"].readLink`, a signed link good for 15 minutes.
+- The match ID is a game's `sessionId` from a leaderboard row. Every competitive session this season has `ServerReplays: true` except the Arena test cup. Replays are kept about one to two weeks, and can be deleted sooner.
+- Event layouts (from replay-reader, MIT): `playerElim` is a header (165 bytes on current versions), the eliminated and the eliminator (type 17, a spare byte, a 16-byte account ID; or type 3 for a bot), a weapon-type byte and a 4-byte knocked flag. `AthenaMatchStats` is 4 bytes, a float accuracy, then ten counts (assists, eliminations, weapon damage, other damage, revives, damage taken, damage to structures, materials gathered, materials used, distance).
+- [ ] On the first real read: that the endpoints answer for this season's match IDs, that the event parts aren't encrypted, and whether `AthenaMatchStats` events name their player. The card's "What the replays held" shows each.
+
 ### Cumulative and ranked tier boards
 - [x] Cumulative boards **are not windows**. FNCS windows list a second score location, `Fortnite:cumulative:<eventId>_cumulative`, with a `*_CumulativeLeaderboardDef`. Payout tables point at it through `scoreId`.
 - [x] The leaderboard endpoint does **not** serve them under any pairing tried (`cumulative/<eventId>_cumulative` and `<eventId>/<eventId>_cumulative` both return 404). **D7 resolved:** compute cumulative standings from the session boards.

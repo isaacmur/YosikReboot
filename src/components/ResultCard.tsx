@@ -1,11 +1,11 @@
 // One tournament on Me and player pages, laid out like Osirion's: the team, rank,
-// Top % and points with Epic's placement/elimination split, then the stats Epic's
-// tournament data has. Those are per team: per-player stats such as damage,
-// accuracy or materials come from match replays, which this app doesn't read.
+// Top % and points with Epic's placement/elimination split, each player's stats
+// from the games' replays (D31), then the team's numbers from Epic's leaderboard.
 
 import { Link } from 'react-router';
 import type { Entry } from '../../lib/types';
 import { formatDuration, ordinal, TEAM_LABEL, topShare } from '../format';
+import { ReplayStats } from './ReplayStats';
 import { Panel } from './ui';
 
 const fmt = (n: number) => n.toLocaleString('en-US');
@@ -93,6 +93,8 @@ export function ResultCard({
         </div>
       </Panel>
 
+      <ReplayStats entry={entry} me={me} />
+
       <Panel className="overflow-hidden">
         <table className="nums w-full text-sm">
           <caption className="sr-only">Tournament stats</caption>
@@ -119,8 +121,8 @@ export function ResultCard({
         </table>
       </Panel>
       <p className="text-[11px] text-faint">
-        Epic's tournament data is per {size > 1 ? 'team' : 'player'} and per game. Damage, accuracy, healing, headshots,
-        edits and materials come from match replays, which this app doesn't read.
+        The table above is Epic's leaderboard, per {size > 1 ? 'team' : 'player'}. Healing, headshots and edits aren't
+        in the replay data this app reads.
       </p>
     </div>
   );

@@ -42,6 +42,7 @@ These are gaps or traps in the spec that change code structure. Each has a recom
 | D28 | Per-match stats (Fortnite Tracker's match pages) need each game's lobby, which Epic doesn't serve. | Every game in a team's history carries Epic's match ID (`sessionId`), shared by the teams that played it, and its time alive (`TIME_ALIVE_STAT`, seconds). `src/matches.ts` rebuilds games from board rows. A session is a set lobby when its games hold at least 8 of the page's teams on average; there, teams that shared games are grouped into lobbies, and each game shows every team's place, eliminations, points and time alive. Qualified and Final sessions get a **Matches** tab that reads the board's first 5 pages (up to 20 on request) and refreshes them on the board's schedule while live. A team's games open the game in place; in an open session that lists only the teams on loaded pages, since the rest of its lobby is spread across the board. |
 | D29 | In qualified rounds and finals what matters is where a team stands as the games go, not points per game. Epic only gives each team's own games. | Lite leaderboard rows keep each game's points (`gamePoints`; they add up to Epic's total in the captures). On Qualified and Final sessions, and every Performance Evaluation session (Epic's own round numbers are unreliable: Cash Cup rounds are all 0), opening a team reads every page of the board once (lite, four at a time, D26) and charts the team's **placement after each game**, with a Rank column in its games table (`src/placements.ts`). After game k every team counts its first k games, which in a set lobby is the board after each match. Ties share the better rank. Final boards are read once per visit; live ones again after 2 minutes. Open sessions keep points per game. Rank axes switch from powers of ten to whole-number steps when the ranks are close together. |
 | D30 | Me should fill itself without board scanning, but Epic answers questions about an account only when that account is signed in (D10), and keeping your main account signed in on the server would put a permanent login to it at risk. | **Sync with Epic** (Me) signs in on demand with Epic's device code flow: you open epicgames.com, sign in and approve, so no password passes through the app. The sign-in is exchanged into the app's client (as for the service account) and lives only in a sealed cookie: AES-GCM with a key from `COOKIE_SECRET`, `HttpOnly`, `Path=/api/sync`, 15 minutes (`lib/auth/seal.ts`). The server stores nothing, and the browser can't read it. The first real sync showed that your schedule's `player.teams` isn't a history of what you played: it listed one session, and not the ones you'd played. So a sync reads your row session by session with `teamAccountIds=` (your team when Epic lists it, otherwise just you), 8 sessions and 16 Epic calls per request. A Ranked Cup's main board answers whether you played in one call, before its tiers. Sessions are read in this order: first, up to two that a board search already found you in, on their own, as a check (if your row doesn't come back there, the sync stops and asks Epic's per-player history once instead, `step=probe`, reporting only the response's outline); then what `player.teams` lists; then your region's unchecked finished sessions from the last three weeks, 60 at most. When the sync ends, whether it finishes, fails, is cancelled or the page closes, the browser calls `DELETE /api/sync`, which ends the session at Epic. Results are kept like final board searches. A solo session without your row counts as not played once the filter has returned a row somewhere; team-mode misses stay on the list to check, since a different team might not match. The signed-in account becomes your "me" follow, and **What Epic returned** on the panel lists Epic's answers board by board. This is the one per-user API route, so it's never cached (an exception to D12). It needs `EPIC_DEVICE_CODE_CLIENT_ID` and `EPIC_DEVICE_CODE_CLIENT_SECRET` on the server. Still to confirm with a real sync: that a filtered row carries the full board's rank (`EPIC_API_NOTES.md`). |
+| D31 | Osirion's per-player stats (damage, accuracy, materials, eliminations per player) aren't in Epic's tournament API; they come from match replays. | Epic records every competitive game (a session's `ServerReplays` flag; all but the Arena test cup this season) and keeps the replay about one to two weeks. `/api/replay?match=` reads one game by its match ID (the `sessionId` already on every game) from Epic's replay storage, with an app token (client credentials, no account, as the open-source downloaders use; the service account's token if that's refused): the metadata, then signed links to just the small event parts, never the gameplay data. It parses eliminations and knocks (`playerElim`: who, whom, knocked) and Epic's per-player match stats (`AthenaMatchStats`: accuracy, damage dealt and taken, materials gathered and used, damage to builds, revives) with layouts from the open-source replay-reader (MIT), and counts every kind of event. Finished games are cached a week on the CDN. The browser reads a tournament's games when its card opens, and Me reads your last two weeks of results in the background, so they're kept before Epic deletes them; each game is kept for good, trimmed to the players asked about (`src/replays.ts`). The card shows each player side by side (`ReplayStats`). Healing, headshots and edits would need the gameplay data and aren't read. Unverified until the first real read: that this season's replays answer the same way and are unencrypted, and whether the stats events name their player (if they don't, only the elimination numbers show, and "What the replays held" says so). |
 
 ---
 
@@ -64,6 +65,7 @@ YosikReboot/
 │   ├── player.ts                 # GET ?name= | ?id=
 │   ├── login.ts                  # POST {passphrase} → Set-Cookie
 │   ├── sync.ts                   # POST ?step=start|poll|rows|probe, DELETE: Sync with Epic, your own sign-in (D30)
+│   ├── replay.ts                 # GET ?match= one tournament game's replay: eliminations, per-player stats (D31)
 │   ├── health.ts                 # GET token + upstream status
 │   └── ics.ts                    # GET ?token=&region= calendar feed (D21)
 ├── lib/                          # Server-only unless noted
@@ -78,6 +80,7 @@ YosikReboot/
 │   │   ├── endpoints.ts          # URL builders (one place to fix when Epic changes)
 │   │   ├── events.ts             # raw → Event[]/Window[]
 │   │   ├── leaderboard.ts        # raw → Entry[]
+│   │   ├── replay.ts             # tournament replays: metadata, signed links, event parsing (D31)
 │   │   ├── accounts.ts           # name ⇄ id, bulk lookup, memo
 │   │   ├── templates.ts          # scoring + payout tables
 │   │   └── cms.ts                # tournamentinformation (posters, titles)
@@ -97,6 +100,7 @@ YosikReboot/
 │   ├── matches.ts                # games and lobbies rebuilt from board rows (D28)
 │   ├── placements.ts             # placement after each game from every team's game points (D29)
 │   ├── sync.ts                   # Sync with Epic: sign in, read your rows, keep them, sign out (D30)
+│   ├── replays.ts                # replays read once and kept; per-player totals; recent results read on Me (D31)
 │   ├── theme.ts                  # System, Dark or Light (Settings), applied before paint by index.html
 │   ├── csv.ts                    # CSV export
 │   ├── search.ts, calendar.ts    # event search (F8); month and week grids (F4)
@@ -114,6 +118,7 @@ YosikReboot/
 │   │   ├── MatchView.tsx, MatchesTab.tsx   # a team's games, one game's lobby, a session's games (D28)
 │   │   ├── FindPlayer.tsx        # find anyone on a board by exact Epic name (D26)
 │   │   ├── SyncPanel.tsx         # Sync with Epic on Me (D30)
+│   │   ├── ResultCard.tsx, ReplayStats.tsx   # the tournament card; each player's replay stats (D31)
 │   └── pages/                    # Home, Events, EventPage, Me, Player, Follows, Settings, Health, Login
 └── test/
     ├── fixtures/epic/            # Saved, scrubbed real responses from Phase 0
@@ -314,6 +319,7 @@ Features: F4, F5, F8, F23, F28, F29.
 > - **Per-match stats:** a team's games list place, eliminations, points and time alive, and each opens that game. Qualified and Final sessions have a Matches tab: every lobby's games in order, each with every team's result (D28).
 > - **Faster searches and Find a player:** pages are read four at a time and kept for the visit, and the leaderboard search finds anyone in the top 10,000 by exact Epic name (D26).
 > - **Sync with Epic:** Me signs in with your own account on demand (you approve on epicgames.com), reads your recent sessions one by one (Epic's own list turned out not to be a history), keeps the results, and ends the Epic session; nothing is stored on the server (D30).
+> - **Replay stats:** the tournament card reads each game's server replay and shows you and your teammates side by side: eliminations, knocks, K/D, damage to and from players, accuracy and materials, where the replays carry them (D31). Me reads your last two weeks' replays in the background, before Epic deletes them.
 > - **Tournament card on Me:** opening a result shows an Osirion-style card: the team, rank and Top % (an upper bound past the top 10,000), points with Epic's placement and elimination split (its `pointBreakdown`), and the stats Epic's tournament data has (eliminations, games, wins, average and best placement, per-game rates, time alive). They're per team; per-player stats like damage, accuracy, healing, edits and materials need match replays (F27, Later). Results are tagged Solo, Duos or Trios.
 > - **Placement after each game:** in Qualified and Final sessions and Performance Evaluations, a team's breakdown charts where it stood on the board after each game, instead of points per game, and its games table gains a Rank column (D29).
 > - **Verified locally** in scripted Chromium at 390 px and 1366 px, dark and light, with no horizontal scroll and no console errors, against the fake Epic (now with set lobbies, match IDs and 300 ms per Epic call):
@@ -326,7 +332,7 @@ Features: F4, F5, F8, F23, F28, F29.
 ### Later (not scheduled)
 
 - Staying signed in to your main account permanently (stored device auth, so Me syncs with no approval) was considered and isn't recommended: the secret is a full login that skips two-factor, and a leak would expose your real account. Sync with Epic (D30) signs in on demand instead.
-- F9 eligibility (needs the player-tokens endpoint working for *your* account, not the service account), F19 projected cutoff and F20 points calculator (build on F28 data), F26 head-to-head, F27 replay stats (Osirion's per-player damage, accuracy, healing, edits and materials come from match replays, which Epic's tournament API doesn't carry; it would mean downloading and parsing each game's replay, or a paid service like api-fortnite.com), F30 Power Rankings scraper.
+- F9 eligibility (needs the player-tokens endpoint working for *your* account, not the service account), F19 projected cutoff and F20 points calculator (build on F28 data), F26 head-to-head, F27 replay stats beyond D31 (healing, headshots, edits: these need the replays' gameplay data, not just their events), F30 Power Rankings scraper.
 
 ---
 

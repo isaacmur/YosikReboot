@@ -19,6 +19,7 @@ const windowRoute = await load('api/window.js');
 const player = await load('api/player.js');
 const ics = await load('api/ics.js');
 const sync = await load('api/sync.js');
+const replay = await load('api/replay.js');
 const middleware = (await load('middleware.js')).default;
 
 let failed = 0;
@@ -62,6 +63,9 @@ check(
   'sync end clears its cookie',
   syncEnd.status === 200 && /Max-Age=0/.test(syncEnd.headers.get('set-cookie') ?? ''),
 );
+
+const badMatch = await replay.GET(new Request('https://smoke.test/api/replay?match=nope'));
+check('replay rejects a bad match ID', badMatch.status === 400);
 
 process.env.ICS_TOKEN = 'smoke-feed-token-0123456789';
 const feedOk = await middleware(new Request('https://smoke.test/api/ics?token=smoke-feed-token-0123456789'));
