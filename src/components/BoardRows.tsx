@@ -1,18 +1,20 @@
 // Leaderboard rows: rank with its movement arrow (F15), names with a saved
 // team's label (F24), stats, and a breakdown that opens on tap with each game
-// (F17, each one opening that game, D28) and buttons to follow the players or
-// save them as a team. Cutoff lines
-// (F16) and gaps between loaded pages sit between rows.
+// (F17, each one opening that game, D28), points per game or, in qualified
+// rounds and finals, placement after each game (D29), and buttons to follow the
+// players or save them as a team. Cutoff lines (F16) and gaps between loaded
+// pages sit between rows.
 
-import { memo, useState, type FormEvent } from 'react';
+import { memo, useContext, useEffect, useState, type FormEvent } from 'react';
 import { Link } from 'react-router';
 import type { Entry } from '../../lib/types';
 import { cutoffTitle, type PlacedCutoff } from '../board';
 import { addFollow, useFollows } from '../follows';
-import { plural } from '../format';
+import { ordinal, plural } from '../format';
 import type { Move } from '../movement';
+import { PlacementContext, type Placements } from '../placements';
 import { removeTeam, saveTeam, useTeams } from '../teams';
-import { MatchChart } from './Charts';
+import { LineChart, MatchChart } from './Charts';
 import { GamesTable } from './MatchView';
 import { MoveIcon, PlusIcon, StarIcon } from './icons';
 import { Button, Chip } from './ui';
@@ -136,16 +138,72 @@ function Members({ e }: { e: Entry }) {
   );
 }
 
+/** Where the team stood after each game (D29), while the board is read and once it is. */
+function PlacementChart({ placements, ranks, e }: { placements: Placements; ranks?: number[]; e: Entry }) {
+  if (!ranks)
+    return (
+      <figure>
+        <figcaption className="text-[10px] font-semibold tracking-wider text-faint uppercase">
+          Placement after each game
+        </figcaption>
+        <div className="mt-1 grid h-36 place-items-center rounded-md border border-dashed border-line px-3 text-center text-xs text-muted">
+          <span>
+            Reading the board to work out placements
+            {placements.total > 1 && `: ${placements.done} of ${placements.total} pages`}…
+          </span>
+        </div>
+      </figure>
+    );
+  return (
+    <LineChart
+      title={`Placement after each game${placements.teams ? ` · of ${fmtN(placements.teams)}` : ''}`}
+      ranks
+      format={ordinal}
+      xLabels={ranks.map((_, i) => String(i + 1))}
+      points={ranks.map((r, i) => {
+        const s = e.sessions[i]!;
+        return {
+          value: r,
+          label: `after game ${i + 1} · ${s.victory ? 'win' : s.place ? `#${s.place}` : '—'} · ${s.points ?? 0} pts`,
+        };
+      })}
+    />
+  );
+}
+
 function Games({ e, tz, onMatch }: { e: Entry; tz: string; onMatch: (sessionId: string) => void }) {
+  const placements = useContext(PlacementContext);
+  const points = e.sessions.map((s) => s.points);
+  const byPlacement = !!placements?.enabled && e.sessions.length > 0 && points.every((p) => p !== null);
+  const ensure = placements?.ensure;
+  useEffect(() => {
+    if (byPlacement) ensure?.();
+  }, [byPlacement, ensure]);
+  const ranks = byPlacement ? placements.after?.(points as number[]) : undefined;
   return (
     <div className="space-y-2.5 border-t border-line bg-bg/60 px-3 py-2.5 sm:pl-[3.25rem]">
       <Members e={e} />
       {e.sessions.length > 1 && (
         <div className="max-w-md">
-          <MatchChart sessions={e.sessions} tz={tz} />
+          {byPlacement && !placements.error ? (
+            <PlacementChart placements={placements} ranks={ranks} e={e} />
+          ) : (
+            <MatchChart sessions={e.sessions} tz={tz} />
+          )}
         </div>
       )}
-      {e.sessions.length > 0 && <GamesTable sessions={e.sessions} tz={tz} onGame={onMatch} />}
+      {byPlacement && placements.error && (
+        <p className="text-xs text-muted">
+          Couldn't work out placements: {placements.error}{' '}
+          <button
+            onClick={() => placements.ensure(true)}
+            className="font-semibold text-accent-bright underline underline-offset-2"
+          >
+            Try again
+          </button>
+        </p>
+      )}
+      {e.sessions.length > 0 && <GamesTable sessions={e.sessions} tz={tz} onGame={onMatch} ranks={ranks} />}
     </div>
   );
 }

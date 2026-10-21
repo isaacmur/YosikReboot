@@ -36,6 +36,7 @@ import { formatSecondsAgo, formatTime, plural, useNow } from '../format';
 import { useFollows } from '../follows';
 import { isSetLobby, matchesOf, type Match } from '../matches';
 import { boardMoves, type Move } from '../movement';
+import { PlacementContext, usePlacements } from '../placements';
 import { lastScan, LIVE_TTL_MS, scanBoard, type BoardScan } from '../scan';
 import { useSettings } from '../settings';
 import { createStore } from '../store';
@@ -332,11 +333,14 @@ export function Leaderboard({
   eventName,
   w,
   board,
+  placementHistory = false,
 }: {
   eventId: string;
   eventName: string;
   w: EventWindow;
   board: BoardInfo;
+  /** Rows chart placement after each game instead of points per game (D29). */
+  placementHistory?: boolean;
 }) {
   const [{ timeZone, refreshSec }] = useSettings();
   const follows = useFollows();
@@ -356,6 +360,13 @@ export function Leaderboard({
     watch: () => watchRef.current(),
   });
   const boardKey = `${eventId}|${w.id}|${board.id}`;
+  const placements = usePlacements({
+    eventId,
+    windowId: w.id,
+    board: board.id,
+    final,
+    enabled: placementHistory && !board.computed,
+  });
   const query = new URLSearchParams({ event: eventId, window: w.id, board: board.id }).toString();
 
   // Rows, runs and movement.
@@ -526,229 +537,236 @@ export function Leaderboard({
   const loaded = !!pages[0];
 
   return (
-    <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_19rem] lg:items-start lg:gap-5">
-      <div className="min-w-0 space-y-3">
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
-          {live.receivedAt && <span>Updated {formatSecondsAgo(live.receivedAt, now)}</span>}
-          {live.nextAt && (
-            <span>
-              Next refresh <Countdown to={live.nextAt.toISOString()} now={now} />
-            </span>
-          )}
-          {final && loaded && <span>Final standings</span>}
-          {state === 'wrapping' && <span>Results can still change while Epic settles them</span>}
-          <span className="ml-auto flex items-center gap-3">
-            <span className="lg:hidden">
-              <ToolButton onClick={() => setSheet('scoring')}>
-                <InfoIcon size={13} /> Scoring
+    <PlacementContext.Provider value={placements}>
+      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_19rem] lg:items-start lg:gap-5">
+        <div className="min-w-0 space-y-3">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
+            {live.receivedAt && <span>Updated {formatSecondsAgo(live.receivedAt, now)}</span>}
+            {live.nextAt && (
+              <span>
+                Next refresh <Countdown to={live.nextAt.toISOString()} now={now} />
+              </span>
+            )}
+            {final && loaded && <span>Final standings</span>}
+            {state === 'wrapping' && <span>Results can still change while Epic settles them</span>}
+            <span className="ml-auto flex items-center gap-3">
+              <span className="lg:hidden">
+                <ToolButton onClick={() => setSheet('scoring')}>
+                  <InfoIcon size={13} /> Scoring
+                </ToolButton>
+              </span>
+              <ToolButton onClick={() => setSheet('export')}>
+                <DownloadIcon size={13} /> Export
+              </ToolButton>
+              <ToolButton onClick={live.refresh} label="Refresh leaderboard">
+                <RefreshIcon size={13} className={live.loading ? 'animate-spin' : ''} /> Refresh
               </ToolButton>
             </span>
-            <ToolButton onClick={() => setSheet('export')}>
-              <DownloadIcon size={13} /> Export
-            </ToolButton>
-            <ToolButton onClick={live.refresh} label="Refresh leaderboard">
-              <RefreshIcon size={13} className={live.loading ? 'animate-spin' : ''} /> Refresh
-            </ToolButton>
-          </span>
+          </div>
+
+          {live.staleSince && (
+            <p role="status" className="rounded-md border border-wrap/40 bg-wrap/10 px-3 py-2 text-xs">
+              Showing data from {formatTime(live.staleSince.toISOString(), timeZone)}: {live.error?.message}. Retrying
+              on its own.
+            </p>
+          )}
+          {pages[0]?.approximate && (
+            <p className="text-xs text-faint">
+              Cumulative standings add up the top 300 of each session, so lower ranks are approximate.
+            </p>
+          )}
+
+          {entries.length > 0 && (
+            <CutoffStrip
+              lines={summary}
+              pages={[...Object.values(pages), ...Object.values(lite)]}
+              firstRun={runs[0]?.rows.map((r) => r.entry) ?? []}
+              teams={teamsOnBoard}
+              boardEnd={lastLoaded >= totalPages - 1}
+              final={final}
+              onJump={(r) => void jumpTo(r)}
+            />
+          )}
+
+          {ids.length > 0 && entries.length > 0 && (
+            <PinnedStrip
+              pinned={pinned}
+              missing={missing}
+              rows={entries}
+              names={followNames}
+              teams={teams}
+              moves={moves}
+              search={search}
+              searchedAt={scan?.scannedAt}
+              searchComplete={searchComplete}
+              canSearch={canSearch}
+              totalPages={totalPages}
+              final={final}
+              tz={timeZone}
+              onFind={() => void find(false)}
+              onJump={(r, k) => void jumpTo(r, k)}
+            />
+          )}
+
+          <div className="flex gap-2">
+            <label className="relative block min-w-0 flex-1">
+              <SearchIcon
+                size={15}
+                className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-faint"
+              />
+              <input
+                type="search"
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && findEverywhere && !filtered.length) void findName(filter);
+                }}
+                placeholder={canSearch && totalPages > 1 ? 'Find a player' : `Search ${fmtN(entries.length)} loaded`}
+                aria-label="Search players by name"
+                className="h-9 w-full rounded-md border border-line bg-surface pr-3 pl-9 text-sm outline-none placeholder:text-faint focus:border-accent"
+              />
+            </label>
+            <form onSubmit={onJump} className="flex shrink-0 gap-1.5">
+              <input
+                value={jump}
+                onChange={(e) => setJump(e.target.value)}
+                inputMode="numeric"
+                pattern="[0-9,]*"
+                placeholder="Rank"
+                aria-label={`Jump to rank (1 to ${fmtN(maxRank)})`}
+                className="nums h-9 w-20 rounded-md border border-line bg-surface px-3 text-sm outline-none placeholder:text-faint focus:border-accent"
+              />
+              <Button type="submit" disabled={!jump.trim() || !loaded}>
+                Go
+              </Button>
+            </form>
+          </div>
+
+          {hunt && <HuntNote hunt={hunt} onStop={stopHunt} />}
+
+          {!loaded ? (
+            live.error ? (
+              <ErrorNote error={live.error} onRetry={live.refresh} />
+            ) : (
+              <ListSkeleton rows={8} />
+            )
+          ) : !entries.length ? (
+            <Empty>No results yet. Check back once games finish.</Empty>
+          ) : needle ? (
+            filtered.length ? (
+              <>
+                <Panel className="overflow-hidden">
+                  <HeaderRow />
+                  <ul className="divide-y divide-line">
+                    {filtered.map((e) => (
+                      <Row
+                        key={e.teamKey}
+                        e={e}
+                        tz={timeZone}
+                        move={moves.get(e.teamKey)}
+                        team={teamNames.get(e.teamKey)}
+                        followed={e.members.some((m) => followSet.has(m.id))}
+                        open={open === e.teamKey}
+                        flash={false}
+                        onToggle={onToggle}
+                        onMatch={onMatch}
+                      />
+                    ))}
+                  </ul>
+                </Panel>
+                {findEverywhere && (
+                  <p className="flex flex-wrap items-center gap-2 text-xs text-muted">
+                    Not who you meant? {findButton}
+                  </p>
+                )}
+              </>
+            ) : (
+              <Empty action={findEverywhere ? findButton : undefined}>
+                No one by that name on the loaded pages.
+                {findEverywhere && ' Search every page by their exact Epic name.'}
+              </Empty>
+            )
+          ) : (
+            <BoardList
+              runs={runs}
+              moves={moves}
+              followSet={followSet}
+              teamNames={teamNames}
+              open={open}
+              flashTeam={flashTeam}
+              onToggle={onToggle}
+              onMatch={onMatch}
+              observe={observe}
+              pending={pending}
+              onLoad={loadPage}
+              tz={timeZone}
+            />
+          )}
+
+          {loaded && !needle && entries.length > 0 && lastLoaded + 1 < totalPages && (
+            <MoreRows
+              key={lastLoaded + 1}
+              page={lastLoaded + 1}
+              totalPages={totalPages}
+              loading={pending.includes(lastLoaded + 1)}
+              failed={!!loadError}
+              onLoad={loadPage}
+            />
+          )}
+          {loaded && !needle && entries.length > 0 && lastLoaded + 1 >= totalPages && board.id !== 'cumulative' && (
+            <p className="text-center text-xs text-faint">
+              {totalPages >= 100
+                ? "That's the top 10,000, as far as Epic lists."
+                : `End of the board: ${plural(teamsOnBoard ?? entries.length, 'team')}.`}
+            </p>
+          )}
+          {loadError && <ErrorNote error={loadError} onRetry={() => void loadPage(lastLoaded + 1)} />}
         </div>
 
-        {live.staleSince && (
-          <p role="status" className="rounded-md border border-wrap/40 bg-wrap/10 px-3 py-2 text-xs">
-            Showing data from {formatTime(live.staleSince.toISOString(), timeZone)}: {live.error?.message}. Retrying on
-            its own.
-          </p>
-        )}
-        {pages[0]?.approximate && (
-          <p className="text-xs text-faint">
-            Cumulative standings add up the top 300 of each session, so lower ranks are approximate.
-          </p>
-        )}
+        <aside
+          className="sticky top-20 hidden max-h-[calc(100dvh-6rem)] overflow-y-auto overscroll-contain lg:block"
+          aria-label="Scoring and prizes"
+        >
+          <SectionHeader title="Scoring" />
+          <ScoringPanel board={board} />
+          <SectionHeader title="Prizes" />
+          <PrizesPanel board={board} />
+        </aside>
 
-        {entries.length > 0 && (
-          <CutoffStrip
-            lines={summary}
-            pages={[...Object.values(pages), ...Object.values(lite)]}
-            firstRun={runs[0]?.rows.map((r) => r.entry) ?? []}
-            teams={teamsOnBoard}
-            boardEnd={lastLoaded >= totalPages - 1}
-            final={final}
-            onJump={(r) => void jumpTo(r)}
-          />
-        )}
-
-        {ids.length > 0 && entries.length > 0 && (
-          <PinnedStrip
-            pinned={pinned}
-            missing={missing}
+        <Sheet open={sheet === 'scoring'} onClose={() => setSheet(undefined)} title={`Scoring · ${board.label}`}>
+          <ScoringPanel board={board} />
+          <SectionHeader title="Prizes" />
+          <PrizesPanel board={board} />
+        </Sheet>
+        <Sheet open={!!matchId} onClose={() => setMatchId(undefined)} title="Game">
+          {matchId && (
+            <GameSheet
+              match={matchesOf(entries).get(matchId)}
+              setLobby={isSetLobby(entries)}
+              allLoaded={Object.keys(pages).length >= totalPages}
+              gamesHref={
+                w.stage === 'open'
+                  ? undefined
+                  : `?${new URLSearchParams({ ...Object.fromEntries(params), tab: 'matches', match: matchId })}`
+              }
+              followSet={followSet}
+              teamNames={teamNames}
+              tz={timeZone}
+            />
+          )}
+        </Sheet>
+        <Sheet open={sheet === 'export'} onClose={() => setSheet(undefined)} title="Export CSV">
+          <BoardExport
             rows={entries}
-            names={followNames}
-            teams={teams}
-            moves={moves}
-            search={search}
-            searchedAt={scan?.scannedAt}
-            searchComplete={searchComplete}
-            canSearch={canSearch}
+            pages={pages}
+            query={query}
             totalPages={totalPages}
             final={final}
-            tz={timeZone}
-            onFind={() => void find(false)}
-            onJump={(r, k) => void jumpTo(r, k)}
+            name={[eventName, w.label, board.kind === 'main' ? '' : board.label]}
+            teamName={(k) => teamNames.get(k)}
           />
-        )}
-
-        <div className="flex gap-2">
-          <label className="relative block min-w-0 flex-1">
-            <SearchIcon size={15} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-faint" />
-            <input
-              type="search"
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && findEverywhere && !filtered.length) void findName(filter);
-              }}
-              placeholder={canSearch && totalPages > 1 ? 'Find a player' : `Search ${fmtN(entries.length)} loaded`}
-              aria-label="Search players by name"
-              className="h-9 w-full rounded-md border border-line bg-surface pr-3 pl-9 text-sm outline-none placeholder:text-faint focus:border-accent"
-            />
-          </label>
-          <form onSubmit={onJump} className="flex shrink-0 gap-1.5">
-            <input
-              value={jump}
-              onChange={(e) => setJump(e.target.value)}
-              inputMode="numeric"
-              pattern="[0-9,]*"
-              placeholder="Rank"
-              aria-label={`Jump to rank (1 to ${fmtN(maxRank)})`}
-              className="nums h-9 w-20 rounded-md border border-line bg-surface px-3 text-sm outline-none placeholder:text-faint focus:border-accent"
-            />
-            <Button type="submit" disabled={!jump.trim() || !loaded}>
-              Go
-            </Button>
-          </form>
-        </div>
-
-        {hunt && <HuntNote hunt={hunt} onStop={stopHunt} />}
-
-        {!loaded ? (
-          live.error ? (
-            <ErrorNote error={live.error} onRetry={live.refresh} />
-          ) : (
-            <ListSkeleton rows={8} />
-          )
-        ) : !entries.length ? (
-          <Empty>No results yet. Check back once games finish.</Empty>
-        ) : needle ? (
-          filtered.length ? (
-            <>
-              <Panel className="overflow-hidden">
-                <HeaderRow />
-                <ul className="divide-y divide-line">
-                  {filtered.map((e) => (
-                    <Row
-                      key={e.teamKey}
-                      e={e}
-                      tz={timeZone}
-                      move={moves.get(e.teamKey)}
-                      team={teamNames.get(e.teamKey)}
-                      followed={e.members.some((m) => followSet.has(m.id))}
-                      open={open === e.teamKey}
-                      flash={false}
-                      onToggle={onToggle}
-                      onMatch={onMatch}
-                    />
-                  ))}
-                </ul>
-              </Panel>
-              {findEverywhere && (
-                <p className="flex flex-wrap items-center gap-2 text-xs text-muted">Not who you meant? {findButton}</p>
-              )}
-            </>
-          ) : (
-            <Empty action={findEverywhere ? findButton : undefined}>
-              No one by that name on the loaded pages.
-              {findEverywhere && ' Search every page by their exact Epic name.'}
-            </Empty>
-          )
-        ) : (
-          <BoardList
-            runs={runs}
-            moves={moves}
-            followSet={followSet}
-            teamNames={teamNames}
-            open={open}
-            flashTeam={flashTeam}
-            onToggle={onToggle}
-            onMatch={onMatch}
-            observe={observe}
-            pending={pending}
-            onLoad={loadPage}
-            tz={timeZone}
-          />
-        )}
-
-        {loaded && !needle && entries.length > 0 && lastLoaded + 1 < totalPages && (
-          <MoreRows
-            key={lastLoaded + 1}
-            page={lastLoaded + 1}
-            totalPages={totalPages}
-            loading={pending.includes(lastLoaded + 1)}
-            failed={!!loadError}
-            onLoad={loadPage}
-          />
-        )}
-        {loaded && !needle && entries.length > 0 && lastLoaded + 1 >= totalPages && board.id !== 'cumulative' && (
-          <p className="text-center text-xs text-faint">
-            {totalPages >= 100
-              ? "That's the top 10,000, as far as Epic lists."
-              : `End of the board: ${plural(teamsOnBoard ?? entries.length, 'team')}.`}
-          </p>
-        )}
-        {loadError && <ErrorNote error={loadError} onRetry={() => void loadPage(lastLoaded + 1)} />}
+        </Sheet>
       </div>
-
-      <aside
-        className="sticky top-20 hidden max-h-[calc(100dvh-6rem)] overflow-y-auto overscroll-contain lg:block"
-        aria-label="Scoring and prizes"
-      >
-        <SectionHeader title="Scoring" />
-        <ScoringPanel board={board} />
-        <SectionHeader title="Prizes" />
-        <PrizesPanel board={board} />
-      </aside>
-
-      <Sheet open={sheet === 'scoring'} onClose={() => setSheet(undefined)} title={`Scoring · ${board.label}`}>
-        <ScoringPanel board={board} />
-        <SectionHeader title="Prizes" />
-        <PrizesPanel board={board} />
-      </Sheet>
-      <Sheet open={!!matchId} onClose={() => setMatchId(undefined)} title="Game">
-        {matchId && (
-          <GameSheet
-            match={matchesOf(entries).get(matchId)}
-            setLobby={isSetLobby(entries)}
-            allLoaded={Object.keys(pages).length >= totalPages}
-            gamesHref={
-              w.stage === 'open'
-                ? undefined
-                : `?${new URLSearchParams({ ...Object.fromEntries(params), tab: 'matches', match: matchId })}`
-            }
-            followSet={followSet}
-            teamNames={teamNames}
-            tz={timeZone}
-          />
-        )}
-      </Sheet>
-      <Sheet open={sheet === 'export'} onClose={() => setSheet(undefined)} title="Export CSV">
-        <BoardExport
-          rows={entries}
-          pages={pages}
-          query={query}
-          totalPages={totalPages}
-          final={final}
-          name={[eventName, w.label, board.kind === 'main' ? '' : board.label]}
-          teamName={(k) => teamNames.get(k)}
-        />
-      </Sheet>
-    </div>
+    </PlacementContext.Provider>
   );
 }

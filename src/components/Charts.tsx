@@ -1,5 +1,5 @@
-// Charts: points per game (F29), placement over time (F23) and cutoff points
-// over time (F28). Drawn in SVG at the container's pixel width so text stays
+// Charts: points per game (F29), placement over time (F23), placement after
+// each game (D29) and cutoff points over time (F28). Drawn in SVG at the container's pixel width so text stays
 // small and sharp. One series each, in the accent color: thin marks, hairline
 // grid, the extreme labelled, and a tooltip on hover and keyboard focus. Every
 // chart sits next to a table with the same numbers.
@@ -7,7 +7,7 @@
 import { useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import type { MatchResult } from '../../lib/types';
 import { formatTime, ordinal } from '../format';
-import { compact, logTicks, niceMax, niceTicks } from '../scales';
+import { compact, niceMax, niceTicks, rankTicks } from '../scales';
 
 function useWidth() {
   const ref = useRef<HTMLDivElement>(null);
@@ -173,37 +173,47 @@ export function LineChart({
   title,
   ranks = false,
   format = (v) => v.toLocaleString('en-US'),
+  xLabels,
 }: {
   points: LinePoint[];
   title: string;
   ranks?: boolean;
   format?: (v: number) => string;
+  /** Under each point, e.g. game numbers. */
+  xLabels?: string[];
 }) {
   const [ref, width] = useWidth();
   const [active, setActive] = useState<number>();
   const H = 160;
   const values = points.map((p) => p.value);
-  const plotW = Math.max(0, width - PAD.l - PAD.r - 8);
   const plotH = H - PAD.t - PAD.b;
   const lo = Math.min(...values);
   const hi = Math.max(...values);
-  // A trend's axis fits its values; a line doesn't need a zero baseline.
-  const ticks = ranks ? logTicks(lo, hi) : niceTicks(lo, hi);
-  const [tMin, tMax] = ranks
+  // A trend's axis fits its values; a line doesn't need a zero baseline. Ranks
+  // spread over orders of magnitude go on a log scale.
+  const rank = ranks ? rankTicks(lo, hi) : undefined;
+  const log = !!rank?.log;
+  const ticks = rank ? rank.ticks : niceTicks(lo, hi);
+  const [tMin, tMax] = log
     ? [Math.log10(Math.max(1, ticks[0]!)), Math.log10(Math.max(hi, ticks[ticks.length - 1]!, 2))]
-    : [ticks[0]!, ticks[ticks.length - 1]!];
-  const scaled = (v: number) => (ranks ? Math.log10(Math.max(1, v)) : v);
+    : [Math.min(lo, ticks[0]!), Math.max(hi, ticks[ticks.length - 1]!)];
+  const scaled = (v: number) => (log ? Math.log10(Math.max(1, v)) : v);
+  const tickLabel = (t: number) => (ranks ? ordinal(t) : compact(t));
+  // Room for the widest axis label ("1,000th"), about 6 px a character.
+  const padL = Math.max(PAD.l, 10 + Math.max(...ticks.map((t) => tickLabel(t).length)) * 6);
+  const plotW = Math.max(0, width - padL - PAD.r - 8);
   // Ranks: 1st at the top. Values: 0 at the bottom.
   const y = (v: number) => {
     const f = (scaled(v) - tMin) / (tMax - tMin || 1);
     return ranks ? PAD.t + f * plotH : PAD.t + plotH - f * plotH;
   };
-  const x = (i: number) => PAD.l + 8 + (points.length > 1 ? (i / (points.length - 1)) * plotW : plotW / 2);
+  const x = (i: number) => padL + 8 + (points.length > 1 ? (i / (points.length - 1)) * plotW : plotW / 2);
   const line = points.map((p, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(p.value).toFixed(1)}`).join('');
   // The area wash reads as "amount from zero", so it's drawn only when the axis starts at 0.
   const wash = !ranks && tMin === 0;
   const best = ranks ? values.indexOf(lo) : values.indexOf(hi);
   const nearest = (px: number) => points.reduce((b, _, i) => (Math.abs(x(i) - px) < Math.abs(x(b) - px) ? i : b), 0);
+  const every = Math.ceil(16 / Math.max(points.length > 1 ? plotW / (points.length - 1) : plotW, 1));
   return (
     <figure>
       <figcaption className="text-[10px] font-semibold tracking-wider text-faint uppercase">{title}</figcaption>
@@ -219,12 +229,20 @@ export function LineChart({
           >
             {ticks.map((t) => (
               <g key={t}>
-                <line x1={PAD.l} x2={width - PAD.r} y1={y(t)} y2={y(t)} stroke="var(--line)" strokeWidth={1} />
-                <text x={PAD.l - 6} y={y(t)} dy="0.32em" textAnchor="end" className="nums fill-faint text-[10px]">
-                  {ranks ? ordinal(t) : compact(t)}
+                <line x1={padL} x2={width - PAD.r} y1={y(t)} y2={y(t)} stroke="var(--line)" strokeWidth={1} />
+                <text x={padL - 6} y={y(t)} dy="0.32em" textAnchor="end" className="nums fill-faint text-[10px]">
+                  {tickLabel(t)}
                 </text>
               </g>
             ))}
+            {xLabels?.map(
+              (l, i) =>
+                i % every === 0 && (
+                  <text key={i} x={x(i)} y={H - 6} textAnchor="middle" className="nums fill-faint text-[10px]">
+                    {l}
+                  </text>
+                ),
+            )}
             {wash && (
               <path
                 d={`${line}L${x(points.length - 1).toFixed(1)},${y(0)}L${x(0).toFixed(1)},${y(0)}Z`}

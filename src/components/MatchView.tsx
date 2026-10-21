@@ -12,17 +12,22 @@ import { Chip, Panel } from './ui';
 
 const TH = 'pb-1 font-semibold';
 
-/** A team's games, oldest first. Each opens its game through `onGame` or `gameHref`. */
+/**
+ * A team's games, oldest first. Each opens its game through `onGame` or
+ * `gameHref`. `ranks` adds where the team stood on the board after each (D29).
+ */
 export function GamesTable({
   sessions,
   tz,
   onGame,
   gameHref,
+  ranks,
 }: {
   sessions: MatchResult[];
   tz: string;
   onGame?: (sessionId: string) => void;
   gameHref?: (sessionId: string) => string;
+  ranks?: number[];
 }) {
   const open = (s: MatchResult, children: ReactNode) => {
     if (!s.sessionId) return children;
@@ -49,6 +54,11 @@ export function GamesTable({
           <th className={`${TH} text-right`}>Place</th>
           <th className={`${TH} text-right`}>Elims</th>
           <th className={`${TH} text-right`}>Pts</th>
+          {ranks && (
+            <th className={`${TH} text-right`} title="Rank on the leaderboard after this game">
+              Rank
+            </th>
+          )}
           <th className={`${TH} text-right`}>Alive</th>
           <th className={`${TH} text-right`}>Ended</th>
         </tr>
@@ -62,6 +72,7 @@ export function GamesTable({
             </td>
             <td className="py-1 text-right">{s.elims}</td>
             <td className="py-1 text-right font-semibold">{s.points ?? '—'}</td>
+            {ranks && <td className="py-1 text-right">{ranks[i] ? `#${ranks[i].toLocaleString('en-US')}` : '—'}</td>}
             <td className="py-1 text-right text-muted">{formatAlive(s.timeAlive)}</td>
             <td className="py-1 text-right text-muted">{s.endedAt ? formatTime(s.endedAt, tz) : '—'}</td>
           </tr>
