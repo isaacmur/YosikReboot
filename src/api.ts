@@ -49,6 +49,15 @@ export async function logout(): Promise<void> {
 
 const cache = new Map<string, { at: number; data: unknown }>();
 
+/** `apiGet` through the same short cache `useApi` uses. */
+export async function apiGetCached<T>(path: string, maxAgeMs = 60_000): Promise<T> {
+  const hit = cache.get(path);
+  if (hit && Date.now() - hit.at < maxAgeMs) return hit.data as T;
+  const data = await apiGet<T>(path);
+  cache.set(path, { at: Date.now(), data });
+  return data;
+}
+
 interface ApiState<T> {
   data?: T;
   error?: Error;

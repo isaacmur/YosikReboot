@@ -1,7 +1,11 @@
 // Epic's public tournament-info CMS document: titles, descriptions, posters and
 // colors, keyed by each event's `displayDataId` (verified 45/45 in Phase 0).
 
+import type { EpicClient } from './client.js';
+import { endpoints } from './endpoints.js';
 import { asObj, str } from './json.js';
+
+const CMS_TTL_MS = 24 * 60 * 60_000;
 
 export interface CmsEntry {
   title?: string;
@@ -50,4 +54,21 @@ export function indexCms(raw: unknown): CmsIndex {
     });
   }
   return out;
+}
+
+/**
+ * The CMS index, fetched at most once a day per handler. Display data is
+ * decoration: on failure keep the last copy (or none) rather than fail the route.
+ */
+export function cmsCache(now: () => number): (client: EpicClient) => Promise<CmsIndex> {
+  let cms: { at: number; index: CmsIndex } | undefined;
+  return async (client) => {
+    if (cms && now() - cms.at < CMS_TTL_MS) return cms.index;
+    try {
+      cms = { at: now(), index: indexCms(await client.getJson(endpoints.tournamentInfo(), 'cms', { auth: false })) };
+    } catch {
+      return cms?.index ?? new Map();
+    }
+    return cms.index;
+  };
 }

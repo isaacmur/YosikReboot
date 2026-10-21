@@ -189,6 +189,24 @@ describe('payouts', () => {
     );
   });
 
+  it('keeps which table each tier is in, and its cash in dollars', () => {
+    const cash = parsePayouts(NAC.payoutTables.S42_ReloadCashCup_DuosZB_Event5Round2_NAC);
+    expect(cash.map((t) => [t.threshold, t.usd])).toEqual([
+      [1, 600],
+      [2, 450],
+      [3, 300],
+      [4, 200],
+      [5, 150],
+      [8, 100],
+    ]);
+    // Last chance: a points table and a rank table, both qualifying, no cash.
+    const lcq = parsePayouts(NAC.payoutTables.epicgames_S42_FNCSSolo_LastChanceQualifier_NAC);
+    expect(lcq.map((t) => [t.basis, t.table, t.usd])).toEqual([
+      ['points', 0, 0],
+      ['rank', 1, 0],
+    ]);
+  });
+
   it('draws one cutoff per next round, one for the last paid place, and one per item tier', () => {
     const t = NAC.payoutTables;
     expect(parseCutoffs(t.S42_ReloadCashCup_DuosZB_Event5Round1_NAC)).toEqual([
@@ -250,7 +268,9 @@ describe('payouts', () => {
       },
       { scoringType: 'mystery', ranks: [] },
     ]);
-    expect(t).toEqual([{ basis: 'percentile', threshold: 0.05, rewards: ['Glider'], qualifies: false }]);
+    expect(t).toEqual([
+      { basis: 'percentile', threshold: 0.05, table: 0, rewards: ['Glider'], qualifies: false, usd: 0 },
+    ]);
   });
 });
 

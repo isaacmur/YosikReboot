@@ -16,7 +16,7 @@ These are gaps or traps in the spec that change code structure. Each has a recom
 | D2 | Cached responses must not vary per user, or the cookie would fragment / leak. | API responses never contain per-user data. "Which rows are my follows" is computed client-side; the server only accepts explicit `accountIds` params. |
 | D3 | Leaderboard entries carry **account IDs, not names**. 100 rows × up to 3 members = up to 300 lookups per page. | Resolve names server-side with Epic's bulk account lookup (≤100 IDs per call), memoised in function memory and folded into the cached leaderboard response. |
 | D4 | Leaderboard cache TTL depends on window **state**, which depends on the event list. | `/api/leaderboard` looks the window up via the same cached events fetch (`lib/epic/events.ts`), derives state, then sets `s-maxage` accordingly. |
-| D5 | Vercel Hobby caps functions per deployment (12). | Budget: `events`, `window`, `leaderboard`, `player`, `login`, `health`, later `ics` = 7. Shared code lives in `lib/`, not in `api/`. |
+| D5 | Vercel Hobby caps functions per deployment (12). | Budget: `events`, `window`, `leaderboard`, `player`, `login`, `health`, `ics` = 7 (all in use since Phase 4). Shared code lives in `lib/`, not in `api/`. |
 | D6 | Epic access tokens expire (~2 h, confirm in Phase 0). | Token cache stores `expiresAt`; re-mint at `expiresAt − 5 min`, on 401, or on cold start. |
 | D7 | "Cumulative" leaderboards. | **Resolved in Phase 0:** cumulative boards are score locations, not windows, and the leaderboard endpoint doesn't serve them. F12 computes cumulative standings server-side by summing the event's session boards, capped to the top N. |
 | D8 | Time zone. | All server data is UTC ISO strings. Formatting happens only in the browser via `Intl.DateTimeFormat` with the settings time zone (default `America/New_York`). No date library needed beyond small helpers. |
@@ -32,6 +32,11 @@ These are gaps or traps in the spec that change code structure. Each has a recom
 | D18 | Full depth (F14) means many loaded pages, but refreshing all of them every tick would multiply Epic calls. | Each tick re-reads page 0, the loaded pages on screen, pages holding a follow, and the pages a qualifying or paid line falls on, read in `lite` mode when they aren't loaded: at most 5 full and 3 lite pages (`src/useBoard.ts`). Other pages load as you scroll or jump, and stay as they were. Pinned rows off the loaded pages (F18) come from the last search of all pages, which a live board repeats every 5 minutes, starting around the pages where they were last found, once you've searched once (D10). |
 | D19 | Movement arrows (F15) that compare with the previous fetch vanish whenever a refresh brings no change (Epic hasn't updated, or the CDN served the same copy). | A row's baseline is the newest earlier sighting of that team on any page, and a refresh where nobody moved keeps the old baseline (`src/movement.ts`). The ranks last shown are kept per board in localStorage (4 boards, 6 pages each), so arrows also cover the time since you last looked, and are dropped once the session is final. |
 | D20 | The plan named `vite-plugin-pwa` for F34, but its `workbox-build` peer brings Babel, Rollup and Terser to emit a ~50-line worker, and npm 10 already struggles with peer dependencies here. | A hand-written worker (`pwa/sw.js`) with the build's file list and a version filled in by a small Vite plugin in `vite.config.ts`. Navigations go network first, with the saved shell offline; hashed assets come from the cache; `/api/*` is never cached or handled. It is registered in production builds only. |
+| D21 | Calendar apps can't send the session cookie, but the feed (F5) must stay behind the gate, CDN cache included (D1). | `/api/ics?token=…&region=` is unlocked by its own secret, `ICS_TOKEN` (16+ characters; unset turns the feed off). Middleware checks it before the cache and the route checks it again; the token opens the feed only. The signed-in app reads the token from `/api/ics` without one (cookie-gated, `no-store`) to build the subscribe link: the one credential the browser sees, and only your own feed's. One event per session from two weeks back, with stable UIDs, cached 15 min. |
+| D22 | Search (F8) and an all-regions calendar (F4) need every region's schedule; loading eight on every visit would waste calls. | `useAllEvents()` fetches the eight regions only while you search or pick "All regions", through the same CDN-cached `/api/events` and the browser's short cache, and lists each event once (D11). |
+| D23 | Prize money (F23) needs the board's payout tiers for every result, but results come from scans saved over the season. | `PayoutTier` gains its `table` and `usd`. Scans now store their board's tiers; older saved scans get them from `/api/window` once, a few per visit. Within a table a place earns its nearest tier at or after it (6th in "1st…5th, 8th" gets the 8th-place prize); points tiers all pay once reached; 0-point entry tokens aren't prizes. Percentile tiers need the team count, so they count only where it's known. |
+| D24 | The plan named Recharts for charts (F29). | Charts are small hand-drawn SVGs (`components/Charts.tsx`), like the icon set: one series each, measured to the container's pixel width, thin marks, hairline grid, the extreme labelled, tooltips on hover and keyboard focus, and a table beside every chart. A trend's axis fits its values; a fill is drawn only from zero. |
+| D25 | Cutoff history (F28) costs Epic calls per finished session. | Read on request, one session at a time: the session's rules (`/api/window`), then one lite page per qualifying or paid rank line. Final standings don't change, so results are kept in the browser for good. Points lines aren't read (their name says what they take). Shown per event (Sessions tab) and for every event of a type in your region (Events → Cutoffs). |
 
 ---
 
@@ -53,7 +58,8 @@ YosikReboot/
 │   ├── leaderboard.ts            # GET ?window=&page=
 │   ├── player.ts                 # GET ?name= | ?id=
 │   ├── login.ts                  # POST {passphrase} → Set-Cookie
-│   └── health.ts                 # GET token + upstream status
+│   ├── health.ts                 # GET token + upstream status
+│   └── ics.ts                    # GET ?token=&region= calendar feed (D21)
 ├── lib/                          # Server-only unless noted
 │   ├── types.ts                  # Event, Window, Entry … (shared with browser)
 │   ├── status.ts                 # windowState(), cacheSecondsFor() (shared)
@@ -69,6 +75,7 @@ YosikReboot/
 │   │   ├── templates.ts          # scoring + payout tables
 │   │   └── cms.ts                # tournamentinformation (posters, titles)
 │   ├── http.ts                   # json(), cacheHeaders(), error envelope
+│   ├── ics.ts                    # iCalendar text: folding, escaping
 │   └── health.ts                 # in-memory ring buffer of recent upstream calls
 ├── pwa/sw.js                     # Service worker template; vite.config.ts fills in the build's files (D20)
 ├── public/                       # Web manifest and app icons (PNGs rendered from icons/icon.svg)
@@ -80,6 +87,8 @@ YosikReboot/
 │   ├── movement.ts               # movement arrows (D19)
 │   ├── scan.ts, follows.ts, teams.ts, settings.ts, store.ts   # browser-side state (localStorage)
 │   ├── csv.ts                    # CSV export
+│   ├── search.ts, calendar.ts    # event search (F8); month and week grids (F4)
+│   ├── prizes.ts, cutoffHistory.ts, scales.ts   # prize money (D23); cutoff history (D25); chart axes
 │   ├── links.ts, format.ts       # event URLs and region suffixes; dates in your time zone
 │   ├── components/
 │   │   ├── ui.tsx                # primitives: tags, tabs, pills, buttons, panels, sheets, Art
@@ -88,7 +97,9 @@ YosikReboot/
 │   │   ├── Board.tsx             # the leaderboard: refresh, depth, jump, cutoffs, side panel
 │   │   ├── BoardRows.tsx         # rows, match breakdown, cutoff lines, gaps
 │   │   ├── Pinned.tsx, BoardExport.tsx, Scoring.tsx   # pinned follows; CSV export; scoring and prizes
-│   └── pages/                    # Home, Events, EventPage, Me, Follows, Settings, Health, Login
+│   │   ├── CalendarView.tsx, SearchResults.tsx, Feed.tsx, CutoffHistory.tsx   # Events views; feed link
+│   │   ├── PlayerView.tsx, Charts.tsx   # a player's season (Me and /players/:id); SVG charts (D24)
+│   └── pages/                    # Home, Events, EventPage, Me, Player, Follows, Settings, Health, Login
 └── test/
     ├── fixtures/epic/            # Saved, scrubbed real responses from Phase 0
     └── *.test.ts                 # Vitest
@@ -257,12 +268,27 @@ Features: F14, F15, F16, F17, F18, F21, F24, F31, F34.
 
 Features: F4, F5, F8, F23, F28, F29.
 
+> **Status: done** (code), pending your checks in production.
+> - **Built:**
+>   - Calendar (Events → Calendar): month grid (dots on phones, session names wider), the day's sessions below it, and a week agenda; your region or all regions.
+>   - Calendar feed: `/api/ics` behind its own token (D21), with a subscribe link on the calendar and in Settings.
+>   - Search across every region (Events page): events, sessions and dates, typo-tolerant, with sessions picked out ("round 2", "oct 18").
+>   - Player pages (`/players/:id`, and Me): results, best finish, prize money and qualifications from payout tables (D23), placement over time, and each result's points per game. Players link from Follows, Home and board rows.
+>   - Points per game (F29) on player results and in a board row's breakdown.
+>   - Cutoff history (D25): per event on its Sessions tab, and by type in your region under Events → Cutoffs, as a table and a chart.
+> - **Verified locally** in scripted Chromium at 390 px and 1366 px, dark and light, with no horizontal scroll and no console errors, against a fake Epic serving the captured schedules and CMS with generated boards (no Epic credentials in the build sandbox):
+>   - "cash cup round 2" found 7 events across regions, each with only its Round 2 sessions.
+>   - The calendar showed today and session states, a day's agenda, the week, and 157 sessions across all regions. The subscribe sheet built the feed link, and Python's `icalendar` parser read all 76 sessions of the NAE feed.
+>   - Cutoff history read every finished Reload Cash Cup session (Top 20 qualify around 600 points, Top 5 paid) into a table and chart.
+>   - Checking Cash Cup sessions on Me found 2 results: a 3rd place worth $300 (from the payout table) and a 113th. Opening a result drew its points per game with tooltips.
+> - **Your checks:** set `ICS_TOKEN` in Vercel (16+ characters, `openssl rand -hex 16`), redeploy, then subscribe from Settings and see sessions in your calendar app. Then try Me → Check on your own sessions.
+
 - **F4 Calendar:** month/week grid built from all regions' windows (or current region; setting).
 - **F5 iCal feed:** `api/ics.ts` → `text/calendar`. Calendar apps can't send cookies, so this route uses a **separate secret token in the query string** (`ICS_TOKEN`), excluded from the cookie middleware and checked in middleware instead. Cache 15 min.
 - **F8 Search:** client-side fuzzy match over all regions' cached event lists.
 - **F23 Player page:** season history, best finishes, earnings from payout tables.
-- **F28 Cutoff history:** for each ended window, points at each cutoff rank (one page fetch per cutoff, cached 24 h). Group by event type × region.
-- **F29 Points charts:** Recharts line of points per match for a team.
+- **F28 Cutoff history:** for each ended window, points at each cutoff rank (one page fetch per cutoff, kept in the browser for good, D25). Group by event type × region.
+- **F29 Points charts:** points per game for a team, drawn without a chart library (D24).
 
 ### Later (not scheduled)
 
@@ -296,7 +322,7 @@ Features: F4, F5, F8, F23, F28, F29.
 
 **Politeness budget (F37):** server-side spacing + CDN cache + client pause-when-hidden. `/api/health` shows upstream calls per minute so this is observable, not assumed.
 
-**Security checklist:** no secrets in the bundle (CI greps the build output for env var names), `HttpOnly` cookie, middleware gate covers cached responses, no CORS, the iCal token is the only query-string secret and is rotatable.
+**Security checklist:** no secrets in the bundle (CI greps the build output for env var names), `HttpOnly` cookie, middleware gate covers cached responses, no CORS, the iCal token is the only query-string secret, opens only the feed, and is rotatable (D21).
 
 ---
 

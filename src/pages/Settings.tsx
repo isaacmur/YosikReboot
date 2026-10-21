@@ -2,6 +2,7 @@ import { useMemo, type ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { REGIONS, type Region } from '../../lib/types';
 import { logout } from '../api';
+import { FeedPanel } from '../components/Feed';
 import { ActivityIcon, ChevronRight, LogOutIcon, UsersIcon } from '../components/icons';
 import { Button, PageTitle, Panel, PillSelect, SectionHeader } from '../components/ui';
 import { REGION_LABEL, zoneAbbrev } from '../format';
@@ -86,6 +87,11 @@ export default function Settings() {
             ))}
           </PillSelect>
         </Row>
+      </Panel>
+
+      <SectionHeader title="Calendar feed" />
+      <Panel className="p-4">
+        <FeedPanel region={settings.region} />
       </Panel>
 
       <SectionHeader title="More" />

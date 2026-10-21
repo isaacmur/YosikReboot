@@ -221,7 +221,9 @@ export default function Follows() {
                     </span>
                   </span>
                   <span className="flex min-w-0 flex-1 items-center gap-2">
-                    <span className="truncate font-semibold">{f.name}</span>
+                    <Link to={`/players/${f.id}`} className="truncate font-semibold hover:underline">
+                      {f.name}
+                    </Link>
                     {f.isMe && <Chip tone="accent">You</Chip>}
                   </span>
                   <Button size="sm" variant="ghost" onClick={() => setMe(f.isMe ? null : f.id)}>

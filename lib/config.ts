@@ -42,3 +42,8 @@ export function epicConfig(env: Env = process.env): { client: ClientCredentials;
     device: { accountId: v.EPIC_ACCOUNT_ID!, deviceId: v.EPIC_DEVICE_ID!, secret: v.EPIC_DEVICE_SECRET! },
   };
 }
+
+/** The calendar feed's secret (F5, D21); undefined turns the feed off. */
+export function feedToken(env: Env = process.env): string | undefined {
+  return env.ICS_TOKEN?.trim() || undefined;
+}

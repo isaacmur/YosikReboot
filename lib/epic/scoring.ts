@@ -87,16 +87,18 @@ function rewardLabel(p: Record<string, unknown>): string | undefined {
 interface Tier {
   basis: PayoutTier['basis'];
   threshold: number;
+  table: number;
   rewards: string[];
   /** Labels of the qualification rewards ("Qualifies for …"). */
   qualifyTo: string[];
   cash: boolean;
+  usd: number;
 }
 
 function parseTiers(raw: unknown): Tier[] {
   const out: Tier[] = [];
-  for (const table of asArr(raw)) {
-    const t = asObj(table);
+  for (const [table, entry] of asArr(raw).entries()) {
+    const t = asObj(entry);
     const basis = BASIS[str(t?.scoringType) ?? ''];
     if (!basis) continue;
     for (const rank of asArr(t?.ranks)) {
@@ -115,9 +117,13 @@ function parseTiers(raw: unknown): Tier[] {
         out.push({
           basis,
           threshold,
+          table,
           rewards,
           qualifyTo: labels('token'),
           cash: payouts.some((p) => p.rewardType === 'ecomm'),
+          usd: payouts
+            .filter((p) => p.rewardType === 'ecomm' && p.value === 'USD')
+            .reduce((sum, p) => sum + (num(p.quantity) ?? 0), 0),
         });
     }
   }
@@ -125,11 +131,13 @@ function parseTiers(raw: unknown): Tier[] {
 }
 
 export function parsePayouts(raw: unknown): PayoutTier[] {
-  return parseTiers(raw).map(({ basis, threshold, rewards, qualifyTo }) => ({
+  return parseTiers(raw).map(({ basis, threshold, table, rewards, qualifyTo, usd }) => ({
     basis,
     threshold,
+    table,
     rewards,
     qualifies: qualifyTo.length > 0,
+    usd,
   }));
 }
 

@@ -4,7 +4,7 @@
 // around the pages where they were last found. Results for final boards never
 // change, so they're kept in this browser for good; others for 5 min.
 
-import type { Entry, LeaderboardPage, WindowDetail } from '../lib/types';
+import type { Entry, LeaderboardPage, PayoutTier, WindowDetail } from '../lib/types';
 import { ApiError, apiGet } from './api';
 import { createStore } from './store';
 
@@ -34,6 +34,8 @@ export interface BoardScan {
   /** For lists of results: "Solo Ranked Cup · Event 8" and when the session ended. */
   title?: string;
   endedAt?: string;
+  /** The board's payout tiers, so prizes can be worked out later (scans saved before Phase 4 lack them). */
+  payouts?: PayoutTier[];
 }
 
 export const LIVE_TTL_MS = 5 * 60_000;
@@ -70,6 +72,15 @@ export function cachedScan(eventId: string, windowId: string, board: string, ids
 export function lastScan(eventId: string, windowId: string, board: string): BoardScan | undefined {
   const key = keyOf(eventId, windowId, board);
   return permanent.get()[key] ?? recent.get(key);
+}
+
+/** Adds payout tiers to a kept scan saved without them. */
+export function setScanPayouts(eventId: string, windowId: string, board: string, payouts: PayoutTier[]): void {
+  const key = keyOf(eventId, windowId, board);
+  const hit = permanent.get()[key];
+  if (hit && !hit.payouts) permanent.set({ ...permanent.get(), [key]: { ...hit, payouts } });
+  const live = recent.get(key);
+  if (live && !live.payouts) recent.set(key, { ...live, payouts });
 }
 
 /** All kept scans (final ones and recent live ones), most recent session first. */
@@ -121,6 +132,7 @@ export interface ScanOptions {
   boardLabel: string;
   title?: string;
   endedAt?: string;
+  payouts?: PayoutTier[];
 }
 
 export async function scanBoard(
@@ -174,6 +186,7 @@ export async function scanBoard(
     final: o.final,
     ...(o.title ? { title: o.title } : {}),
     ...(o.endedAt ? { endedAt: o.endedAt } : {}),
+    ...(o.payouts ? { payouts: o.payouts } : {}),
   };
   const key = keyOf(eventId, windowId, board);
   if (o.final) permanent.set({ ...permanent.get(), [key]: scan });
@@ -196,7 +209,11 @@ export async function scanWindow(
   for (const b of [...boards].reverse()) {
     if (!remaining.length) break;
     o.onBoard?.(b.label);
-    const scan = await scanBoard(eventId, windowId, b.id, remaining, { ...o, boardLabel: b.label });
+    const scan = await scanBoard(eventId, windowId, b.id, remaining, {
+      ...o,
+      boardLabel: b.label,
+      payouts: b.payouts,
+    });
     scans.push(scan);
     remaining = remaining.filter((id) => !scan.found[id]);
   }

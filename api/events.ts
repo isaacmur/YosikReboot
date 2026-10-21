@@ -4,9 +4,8 @@
 // 15 min. Session states are computed in the browser from the times, so a cached
 // copy never shows a stale "live".
 
-import { indexCms, type CmsIndex } from '../lib/epic/cms.js';
+import { cmsCache } from '../lib/epic/cms.js';
 import { epicClient, type EpicClient } from '../lib/epic/client.js';
-import { endpoints } from '../lib/epic/endpoints.js';
 import { normalizeEvents } from '../lib/epic/events.js';
 import { rawSchedule } from '../lib/epic/schedule.js';
 import { epicConfig } from '../lib/config.js';
@@ -14,7 +13,6 @@ import { apiError, cdnCacheHeaders, json, toErrorResponse } from '../lib/http.js
 import { REGIONS, isRegion, type EventsResponse } from '../lib/types.js';
 
 export const SCHEDULE_CACHE_S = 900;
-const CMS_TTL_MS = 24 * 60 * 60_000;
 
 interface Deps {
   client: () => EpicClient;
@@ -23,21 +21,7 @@ interface Deps {
 }
 
 export function makeEventsHandler(deps: Deps) {
-  let cms: { at: number; index: CmsIndex } | undefined;
-
-  /** Display data is decoration: on failure keep the last copy (or none) rather than fail the schedule. */
-  async function cmsIndex(client: EpicClient): Promise<CmsIndex> {
-    if (cms && deps.now() - cms.at < CMS_TTL_MS) return cms.index;
-    try {
-      cms = {
-        at: deps.now(),
-        index: indexCms(await client.getJson(endpoints.tournamentInfo(), 'cms', { auth: false })),
-      };
-    } catch {
-      return cms?.index ?? new Map();
-    }
-    return cms.index;
-  }
+  const cmsIndex = cmsCache(deps.now);
 
   return async function GET(request: Request): Promise<Response> {
     const region = new URL(request.url).searchParams.get('region');
